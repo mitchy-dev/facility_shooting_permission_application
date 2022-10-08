@@ -1,0 +1,187 @@
+@startuml kaigan-loca
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+
+entity "users" as users {
+  user_id:int not null autoincrement primary key
+  --
+  email:varchar(255) not null
+  password:varchar(255) not null
+  organization:varchar(255)
+  department:varchar(255)
+  representative_title:varchar(255)
+  representatives_name:varchar(255)
+  person_in_charge:varchar(255)
+  phone_number:varchar(255)
+  comment:text
+  avatar_path:varchar(255)
+  has_facility_registration_authority:boolean not null default true
+  is_deleted:boolean not null default false
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "facilities" as facilities {
+  facility_id:int not null autoincrement primary key
+  --
+  user_id<<FK>>:int not null
+  facility_name:varchar(255): not null
+  thumbnail_path:varchar(255)
+  prefecture_id<<FK>>:int not null
+  facility_address:varchar(255)
+  shooting fee:varchar(255)
+  url_of_facility_information_page:varchar(255)
+  title_of_facility_information_page:varchar(255)
+  is_deleted:boolean not null default false
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "stakeholders" as stakeholders {
+  stakeholder_id:int not null autoincrement primary key
+  --
+  user_id<<FK>>:int
+  organization:varchar(255) not null
+  department:varchar(255)
+  avatar_path:varchar(255)
+  url_of_shooting_application_guide:varchar(255)
+  title_of_shooting_application_guide:varchar(255)
+  application_deadline:varchar(255)
+  phone_number:varchar(255)
+  email:varchar(255)
+  url_of_contact_form:varchar(255)
+  url_of_application_format:varchar(255)
+  title_of_application_format:varchar(255)
+  is_deleted:boolean not null default value false
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "facility_images" as facility_images {
+  facility_image_id:int not null autoincrement primary key
+  --
+  facility_id<<FK>>:int not null
+  image_path:varchar(255) not null
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "comments_on_facilities" as comments_on_facilities {
+  comment_id:int not null autoincrement primary key
+  --
+  user_id<<FK>>:int not null
+  facility_id<<FK>>:int not null
+  comment:text
+  is_deleted:boolean not null default false
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "favorite_facilities" as favorite_facilities {
+  favorite_id:int not null autoincrement primary key
+  --
+  user_id<<FK>>:int not null
+  facility_id<<FK>>:int not null
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+'マスタデータ
+entity "regions" as regions {
+  region_id:int not null autoincrement primary key
+  --
+  name:varchar(255) not null
+  name_kana:varchar(255) not null
+}
+entity "prefectures" as prefectures {
+  prefecture_id:int not null autoincrement primary key
+  --
+  region_id<<FK>>:int not null
+  name:varchar(255) not null
+  name_kana:varchar(255)
+}
+
+entity "stakeholder_categories" as stakeholder_categories {
+  stakeholder_category_id:int not null autoincrement primary key
+  --
+  name:varchar(255) not null
+  is_deleted:boolean not null default false
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "shooting_application_acceptance_type_tags" as shooting_application_acceptance_type_tags {
+  shooting_application_acceptance_type_tag_id:int not null autoincrement primary key
+  --
+  name:varchar(255) not null
+  is_deleted:boolean not null default false
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "facility_categories" as facility_categories {
+  facility_category_id:int not null autoincrement primary key
+  --
+  name:varchar(255) not null
+  is_deleted:boolean not null default false
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+
+'交差テーブル
+entity "facilities_categorization" as facilities_categorization {
+  facility_id<<FK>>:int not null primary key
+  facility_category_id<<FK>>:int not null primary key
+  --
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "facilities_stakeholders" as facilities_stakeholders {
+  facility_id<<FK>>:int not null primary key
+  stakeholder_id <<FK>>:int not null primary key
+  --
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "stakeholder_categorization" as stakeholder_categorization {
+  stakeholder_id<<FK>>:int not null primary key
+  stakeholder_category_id<<FK>>:int not null primary key
+  --
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+
+entity "shooting_application_acceptance_type_tagging" as shooting_application_acceptance_type_tagging {
+  stakeholder_id<<FK>>:int not null primary key
+  shooting_application_acceptance_type_tag_id<<FK>>:int not null primary key
+  --
+  created_at:datetime not null
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
+'user
+users ||--o{ facilities
+users ||--o{ stakeholders
+users ||--o{ favorite_facilities
+'facilities
+facilities ||--|| prefectures
+prefectures }|--|| regions
+facility_images }|--|| facilities
+facilities ||--|{ facilities_categorization
+facilities_categorization }|--|| facility_categories
+facilities ||--|{ facilities_stakeholders
+facilities_stakeholders }|--|| stakeholders
+facilities ||--o{ comments_on_facilities
+'stakeholders
+stakeholders ||--|{ stakeholder_categorization
+stakeholder_categorization }|--|| stakeholder_categories
+stakeholders ||--o{ shooting_application_acceptance_type_tagging
+shooting_application_acceptance_type_tagging }o--|| shooting_application_acceptance_type_tags
+
+@enduml
