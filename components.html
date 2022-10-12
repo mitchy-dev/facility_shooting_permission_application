@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="destyle.css">
+  <link rel="stylesheet" href="style.css">
+  <title>コンポーネント集</title>
+</head>
+<body>
+<div class="debug-label">Layout</div>
+<div class="l-wrapper u-text-center">
+  <header class="l-header">
+    <div class="c-header-title">
+      <a href="" class="c-header-title__link">
+        海岸ロケ
+      </a>
+    </div>
+    <ul class="c-header-nav">
+      <li class="c-header-nav__item c-button c-button__primary">
+        <a>
+          ログイン
+        </a>
+      </li>
+      <li class="c-header-nav__item c-button c-button__secondary">
+        <a>
+          ユーザー登録
+        </a>
+      </li>
+    </ul>
+  </header>
+
+  <main class="l-main">main</main>
+
+  <footer class="l-footer u-text-center">
+    <ul class="c-footer-nav">
+      <li class="c-footer-nav__list --active"><a href="" class="c-footer-nav__item">利用規約</a></li>
+      <li class="c-footer-nav__list"><a href="" class="c-footer-nav__item">プライバシーポリシー</a></li>
+      <li class="c-footer-nav__list"><a href="" class="c-footer-nav__item">お問い合わせ</a></li>
+    </ul>
+    <div class="c-footer-copyright">
+      <p class="c-footer-copyright__item">©2023 みっちー</p>
+    </div>
+  </footer>
+</div>
+
+
+<div class="debug-label">Components</div>
+
+<div class="debug-label">Title</div>
+<h1 class="c-main__title">画面タイトル</h1>
+<p class="c-main__message">タイトル下メッセージ</p>
+<p class="c-main__message --error">共通エラー文</p>
+
+
+<div class="debug-label">Button</div>
+<button class="c-button c-button__primary" type="button">Primary</button>
+<button class="c-button c-button__secondary" type="button">Secondary</button>
+<button class="c-button c-button__warning" type="button">Warning</button>
+<button class="c-button c-button__text" type="button">Text</button>
+
+<div class="debug-label">Project</div>
+
+<div class="debug-label">カード</div>
+
+<div class="p-card">
+  <a href="" class="p-card__link">
+    <div class="p-card__head">
+      <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">
+    </div>
+    <div class="p-card__foot">
+      <div class="p-card__title-container">
+        <h2 class="p-card__title">真鶴海岸</h2>
+      </div>
+      <div class="p-card__sub-title-container">
+        <p class="p-card__sub-title">神奈川県</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="debug-label">セレクトボックス</div>
+<!--三角形は右端に寄っているが、index.htmlでは正常な位置に表示されている-->
+<div class="c-select__wrap">
+  <select name="region" id="" class="c-select__box">
+    <option value="0" class="c-select__option">全国</option>
+    <option value="1" class="c-select__option">北海道</option>
+    <option value="2" class="c-select__option">東北</option>
+    <option value="2" class="c-select__option">神奈川県</option>
+  </select>
+</div>
+
+<div class="debug-label">ページング</div>
+<div class="c-paging__layout">
+  <ul class="c-paging__list">
+    <li class="c-paging__item"><a href="facilityDetail.html">&lt;</a></li>
+    <li class="c-paging__item is-active"><a href="facilityDetail.html">1</a></li>
+    <li class="c-paging__item"><a href="facilityDetail.html">2</a></li>
+    <li class="c-paging__item"><a href="facilityDetail.html">3</a></li>
+    <li class="c-paging__item"><a href="facilityDetail.html">4</a></li>
+    <li class="c-paging__item"><a href="facilityDetail.html">5</a></li>
+    <li class="c-paging__item"><a href="facilityDetail.html">&gt;</a></li>
+  </ul>
+</div>
+
+<div class="debug-label">代替テキスト</div>
+<div class="c-alternate-text__container">
+  <p class="c-alternate-text">検索条件に合致する海岸はありませんでした</p>
+</div>
+<div class="debug-label">カード</div>
+<div class="debug-label">カード</div>
+
+</body>
+</html>
