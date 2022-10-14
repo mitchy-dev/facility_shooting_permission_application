@@ -59,6 +59,7 @@
     --color-wellow-900: #ffcc17;
     --color-orange-700: #ff834f;
     --color-gray-orange-800: #D6D3D0;
+    --color-gray-orange-900: #F2F1F0;
     --color-gray-red-900: #dddddd;
     --color-green-900: #0F857F;
     --color-black-900: #000000de;
@@ -90,7 +91,7 @@
     /* Background Colors
     ----------------------------------------------------------------- */
     --color-background-base: var(--color-white-900);
-    --color-background-base_current: var(--color-gray-orange-800);
+    --color-background-base_current: var(--color-gray-orange-900);
     --color-background-main: var(--color-blue-900);
     --color-background-error: var(--color-red-100);
 
@@ -181,6 +182,18 @@ strong {
     padding-right: 80px;
     padding-left: 80px;
     padding-bottom: 16px;
+    overflow: hidden;
+}
+
+.l-sidebar__container {
+    float: left;
+    width: 296px;
+}
+
+.l-main__my-page {
+    float: left;
+    width: calc(1280px - 296px);
+    padding: 0 calc((1280px - 296px - 308 * 2px - 16px) / 2);
     overflow: hidden;
 }
 
@@ -694,6 +707,7 @@ strong {
     overflow: hidden;
 }
 
+/*海岸一覧ページのカードのレイアウト*/
 .p-card__layout {
     float: left;
     margin-right: var(--spacing-xs);
@@ -702,6 +716,19 @@ strong {
 }
 
 .p-card__layout:nth-child(4n) {
+    margin-right: var(--spacing-none);
+}
+
+/*マイページのカードのレイアウト*/
+.p-card__layout.--my-page {
+    float: left;
+    margin-right: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+    width: 308px;
+}
+
+
+.p-card__layout.--my-page:nth-child(odd) {
     margin-right: var(--spacing-none);
 }
 
@@ -886,3 +913,37 @@ strong {
     width: 276px;
 }
 
+.c-sidebar__list-title {
+    color: var(--color-text-main);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: var(--border-normal);
+}
+
+.c-sidebar__list {
+}
+
+.c-sidebar__item {
+    padding-top: var(--spacing-xxs);
+    padding-bottom: var(--spacing-xxs);
+    padding-left: var(--spacing-xxs);
+    border-bottom: var(--border-normal);
+}
+
+.c-sidebar__item.--active {
+    background: var(--color-background-base_current);
+}
+
+.c-sidebar__item a {
+    color: var(--color-text-main);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+}
+
+.c-sidebar__item.--border-top {
+    border-top: var(--border-normal);
+}
