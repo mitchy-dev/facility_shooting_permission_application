@@ -127,6 +127,10 @@
        ----------------------------------------------------------------- */
     --opacity-hover: 50%;
     --opacity-disabled: 50%;
+
+    /* Width
+       ----------------------------------------------------------------- */
+    --width-user-management-wrapper: 568px;
 }
 
 /* ==========================================================================
@@ -600,7 +604,7 @@ strong {
 /* チェックボックス
    ----------------------------------------------------------------- */
 .c-checkbox__container {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
 }
 
 .c-checkbox__container::after {
@@ -664,7 +668,7 @@ strong {
 /* ユーザー管理関係
    ----------------------------------------------------------------- */
 .c-user-management__wrapper {
-    max-width: 568px;
+    max-width: var(--width-user-management-wrapper);
     margin-left: auto;
     margin-right: auto;
 }
@@ -861,6 +865,10 @@ strong {
     text-align: center;
 }
 
+.u-text-right {
+    text-align: right;
+}
+
 .u-float--left {
     float: left;
 }
@@ -868,3 +876,13 @@ strong {
 .u-mb-24 {
     margin-bottom: var(--spacing-sm);
 }
+
+.p-button-horizontal-wrapper {
+    overflow: hidden;
+}
+
+.p-button-horizontal-wrapper > .c-button {
+    /*(568px - 16px) / 2 */
+    width: 276px;
+}
+
