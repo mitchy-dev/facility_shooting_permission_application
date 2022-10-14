@@ -265,6 +265,38 @@
   <p class="c-input__counter">0/10</p>
 </div>
 
+<div class="debug-label">画像のフォーム:アップロード前</div>
+<!--labelなどの要素はフォームコンポーネントのものを使う-->
+<div class="c-input__container">
+  <!--  <span class="c-status-label">ラベル</span>-->
+  <p class="c-input__label">label</p>
+  <!--  <p class="c-input__sub-label">sub-label</p>-->
+  <!--  <p class="c-input__help-message">help message</p>-->
+  <!--  <p class="c-input__error-message">error</p>-->
+  <label class="c-image-upload__label" for="image-uploads">
+    ここに画像をドラッグ
+    <input class="c-image-upload__body" type="file" class="" name="image-uploads" id="image-uploads"
+           accept=".jpg, .peg, .png">
+    <img class="c-image-upload__img" src="img/sample.jpg" alt="">
+  </label>
+</div>
+
+<div class="debug-label">画像のフォーム:アップロード後</div>
+<!--labelなどの要素はフォームコンポーネントのものを使う-->
+<div class="c-input__container">
+  <!--  <span class="c-status-label">ラベル</span>-->
+  <p class="c-input__label">label</p>
+  <!--  <p class="c-input__sub-label">sub-label</p>-->
+  <!--  <p class="c-input__help-message">help message</p>-->
+  <!--  <p class="c-input__error-message">error</p>-->
+  <label class="c-image-upload__label" for="image-uploads">
+    ここに画像をドラッグ
+    <input class="c-image-upload__body" type="file" class="" name="image-uploads" id="image-uploads"
+           accept=".jpg, .peg, .png">
+    <img class="c-image-upload__img --is-uploaded" src="img/sample.jpg" alt="">
+  </label>
+</div>
+
 <div class="debug-label">ステータスラベル</div>
 
 <span class="c-status-label">

@@ -92,6 +92,7 @@
     ----------------------------------------------------------------- */
     --color-background-base: var(--color-white-900);
     --color-background-base_current: var(--color-gray-orange-900);
+    --color-background-image_upload: var(--color-gray-orange-900);
     --color-background-main: var(--color-blue-900);
     --color-background-error: var(--color-red-100);
 
@@ -132,6 +133,12 @@
     /* Width
        ----------------------------------------------------------------- */
     --width-user-management-wrapper: 568px;
+
+    /* size
+       ----------------------------------------------------------------- */
+    --size-upload-avatar-image: 160px;
+    --size-upload-facility-image: 160px;
+
 }
 
 /* ==========================================================================
@@ -946,4 +953,42 @@ strong {
 
 .c-sidebar__item.--border-top {
     border-top: var(--border-normal);
+}
+
+.c-image-upload__label {
+    position: relative;
+    display: block;
+    border-radius: var(--border-radius-sm);
+    width: var(--size-upload-avatar-image);
+    height: var(--size-upload-avatar-image);
+    color: var(--color-text-sub);
+    line-height: var(--size-upload-avatar-image);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    background: var(--color-background-image_upload);
+    text-align: center;
+}
+
+.c-image-upload__label.--facility {
+    width: 100%;
+    height: calc((308px * 2 + 16px) / 1.6);
+    line-height: calc((308px * 2 + 16px) / 1.6);
+}
+
+.c-image-upload__body {
+    position: absolute;
+    left: -9999em;
+}
+
+.c-image-upload__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: none;
+}
+
+.c-image-upload__img.--is-uploaded {
+    display: block;
 }
