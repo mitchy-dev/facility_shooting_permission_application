@@ -4,7 +4,6 @@
 :root {
     /* Spacing
        ----------------------------------------------------------------- */
-    /* ジャンプ率はフィボナッチ数列*/
     --pritive-spacing: 4px;
     --spacing-3xs: calc(var(--pritive-spacing) * 1);
     --spacing-xxs: calc(var(--pritive-spacing) * 2);
@@ -56,6 +55,7 @@
     --color-blue-900: #5551ff;
     --color-cyan-900: #1a73e8;
     --color-red-900: #e01e5a;
+    --color-red-100: #FFF9F9;
     --color-wellow-900: #ffcc17;
     --color-orange-700: #ff834f;
     --color-gray-orange-800: #D6D3D0;
@@ -92,7 +92,7 @@
     --color-background-base: var(--color-white-900);
     --color-background-base_current: var(--color-gray-orange-800);
     --color-background-main: var(--color-blue-900);
-    --color-background-head: var(--color-blue-900);
+    --color-background-error: var(--color-red-100);
 
     /* Accent Colors
        ----------------------------------------------------------------- */
@@ -106,7 +106,7 @@
     --color-label-red: var(--color-red-900);
     --color-label-green: var(--color-green-900);
     --color-label-gray: var(--color-black-600);
-    --color-label-blue: var(--color-wellow-900);
+    --color-label-blue: var(--color-blue-900);
 
     /* Border Colors
        ----------------------------------------------------------------- */
@@ -119,6 +119,7 @@
     /* Border
        ----------------------------------------------------------------- */
     --border-normal: 1px solid var(--color-border-normal);
+    --border-warning: 2px solid var(--color-border-warning);
     --border-current: 1px solid var(--color-border-current);
     --border-triangle-select: 2px solid var(--color-border-triangle-select);
 
@@ -260,10 +261,11 @@ strong {
 /*メインコンテンツのコンポーネント*/
 .c-main__title {
     color: var(--color-text-main);
-    line-height: var(--line-height-tight);
-    font-size: var(--font-size-xxl);
+    line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-normal);
     margin-bottom: var(--spacing-lg);
+    text-align: center;
 }
 
 .c-main__message {
@@ -295,10 +297,15 @@ strong {
     padding: 12px 16px;
     border-radius: 10px;
     color: var(--color-text-main);
+    cursor: pointer;
     line-height: var(--line-height-normal);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
-    cursor: pointer;
+    text-align: center;
+}
+
+.c-button.--full-width {
+    width: 100%;
 }
 
 .c-button__primary {
@@ -469,6 +476,208 @@ strong {
     font-weight: var(--font-weight-normal);
 }
 
+/* input要素
+   ----------------------------------------------------------------- */
+.c-input__container {
+    width: 100%;
+    margin-bottom: var(--spacing-xl);
+}
+
+
+.c-input__label {
+    color: var(--color-text-main);
+    line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+}
+
+.c-input__sub-label {
+    color: var(--color-text-sub);
+    line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    /*margin-bottom: var(--spacing-xl);*/
+}
+
+.c-input__help-message {
+    color: var(--color-text-sub);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    /*margin-bottom: var(--spacing-xl);*/
+}
+
+.c-input__error-message {
+    color: var(--color-text-red);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    /*margin-bottom: var(--spacing-xl);*/
+}
+
+.c-input__body {
+    border: var(--border-normal);
+    border-radius: var(--border-radius-lg);
+    color: var(--color-text-main);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    padding: var(--spacing-xs) var(--spacing-xxs);
+    margin-top: var(--spacing-xxs);
+    width: 100%;
+    /*margin-bottom: var(--spacing-xl);*/
+}
+
+.c-input__body.error {
+    background: var(--color-background-error);
+    border: var(--border-warning);
+}
+
+.c-input__counter {
+    color: var(--color-text-sub);
+    line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    text-align: right;
+}
+
+
+/* ステータスラベル
+   ----------------------------------------------------------------- */
+.c-status-label {
+    padding: 4px 8px;
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-label-gray);
+    color: var(--color-text-white);
+    line-height: var(--line-height-tight);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+}
+
+.c-status-label.--orange {
+    background-color: var(--color-label-orange);
+}
+
+.c-status-label.--blue {
+    background-color: var(--color-label-blue);
+}
+
+.c-status-label.--green {
+    background-color: var(--color-label-green);
+}
+
+.c-status-label.--yellow {
+    background-color: var(--color-label-yellow);
+}
+
+.c-status-label.--red {
+    background-color: var(--color-label-red);
+}
+
+
+/* 共通テキスト
+   ----------------------------------------------------------------- */
+.c-text {
+    color: var(--color-text-main);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+}
+
+.c-text__link {
+    color: var(--color-text-link);
+    cursor: pointer;
+    font-weight: var(--font-weight-bold);
+}
+
+.c-text__link.--underline {
+    color: var(--color-text-link);
+    cursor: pointer;
+    font-weight: var(--font-weight-bold);
+    text-decoration: underline;
+}
+
+/* チェックボックス
+   ----------------------------------------------------------------- */
+.c-checkbox__container {
+    margin-bottom: var(--spacing-sm);
+}
+
+.c-checkbox__container::after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+.c-checkbox__label {
+    float: left;
+}
+
+.c-checkbox__body {
+    position: absolute;
+    left: -9999em;
+}
+
+.c-checkbox__name {
+    display: block;
+    position: relative;
+    padding-left: 32px;
+    user-select: none;
+}
+
+
+.c-checkbox__name::before {
+    position: absolute;
+    top: 54%;
+    left: 0;
+    font-size: var(--font-size-md);
+    width: 24px;
+    height: 24px;
+    content: "";
+    border: var(--border-normal);
+    border-radius: var(--border-radius-sm);
+    transform: translateY(-50%);
+}
+
+.c-checkbox__name::after {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0.2em;
+    left: 0.5em;
+    width: 0.5em;
+    height: 1em;
+    border-right: 2px solid var(--color-text-main);
+    border-bottom: 2px solid var(--color-text-main);
+    transform: rotate(40deg);
+}
+
+.c-checkbox__body:focus + .c-checkbox__name::before {
+    border-color: #4fa0e7;
+    box-shadow: 0 0 5px #0d7ee0;
+}
+
+
+.c-checkbox__body:checked + .c-checkbox__name::after {
+    content: "";
+}
+
+/* ユーザー管理関係
+   ----------------------------------------------------------------- */
+.c-user-management__wrapper {
+    max-width: 568px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* 区切り線
+   ----------------------------------------------------------------- */
+
+.c-hr {
+    color: var(--color-border-normal);
+    margin-bottom: var(--spacing-lg);
+}
+
 /* ==========================================================================
    Project
    ========================================================================== */
@@ -539,28 +748,10 @@ strong {
 }
 
 
-/* ==========================================================================
-   Utility
-   ========================================================================== */
-/*接頭辞は u */
-
-.debug-label {
-    color: var(--color-text-main);
-    background: var(--color-label-orange);
-    padding: var(--spacing-md);
-    margin-top: var(--spacing-xl);
-    margin-bottom: var(--spacing-xs);
-}
-
-
-.u-text-center {
-    text-align: center;
-}
-
-
+/* 海岸詳細のメイン画像
+   ----------------------------------------------------------------- */
 .p-facility-image__container {
     margin: var(--spacing-xs) calc(50% - 50vw);
-
 }
 
 .p-facility-image__main {
@@ -569,6 +760,8 @@ strong {
     height: auto;
 }
 
+/* 海岸詳細のサムネイル画像
+   ----------------------------------------------------------------- */
 .p-facility-thumbnail__container {
     width: 100%;
     text-align: center;
@@ -597,6 +790,8 @@ strong {
     height: auto;
 }
 
+/* 海岸詳細画面のコンポーネント
+   ----------------------------------------------------------------- */
 .p-facility-detail__wrapper {
     max-width: 848px;
     margin-left: auto;
@@ -648,7 +843,28 @@ strong {
 }
 
 
-.c-hr {
-    color: var(--color-border-normal);
-    margin-bottom: var(--spacing-lg);
+/* ==========================================================================
+   Utility
+   ========================================================================== */
+/*接頭辞は u */
+
+.debug-label {
+    color: var(--color-text-main);
+    background: var(--color-label-orange);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xs);
+}
+
+
+.u-text-center {
+    text-align: center;
+}
+
+.u-float--left {
+    float: left;
+}
+
+.u-mb-24 {
+    margin-bottom: var(--spacing-sm);
 }
