@@ -380,11 +380,28 @@ strong {
     position: relative;
 }
 
+.c-select__wrap--register {
+    position: relative;
+}
 
 .c-select__wrap::before {
     position: absolute;
-    top: 40%;
+    top: 50%;
     right: 0.6em;
+    width: 0;
+    height: 0;
+    padding: 0;
+    content: '';
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--color-border-triangle-select);
+    pointer-events: none;
+}
+
+.c-select__wrap--register::before {
+    position: absolute;
+    top: 53%;
+    right: 24px;
     width: 0;
     height: 0;
     padding: 0;
@@ -407,6 +424,24 @@ strong {
     font-weight: var(--font-weight-bold);
     cursor: pointer;
     appearance: none;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.c-select__box--register {
+    font-size: var(--font-size-md);
+    padding: var(--spacing-xs) var(--spacing-xs);
+    line-height: var(--line-height-normal);
+    border: var(--border-normal);
+    border-radius: var(--border-radius-lg);
+    background-color: transparent;
+    -webkit-appearance: none;
+    color: var(--color-text-main);
+    font-weight: var(--font-weight-normal);
+    cursor: pointer;
+    appearance: none;
+    width: 100%;
+    margin-top: 8px;
 }
 
 .-c-select__box::-ms-expand {
@@ -517,10 +552,11 @@ strong {
 
 .c-input__sub-label {
     color: var(--color-text-sub);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--line-height-tight);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
-    /*margin-bottom: var(--spacing-xl);*/
+    margin-bottom: var(--spacing-3xs);
+    margin-top: var(--spacing-3xs);
 }
 
 .c-input__help-message {
@@ -967,6 +1003,7 @@ strong {
     font-weight: var(--font-weight-normal);
     background: var(--color-background-image_upload);
     text-align: center;
+    margin-top: 8px;
 }
 
 .c-image-upload__label.--on-dragging {
