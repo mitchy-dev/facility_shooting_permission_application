@@ -969,6 +969,10 @@ strong {
     text-align: center;
 }
 
+.c-image-upload__label.--on-dragging {
+    border: 2px solid var(--color-border-focus);
+}
+
 .c-image-upload__label.--facility {
     width: 100%;
     height: calc((308px * 2 + 16px) / 1.6);
