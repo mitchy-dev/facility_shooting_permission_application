@@ -1033,3 +1033,41 @@ strong {
 .c-image-upload__img.--is-uploaded {
     display: block;
 }
+
+.p-my-page__avatar__container {
+    width: 160px;
+    height: 160px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.p-my-page__user-name {
+    color: var(--color-text-main);
+    line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.p-my-mage__number-of-registrations {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.p-my-mage__number-of-registrations tr {
+    padding-bottom: 32px;
+}
+
+.p-my-mage__number-of-registrations td {
+    color: var(--color-text-main);
+    line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    padding-right: 16px;
+}
+
+.p-my-mage__number-of-registrations td:nth-child(2n) {
+    text-align: right;
+}
