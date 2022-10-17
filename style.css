@@ -756,7 +756,8 @@ strong {
     float: left;
     margin-right: var(--spacing-xs);
     margin-bottom: var(--spacing-sm);
-    width: 308px;
+    width: calc((100% - 16px * 3) / 4);
+    min-width: 272px;
 }
 
 .p-card__layout:nth-child(4n) {
@@ -777,7 +778,7 @@ strong {
 }
 
 .p-card {
-    width: inherit;
+    width: 100%;
     padding-bottom: var(--spacing-3xs);
     border-radius: var(--border-radius-md);
     overflow: hidden;
