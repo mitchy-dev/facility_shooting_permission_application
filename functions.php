@@ -51,7 +51,7 @@ function startPageDisplay()
     debug('================================');
 }
 
-//セッションの終了ログ
+//ページ表示の終了ログ
 function endPageDisplay()
 {
     debug('================================');
@@ -59,4 +59,48 @@ function endPageDisplay()
     debug('================================');
 }
 
-$error_massages = array();
+//////////////////////////////////////////////
+//バリデーション
+//////////////////////////////////////////////
+
+//エラー文の格納用の配列
+$errorMassages = array();
+
+//エラー文
+const ERROR = array(
+    'EMPTY' => '入力が必須の項目です。',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+);
+
+//エラーメッセージ表示関数
+function getErrorMessage($key)
+{
+    global $errorMassages;
+    if (!empty($errorMassages[$key])) {
+        echo $errorMassages[$key];
+    }
+}
+
+//エラー時のCSSのクラス属性の付与
+function addErrorClass($key)
+{
+    global $errorMassages;
+    if (!empty($errorMassages[$key])) {
+        echo 'error';
+    }
+}
+
+//空チェック
+function validEmpty($value, $key)
+{
+    global $errorMassages;
+    if (empty($value)) {
+        $errorMassages[$key] = ERROR['EMPTY'];
+    }
+}
+///
+///

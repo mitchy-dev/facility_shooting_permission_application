@@ -1,8 +1,18 @@
 <?php
 
 require('functions.php');
-debug('ユーザー登録');
 startPageDisplay();
+
+if (!empty($_POST)) {
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $reenterPassword = $_POST['reenter-password'];
+
+  validEmpty($email, 'email');
+  validEmpty($password, 'password');
+  validEmpty($reenterPassword, 'reenterPassword');
+}
+
 endPageDisplay();
 ?>
 
@@ -51,9 +61,15 @@ endPageDisplay();
           <!--          <span class="c-status-label">ラベル</span>-->
           <label for="email" class="c-input__label">メールアドレス</label>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
-          <!--                              <p class="c-input__help-message">help message</p>-->
-          <p class="c-input__error-message"></p>
-          <input type="email" name="email" id="email" class="c-input__body js-count js-valid-email">
+          <!--          <p class="c-input__help-message">help message</p>-->
+          <p class="c-input__error-message">
+            <?php
+            echo getErrorMessage('email'); ?>
+          </p>
+          <input type="email" name="email" id="email"
+                 class="c-input__body js-count js-valid-email <?php
+                 addErrorClass('email');
+                 ?>">
           <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
         </div>
 
@@ -91,7 +107,7 @@ endPageDisplay();
             <span class="c-checkbox__name">同意する</span>
           </label>
         </div>
-        <button class="c-button --full-width c-button__primary" type="button">
+        <button type="submit" class="c-button --full-width c-button__primary">
           登録する
         </button>
       </form>
