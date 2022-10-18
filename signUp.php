@@ -1,3 +1,8 @@
+<?php
+require('functions.php');
+debug('ユーザー登録');
+?>
+
 <!doctype html>
 <html lang="ja">
 <head>
