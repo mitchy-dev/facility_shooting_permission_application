@@ -7,10 +7,37 @@ if (!empty($_POST)) {
   $email = $_POST['email'];
   $password = $_POST['password'];
   $reenterPassword = $_POST['reenter-password'];
+  $agreement = !empty($_POST['agreement']) ? $_POST['agreement'] : false;
 
-  validEmpty($email, 'email');
-  validEmpty($password, 'password');
-  validEmpty($reenterPassword, 'reenterPassword');
+  validEmpty($email, 'email', ERROR['EMPTY']);
+  validEmpty($password, 'password', ERROR['EMPTY']);
+  validEmpty($reenterPassword, 'reenterPassword', ERROR['EMPTY']);
+  validEmpty($agreement, 'agreement', ERROR['AGREEMENT']);
+//  validCheckBox($agreement, 'agreement');
+//  var_dump($agreement);
+
+
+  if (empty($errorMessages)) {
+    validMaxLength($email, 'email');
+    if (empty($errorMessages['email'])) {
+      validEmail($email, 'email', ERROR['EMAIL']);
+    }
+
+    validMaxLength($password, 'password');
+    if (empty($errorMessages['password'])) {
+      validMinLength($password, 'password');
+    }
+    if (empty($errorMessages['password'])) {
+      validHalf($password, 'password');
+    }
+
+    if (empty($errorMessages)) {
+      validMatch($password, $reenterPassword, 'reenterPassword');
+      if (empty($errorMessages)) {
+//        DB操作
+      }
+    }
+  }
 }
 
 endPageDisplay();
@@ -68,8 +95,7 @@ endPageDisplay();
           </p>
           <input type="email" name="email" id="email"
                  class="c-input__body js-count js-valid-email <?php
-                 addErrorClass('email');
-                 ?>">
+                 addErrorClass('email'); ?>">
           <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
         </div>
 
@@ -78,8 +104,12 @@ endPageDisplay();
           <label for="password" class="c-input__label">パスワード</label>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
           <p class="c-input__help-message">8文字以上の半角英数字を入力してください</p>
-          <p class="c-input__error-message"></p>
-          <input type="password" name="password" id="password" class="c-input__body">
+          <p class="c-input__error-message">
+            <?php
+            echo getErrorMessage('password'); ?>
+          </p>
+          <input type="password" name="password" id="password" class="c-input__body <?php
+          addErrorClass('password'); ?>">
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
 
@@ -88,8 +118,12 @@ endPageDisplay();
           <label for="reenter-password" class="c-input__label">パスワード再入力</label>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
           <!--                              <p class="c-input__help-message">help message</p>-->
-          <p class="c-input__error-message"></p>
-          <input type="reenter-password" name="reenter-password" id="reenter-password" class="c-input__body">
+          <p class="c-input__error-message">
+            <?php
+            echo getErrorMessage('reenterPassword'); ?>
+          </p>
+          <input type="password" name="reenter-password" id="reenter-password" class="c-input__body <?php
+          addErrorClass('reenterPassword'); ?>">
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
 
@@ -102,9 +136,13 @@ endPageDisplay();
           </p></div>
 
         <div class="c-checkbox__container">
-          <label class="c-checkbox__label">
-            <input type="checkbox" class="c-checkbox__body" name="" id="checkbox">
+          <label for="agreement" class="c-checkbox__label">
+            <input type="checkbox" class="c-checkbox__body" name="agreement" id="agreement">
             <span class="c-checkbox__name">同意する</span>
+            <p class="c-input__error-message">
+              <?php
+              echo getErrorMessage('agreement'); ?>
+            </p>
           </label>
         </div>
         <button type="submit" class="c-button --full-width c-button__primary">

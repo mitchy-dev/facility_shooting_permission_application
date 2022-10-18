@@ -64,11 +64,18 @@ function endPageDisplay()
 //////////////////////////////////////////////
 
 //エラー文の格納用の配列
-$errorMassages = array();
+$errorMessages = array();
 
 //エラー文
 const ERROR = array(
     'EMPTY' => '入力が必須の項目です。',
+    'EMAIL' => 'Emailの形式に合致しません',
+    'MAX_LENGTH' => '文字以下でご入力ください',
+    'MIN_LENGTH' => '文字以上でご入力ください',
+    'HALF' => '半角英数字でご入力ください',
+    'PASSWORD_MATCH' => 'パスワードとパスワード再入力が合致しません',
+    'AGREEMENT' => '利用規約とプライバシーポリシーへの同意が必要です',
+    '' => '',
     '' => '',
     '' => '',
     '' => '',
@@ -79,28 +86,86 @@ const ERROR = array(
 //エラーメッセージ表示関数
 function getErrorMessage($key)
 {
-    global $errorMassages;
-    if (!empty($errorMassages[$key])) {
-        echo $errorMassages[$key];
+    global $errorMessages;
+    if (!empty($errorMessages[$key])) {
+        echo $errorMessages[$key];
     }
 }
 
 //エラー時のCSSのクラス属性の付与
 function addErrorClass($key)
 {
-    global $errorMassages;
-    if (!empty($errorMassages[$key])) {
+    global $errorMessages;
+    if (!empty($errorMessages[$key])) {
         echo 'error';
     }
 }
 
 //空チェック
-function validEmpty($value, $key)
+function validEmpty($value, $key, $message = ERROR['EMPTY'])
 {
-    global $errorMassages;
+    global $errorMessages;
     if (empty($value)) {
-        $errorMassages[$key] = ERROR['EMPTY'];
+        $errorMessages[$key] = $message;
     }
 }
+
+//メールアドレス
+function validEmail($value, $key, $message = ERROR['EMAIL'])
+{
+    global $errorMessages;
+    if (!preg_match('|^[0-9a-z_./?-]+@([0-9a-z-]+\.)+[0-9a-z-]+$|', $value)) {
+        $errorMessages[$key] = $message;
+    }
+}
+
+//最大文字数
+function validMaxLength($value, $key, $maxLength = 256, $message = ERROR['MAX_LENGTH'])
+{
+    global $errorMessages;
+    if (mb_strlen($value) > $maxLength) {
+        $errorMessages[$key] = $maxLength . $message;
+    }
+}
+
+//最小文字数
+function validMinLength($value, $key, $minLength = 8, $message = ERROR['MIN_LENGTH'])
+{
+    global $errorMessages;
+    if (mb_strlen($value) < $minLength) {
+        $errorMessages[$key] = $minLength . $message;
+    }
+}
+
+//半角英数字
+function validHalf($value, $key, $message = ERROR['HALF'])
+{
+    global $errorMessages;
+    if (!preg_match('/^[0-9a-zA-Z]*$/', $value)) {
+        $errorMessages[$key] = $message;
+    }
+}
+
+//一致確認
+function validMatch($value, $value2, $key, $message = ERROR['PASSWORD_MATCH'])
+{
+    global $errorMessages;
+    if ($value !== $value2) {
+        $errorMessages[$key] = $message;
+    }
+}
+
+
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
 ///
 ///
