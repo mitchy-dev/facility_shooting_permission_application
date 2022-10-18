@@ -1,6 +1,9 @@
 <?php
+
 require('functions.php');
 debug('ユーザー登録');
+startPageDisplay();
+endPageDisplay();
 ?>
 
 <!doctype html>
