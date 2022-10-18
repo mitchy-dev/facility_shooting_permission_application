@@ -14,3 +14,5 @@ function debug($string)
         error_log('デバッグ：' . $string);
     }
 }
+
+$error_massages = array();
