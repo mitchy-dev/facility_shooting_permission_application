@@ -121,7 +121,7 @@ function validEmpty($value, $key, $message = ERROR['EMPTY'])
 }
 
 //メールアドレス
-function validEmail($value, $key, $message = ERROR['EMAIL'])
+function validEmailFormat($value, $key, $message = ERROR['EMAIL'])
 {
     global $errorMessages;
     if (!preg_match('|^[0-9a-z_./?-]+@([0-9a-z-]+\.)+[0-9a-z-]+$|', $value)) {
@@ -165,6 +165,15 @@ function validMatch($value, $value2, $key, $message = ERROR['PASSWORD_MATCH'])
     }
 }
 
+function validEmail($value, $key)
+{
+    global $errorMessages;
+    validEmpty($value, $key);
+    validMaxLength($value, $key);
+    if (empty($errorMessages[$key])) {
+        validEmailFormat($value, $key);
+    }
+}
 
 //////////////////////////////////////////////
 //DB操作

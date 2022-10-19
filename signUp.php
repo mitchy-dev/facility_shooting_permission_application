@@ -10,18 +10,13 @@ if (!empty($_POST)) {
   $reenterPassword = $_POST['reenter-password'];
   $agreement = !empty($_POST['agreement']) ? $_POST['agreement'] : false;
 
-  validEmpty($email, 'email', ERROR['EMPTY']);
+  validEmail($email, 'email');
   validEmpty($password, 'password', ERROR['EMPTY']);
   validEmpty($reenterPassword, 'reenterPassword', ERROR['EMPTY']);
   validEmpty($agreement, 'agreement', ERROR['AGREEMENT']);
 
 
   if (empty($errorMessages)) {
-    validMaxLength($email, 'email');
-    if (empty($errorMessages['email'])) {
-      validEmail($email, 'email', ERROR['EMAIL']);
-    }
-
     validMaxLength($password, 'password');
     if (empty($errorMessages['password'])) {
       validMinLength($password, 'password');
