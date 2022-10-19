@@ -43,12 +43,11 @@ if (!empty($_POST)) {
           );
           if (!empty(queryPost($dbh, $sql, $data))) {
             $_SESSION['login_time'] = time();
-            $_SESSION['login_limit'] = MONTH;
+            $_SESSION['login_limit'] = time() + WEEK;
             $_SESSION['message'] = SUCCESS['SIGN_UP'];
             $_SESSION['user_id'] = $dbh->lastInsertId();
 
-//            redirect('index.html');
-            redirect('signup.php');
+            redirect('index.html');
           }
         } catch (Exception $e) {
           exceptionHandler($e);
