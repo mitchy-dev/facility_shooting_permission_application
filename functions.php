@@ -175,6 +175,19 @@ function validEmail($value, $key)
     }
 }
 
+function validPassword($value, $key)
+{
+    global $errorMessages;
+    validEmpty($value, $key);
+    if (empty($errorMessages[$key])) {
+        validMinLength($value, $key);
+    }
+    validMaxLength($value, $key);
+    if (empty($errorMessages[$key])) {
+        validHalf($value, $key);
+    }
+}
+
 //////////////////////////////////////////////
 //DB操作
 //////////////////////////////////////////////

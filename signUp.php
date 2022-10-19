@@ -4,51 +4,36 @@ require('functions.php');
 startPageDisplay();
 
 if (!empty($_POST)) {
-  var_dump($_POST);
   $email = $_POST['email'];
   $password = $_POST['password'];
   $reenterPassword = $_POST['reenter-password'];
   $agreement = !empty($_POST['agreement']) ? $_POST['agreement'] : false;
 
   validEmail($email, 'email');
-  validEmpty($password, 'password', ERROR['EMPTY']);
-  validEmpty($reenterPassword, 'reenterPassword', ERROR['EMPTY']);
+  validPassword($password, 'password');
+  validMatch($password, $reenterPassword, 'reenterPassword');
   validEmpty($agreement, 'agreement', ERROR['AGREEMENT']);
 
 
   if (empty($errorMessages)) {
-    validMaxLength($password, 'password');
-    if (empty($errorMessages['password'])) {
-      validMinLength($password, 'password');
-    }
-    if (empty($errorMessages['password'])) {
-      validHalf($password, 'password');
-    }
+    try {
+      $dbh = dbConnect();
+      $sql = 'insert into users(email, password, created_at) VALUES (:email, :password, :created_at)';
+      $data = array(
+              ':email' => $email,
+              ':password' => password_hash($password, PASSWORD_DEFAULT),
+              ':created_at' => date("Y-m-d H:i:s"),
+      );
+      if (!empty(queryPost($dbh, $sql, $data))) {
+        $_SESSION['login_time'] = time();
+        $_SESSION['login_limit'] = time() + WEEK;
+        $_SESSION['message'] = SUCCESS['SIGN_UP'];
+        $_SESSION['user_id'] = $dbh->lastInsertId();
 
-    if (empty($errorMessages)) {
-      validMatch($password, $reenterPassword, 'reenterPassword');
-      if (empty($errorMessages)) {
-//        DB操作
-        try {
-          $dbh = dbConnect();
-          $sql = 'insert into users(email, password, created_at) VALUES (:email, :password, :created_at)';
-          $data = array(
-                  ':email' => $email,
-                  ':password' => password_hash($password, PASSWORD_DEFAULT),
-                  ':created_at' => date("Y-m-d H:i:s"),
-          );
-          if (!empty(queryPost($dbh, $sql, $data))) {
-            $_SESSION['login_time'] = time();
-            $_SESSION['login_limit'] = time() + WEEK;
-            $_SESSION['message'] = SUCCESS['SIGN_UP'];
-            $_SESSION['user_id'] = $dbh->lastInsertId();
-
-            redirect('index.html');
-          }
-        } catch (Exception $e) {
-          exceptionHandler($e);
-        }
+        redirect('index.html');
       }
+    } catch (Exception $e) {
+      exceptionHandler($e);
     }
   }
 }
