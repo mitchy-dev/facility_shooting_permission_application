@@ -33,7 +33,7 @@ if (!empty($_POST)) {
         $_SESSION['message'] = SUCCESS['SIGN_UP'];
         $_SESSION['user_id'] = $dbh->lastInsertId();
 
-        redirect('index.html');
+        redirect('index.php');
       }
     } catch (Exception $e) {
       exceptionHandler($e);
