@@ -10,6 +10,9 @@ if (!empty($_POST)) {
   $agreement = !empty($_POST['agreement']) ? $_POST['agreement'] : false;
 
   validEmail($email, 'email');
+  if (empty($errorMessages['email'])) {
+    validDuplicateEmail($email, 'email');
+  }
   validPassword($password, 'password');
   validMatch($password, $reenterPassword, 'reenterPassword');
   validEmpty($agreement, 'agreement', ERROR['AGREEMENT']);
