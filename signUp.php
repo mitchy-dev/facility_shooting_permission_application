@@ -4,6 +4,7 @@ require('functions.php');
 startPageDisplay();
 
 if (!empty($_POST)) {
+  var_dump($_POST);
   $email = $_POST['email'];
   $password = $_POST['password'];
   $reenterPassword = $_POST['reenter-password'];
@@ -83,7 +84,10 @@ require "header.php";
         </p>
         <input type="email" name="email" id="email"
                class="c-input__body js-count js-valid-email <?php
-               addErrorClass('email'); ?>">
+               addErrorClass('email'); ?>" value="<?php
+        if (!empty($_POST['email'])) {
+          echo $_POST['email'];
+        } ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
 
@@ -97,7 +101,10 @@ require "header.php";
           echo getErrorMessage('password'); ?>
         </p>
         <input type="password" name="password" id="password" class="c-input__body <?php
-        addErrorClass('password'); ?>">
+        addErrorClass('password'); ?>" value="<?php
+        if (!empty($_POST['password'])) {
+          echo $_POST['password'];
+        } ?>">
         <!--          <p class="c-input__counter">0/10</p>-->
       </div>
 
@@ -111,7 +118,10 @@ require "header.php";
           echo getErrorMessage('reenterPassword'); ?>
         </p>
         <input type="password" name="reenter-password" id="reenter-password" class="c-input__body <?php
-        addErrorClass('reenterPassword'); ?>">
+        addErrorClass('reenterPassword'); ?>" value="<?php
+        if (!empty($_POST['reenter-password'])) {
+          echo $_POST['reenter-password'];
+        } ?>">
         <!--          <p class="c-input__counter">0/10</p>-->
       </div>
 
@@ -125,7 +135,10 @@ require "header.php";
 
       <div class="c-checkbox__container">
         <label for="agreement" class="c-checkbox__label">
-          <input type="checkbox" class="c-checkbox__body" name="agreement" id="agreement">
+          <input type="checkbox" class="c-checkbox__body" name="agreement" id="agreement" <?php
+          if (!empty($_POST['agreement'])) {
+            echo 'checked';
+          } ?>>
           <span class="c-checkbox__name">同意する</span>
           <p class="c-input__error-message">
             <?php
