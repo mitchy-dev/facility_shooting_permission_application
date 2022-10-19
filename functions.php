@@ -43,10 +43,12 @@ function startPageDisplay()
 {
     debug('================================');
     debug(basename($_SERVER['PHP_SELF']) . 'の表示処理開始');
-    debug('セッションID：' . session_id());
-    if (!empty($_SESSION['login_limit'])) {
-        debug('現在のタイムスタンプ：' . time());
-        debug('セッションの有効期限：' . (time() + MONTH));
+    if (!empty($_SESSION['user_id'])) {
+        debug('ログインユーザーID：' . print_r($_SESSION['user_id'], true));
+    }
+    debug('現在のタイムスタンプ：' . time());
+    if (!empty($_SESSION['login_time']) && !empty($_SESSION['login_limit'])) {
+        debug('ログイン有効期限：' . ($_SESSION['login_time'] + $_SESSION['login_limit']));
     }
     debug('================================');
 }
@@ -75,14 +77,22 @@ const ERROR = array(
     'HALF' => '半角英数字でご入力ください',
     'PASSWORD_MATCH' => 'パスワードとパスワード再入力が合致しません',
     'AGREEMENT' => '利用規約とプライバシーポリシーへの同意が必要です',
-    '' => '',
-    '' => '',
+    'EXCEPTION' => '不具合が発生しました。時間をおいてやり直してください。',
+    'QUERY_POST_FALSE' => '不具合が発生しました。お手数ですがお問い合わせください',
     '' => '',
     '' => '',
     '' => '',
     '' => '',
 );
 
+const SUCCESS = array(
+    'SIGN_UP' => 'ユーザー登録しました',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+);
 //エラーメッセージ表示関数
 function getErrorMessage($key)
 {
@@ -129,7 +139,7 @@ function validMaxLength($value, $key, $maxLength = 256, $message = ERROR['MAX_LE
 }
 
 //最小文字数
-function validMinLength($value, $key, $minLength = 8, $message = ERROR['MIN_LENGTH'])
+function validMinLength($value, $key, $minLength = 6, $message = ERROR['MIN_LENGTH'])
 {
     global $errorMessages;
     if (mb_strlen($value) < $minLength) {
@@ -156,11 +166,74 @@ function validMatch($value, $value2, $key, $message = ERROR['PASSWORD_MATCH'])
 }
 
 
+//////////////////////////////////////////////
+//DB操作
+//////////////////////////////////////////////
+//DB接続
+function dbConnect()
+{
+    $dsn = 'mysql:dbname=facility_shooting_permission_application;host=localhost;charset=utf8mb4';
+    $user = 'root';
+    $password = 'root';
+    $options = array(
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    );
+
+    return new PDO($dsn, $user, $password, $options);
+}
+
+//クエリ実行
+function queryPost($dbh, $sql, $data)
+{
+    $sth = $dbh->prepare($sql);
+    if ($sth->execute($data)) {
+        debug('クエリが成功しました');
+        return $sth;
+    } else {
+        global $errorMessages;
+        $errorMessages['common'] = ERROR['QUERY_POST_FALSE'];
+        debug('クエリが失敗しました:' . print_r($sth->errorInfo(), true));
+        return false;
+    }
+}
+
+//例外処理
+function exceptionHandler($e)
+{
+    global $errorMessages;
+    $errorMessages['common'] = ERROR['EXCEPTION'];
+    debug('例外処理：' . $e->getMessage());
+}
+
 ///
+//////////////////////////////////////////////
+//入力値保持
+//////////////////////////////////////////////
+//
+//////////////////////////////////////////////
+//リダイレクト
+//////////////////////////////////////////////
+
+function redirect($pageName)
+{
+    header('Location:' . $pageName);
+    exit();
+}
+
 ///
-///
-///
-///
+//////////////////////////////////////////////
+//フラッシュメッセージ
+//////////////////////////////////////////////
+function getSessionFlash($key)
+{
+    if (!empty($_SESSION[$key])) {
+        $message = $_SESSION[$key];
+        $_SESSION[$key] = '';
+        return $message;
+    }
+}
 ///
 ///
 ///

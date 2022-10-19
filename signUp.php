@@ -13,8 +13,6 @@ if (!empty($_POST)) {
   validEmpty($password, 'password', ERROR['EMPTY']);
   validEmpty($reenterPassword, 'reenterPassword', ERROR['EMPTY']);
   validEmpty($agreement, 'agreement', ERROR['AGREEMENT']);
-//  validCheckBox($agreement, 'agreement');
-//  var_dump($agreement);
 
 
   if (empty($errorMessages)) {
@@ -35,6 +33,26 @@ if (!empty($_POST)) {
       validMatch($password, $reenterPassword, 'reenterPassword');
       if (empty($errorMessages)) {
 //        DB操作
+        try {
+          $dbh = dbConnect();
+          $sql = 'insert into users(email, password, created_at) VALUES (:email, :password, :created_at)';
+          $data = array(
+                  ':email' => $email,
+                  ':password' => password_hash($password, PASSWORD_DEFAULT),
+                  ':created_at' => date("Y-m-d H:i:s"),
+          );
+          if (!empty(queryPost($dbh, $sql, $data))) {
+            $_SESSION['login_time'] = time();
+            $_SESSION['login_limit'] = MONTH;
+            $_SESSION['message'] = SUCCESS['SIGN_UP'];
+            $_SESSION['user_id'] = $dbh->lastInsertId();
+
+//            redirect('index.html');
+            redirect('signup.php');
+          }
+        } catch (Exception $e) {
+          exceptionHandler($e);
+        }
       }
     }
   }
@@ -78,11 +96,17 @@ endPageDisplay();
         </a>
       </li>
     </ul>
+    <div class="c-notification-bar__container">
+      <span class="c-notification-bar__message js-flash-message"><?php
+        echo getSessionFlash('message'); ?></span>
+    </div>
   </header>
 
   <main class="l-main">
     <div class="c-user-management__wrapper">
       <h1 class="c-main__title">ユーザー登録</h1>
+      <p class="c-main__message --error"><?php
+        getErrorMessage('common'); ?></p>
       <form method="post">
         <div class="c-input__container">
           <!--          <span class="c-status-label">ラベル</span>-->
@@ -103,7 +127,7 @@ endPageDisplay();
           <!--          <span class="c-status-label">ラベル</span>-->
           <label for="password" class="c-input__label">パスワード</label>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
-          <p class="c-input__help-message">8文字以上の半角英数字を入力してください</p>
+          <p class="c-input__help-message">6文字以上の半角英数字を入力してください</p>
           <p class="c-input__error-message">
             <?php
             echo getErrorMessage('password'); ?>
@@ -166,8 +190,8 @@ endPageDisplay();
     </div>
   </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
-        integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+        crossorigin="anonymous"></script>
 <script>
   $(function () {
     //フッターの固定
@@ -200,6 +224,15 @@ endPageDisplay();
 
       }
     })
+
+    //  フラッシュメッセージ
+    var $flashMessage = $('.js-flash-message');
+    if ($flashMessage.text().trim() !== '') {
+      $flashMessage.parent().slideToggle('slow');
+      $flashMessage.parent().slideToggle(3000);
+
+
+    }
 
 
   });

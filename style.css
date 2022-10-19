@@ -117,6 +117,7 @@
     --color-border-warning: var(--color-red-900);
     --color-border-focus: var(--color-blue-900);
     --color-border-triangle-select: var(--color-blue-900);
+    --color-border-nortification-success: var(--color-blue-900);
 
     /* Border
        ----------------------------------------------------------------- */
@@ -124,6 +125,7 @@
     --border-warning: 2px solid var(--color-border-warning);
     --border-current: 1px solid var(--color-border-current);
     --border-triangle-select: 2px solid var(--color-border-triangle-select);
+    --border-nortification-success: 1px solid var(--color-border-nortification-success);
 
     /* Opacity
        ----------------------------------------------------------------- */
@@ -182,6 +184,7 @@ strong {
     border-bottom: var(--border-normal);
     overflow: hidden;
     margin-bottom: 16px;
+    position: relative;
 }
 
 .l-main {
@@ -299,6 +302,7 @@ strong {
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-normal);
     margin-bottom: var(--spacing-md);
+    text-align: center;
 }
 
 .c-main__message.--error {
@@ -1095,4 +1099,25 @@ strong {
 
 .u-overflow-hidden {
     overflow: hidden;
+}
+
+.c-notification-bar__container {
+    text-align: center;
+    border: 1px solid var(--color-border-nortification-success);
+    background: rgba(26, 115, 232, 0.1);
+    padding-top: 4px;
+    padding-bottom: 4px;
+    position: absolute;
+    top: 0;
+    /*bottom: 0;*/
+    left: 0;
+    width: 100%;
+    display: none;
+}
+
+.c-notification-bar__message {
+    color: var(--color-text-main);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
 }
