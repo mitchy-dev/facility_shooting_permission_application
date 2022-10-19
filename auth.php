@@ -11,12 +11,12 @@ if (!empty($_SESSION['login_limit'])) {
         }
     } else {
         if (basename($_SERVER['PHP_SELF']) !== 'login.php') {
-            redirect('login.html');
+            redirect('login.php');
         }
     }
 } else {
     if (basename($_SERVER['PHP_SELF']) !== 'login.php') {
-        redirect('login.html');
+        redirect('login.php');
     }
 }
 

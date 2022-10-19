@@ -87,7 +87,7 @@ const ERROR = array(
 
 const SUCCESS = array(
     'SIGN_UP' => 'ユーザー登録しました',
-    '' => '',
+    'LOGIN' => 'ログインしました',
     '' => '',
     '' => '',
     '' => '',
