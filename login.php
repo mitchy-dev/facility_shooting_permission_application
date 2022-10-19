@@ -2,6 +2,7 @@
 
 require('functions.php');
 startPageDisplay();
+require "auth.php";
 
 if (!empty($_POST)) {
   $email = $_POST['email'];
@@ -34,7 +35,7 @@ from users where email = :email and is_deleted = false';
           $_SESSION['login_limit'] = time() + WEEK;
         }
         $_SESSION['message'] = SUCCESS['LOGIN'];
-        redirect('index.html');
+        redirect('index.php');
       } else {
         debug('認証できませんでした');
         $errorMessages['common'] = ERROR['LOGIN'];
