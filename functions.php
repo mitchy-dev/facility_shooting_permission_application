@@ -79,8 +79,8 @@ const ERROR = array(
     'AGREEMENT' => '利用規約とプライバシーポリシーへの同意が必要です',
     'EXCEPTION' => '不具合が発生しました。時間をおいてやり直してください。',
     'QUERY_POST_FALSE' => '不具合が発生しました。お手数ですがお問い合わせください',
-    '' => '',
-    '' => '',
+    'LOGIN' => 'メールアドレスもしくはパスワードが違います',
+    'DUPLICATE_EMAIL' => 'メールアドレスに誤りがあります。ご確認いただき、正しく変更してください。',
     '' => '',
     '' => '',
 );
@@ -162,6 +162,27 @@ function validMatch($value, $value2, $key, $message = ERROR['PASSWORD_MATCH'])
     global $errorMessages;
     if ($value !== $value2) {
         $errorMessages[$key] = $message;
+    }
+}
+
+
+function validDuplicateEmail($value, $key)
+{
+    debug('登録済みのメールアドレスか確認します。');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select count(*) from users where email = :email and is_deleted = false';
+        $data = array(
+            ':email' => $value,
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        $result = $sth->fetch();
+        if (!empty(array_shift($result))) {
+            global $errorMessages;
+            $errorMessages[$key] = ERROR['DUPLICATE_EMAIL'];
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
     }
 }
 
