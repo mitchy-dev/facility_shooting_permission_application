@@ -26,15 +26,15 @@ from users where email = :email and is_deleted = false';
       if (password_verify($password, $result['password'])) {
         debug('認証できました');
         $_SESSION['login_time'] = time();
-        $_SESSION['message'] = SUCCESS['SIGN_UP'];
-        $_SESSION['user_id'] = $dbh->lastInsertId();
+        $_SESSION['user_id'] = $result['user_id'];
+        $_SESSION['message'] = SUCCESS['LOGIN'];
+       
         if (!empty($extendLogin)) {
           debug('次回ログインを省略にチェックがあります');
           $_SESSION['login_limit'] = time() + MONTH;
         } else {
           $_SESSION['login_limit'] = time() + WEEK;
         }
-        $_SESSION['message'] = SUCCESS['LOGIN'];
         redirect('index.php');
       } else {
         debug('認証できませんでした');
