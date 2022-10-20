@@ -14,6 +14,8 @@ if (!empty($_POST)) {
   $personInCharge = $_POST['person_in_charge'];
   $phoneNumber = $_POST['phone_number'];
   $comment = $_POST['comment'];
+  $avatarPath = keepFilePath('avatar_path', 'avatar_path', $dbUserData);
+
 
   validMaxLength($organization, 'organization');
   validMaxLength($representativeTitle, 'representativeTitle');
@@ -34,7 +36,8 @@ if (!empty($_POST)) {
                  department = :department, 
                  person_in_charge = :person_in_charge, 
                  phone_number = :phone_number, 
-                 comment = :comment 
+                 comment = :comment,
+                 avatar_path = :avatar_path
               where 
                     user_id = :user_id and 
                     is_deleted = false';
@@ -46,6 +49,7 @@ if (!empty($_POST)) {
               ':person_in_charge' => $personInCharge,
               ':phone_number' => $phoneNumber,
               ':comment' => $comment,
+              ':avatar_path' => $avatarPath,
               ':user_id' => $_SESSION['user_id'],
 
       );
@@ -191,16 +195,24 @@ require "header.php";
 
       <div class="c-input__container">
         <p class="c-input__label">画像</p>
-        <p class="c-input__sub-label">コメント時に表示されます</p>
+        <!--        <p class="c-input__sub-label">コメント時に表示されます</p>-->
         <!--  <p class="c-input__help-message">help message</p>-->
-        <!--  <p class="c-input__error-message">error</p>-->
+        <p class="c-input__error-message"><?php
+          echo getErrorMessage('avatar_path'); ?></p>
         <label class="c-image-upload__label js-drag-area" for="avatar_path">
           ここに画像をドラッグ
           <input class="c-image-upload__body" type="file" class="" name="avatar_path" id="avatar_path"
                  accept=".jpg, .peg, .png">
           <input type="hidden" name="max_file_size" value="<?php
           echo 2 * MEGA_BYTES; ?>">
-          <img class="c-image-upload__img" src="img/sample.jpg" alt="">
+          <!--          <img class="c-image-upload__img" src="img/sample.jpg" alt="">-->
+          <img class="c-image-upload__img" src="<?php
+          if (!empty($dbUserData['avatar_path'])) {
+            echo $dbUserData['avatar_path'];
+          } ?>" style="<?php
+          if (!empty($dbUserData['avatar_path'])) {
+            echo 'display:block;';
+          } ?>" alt="">
         </label>
       </div>
       <button class="c-button --full-width c-button__primary" type="submit">

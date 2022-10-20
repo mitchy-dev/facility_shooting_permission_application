@@ -89,7 +89,7 @@ const SUCCESS = array(
     'SIGN_UP' => 'ユーザー登録しました',
     'LOGIN' => 'ログインしました',
     'PROFILE_EDIT' => 'プロフィールを更新しました',
-    '' => '',
+    'FILE_UPLOAD' => 'ファイルが正常にアップロードされました',
     '' => '',
     '' => '',
 );
@@ -243,10 +243,10 @@ function queryPost($dbh, $sql, $data)
 }
 
 //例外処理
-function exceptionHandler($e)
+function exceptionHandler($e, $key = 'common', $message = ERROR['EXCEPTION'])
 {
     global $errorMessages;
-    $errorMessages['common'] = ERROR['EXCEPTION'];
+    $errorMessages[$key] = $message;
     debug('例外処理：' . $e->getMessage());
 }
 
@@ -269,6 +269,15 @@ function keepInputAndDatabase($key, $dataFetchedFromDatabase = array(), $useGetM
         if (array_key_exists($key, $method)) {
             return $method[$key];
         }
+    }
+}
+
+function keepFilePath($key, $errorMessageKey = 'common', $dataFetchedFromDatabase = array())
+{
+    if (!empty($_FILES[$key]['name'])) {
+        return uploadImage($key, $errorMessageKey);
+    } elseif (!empty($dataFetchedFromDatabase[$key])) {
+        return $dataFetchedFromDatabase[$key];
     }
 }
 
@@ -322,11 +331,49 @@ from users where user_id = :user_id and is_deleted = false';
 
 
 //////////////////////////////////////////////
-//ファイルサイズ用の定数
+//ファイルアップロード
 //////////////////////////////////////////////
+//
+//ファイルサイズ用の定数
 const KIRO_BYTES = 1024;
 const MEGA_BYTES = KIRO_BYTES * 1024;
-//
+//アップロード関数
+function uploadImage($key, $errorMessageKey)
+{
+    if (isset($_FILES[$key]['error']) && is_int($_FILES[$key]['error'])) {
+        debug('画像のアップロードを開始ログアウトします');
+        try {
+            switch ($_FILES[$key]['error']) {
+                case UPLOAD_ERR_OK: // OK
+                    break;
+                case UPLOAD_ERR_NO_FILE:   // ファイル未選択
+                    throw new RuntimeException('ファイルが選択されていません');
+                case UPLOAD_ERR_INI_SIZE:  // php.ini定義の最大サイズ超過
+                case UPLOAD_ERR_FORM_SIZE: // フォーム定義の最大サイズ超過
+                    throw new RuntimeException('ファイルサイズが大きすぎます');
+                default:
+                    throw new RuntimeException('その他のエラーが発生しました');
+            }
+
+            // $_FILES[$key]['mime']の値はブラウザ側で偽装可能なので、MIMEタイプを自前でチェックする
+            $type = @exif_imagetype($_FILES[$key]['tmp_name']);
+            if (!in_array($type, [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG], true)) {
+                throw new RuntimeException('画像形式が未対応です');
+            }
+
+            // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し、ファイルを保存する
+            $path = sprintf('uploads/%s%s', sha1_file($_FILES[$key]['tmp_name']), image_type_to_extension($type));
+//            $path = sprintf('/uploads/%s%s', sha1_file($_FILES[$key]['tmp_name']), image_type_to_extension($type));
+            if (!move_uploaded_file($_FILES[$key]['tmp_name'], $path)) {
+                throw new RuntimeException('ファイル保存時にエラーが発生しました');
+            }
+            chmod($path, 0644);
+            return $path;
+        } catch (RuntimeException $e) {
+            exceptionHandler($e, $errorMessageKey, $e->getMessage());
+        }
+    }
+}
 ///
 ///
 ///
