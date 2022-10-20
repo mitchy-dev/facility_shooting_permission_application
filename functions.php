@@ -232,7 +232,7 @@ function queryPost($dbh, $sql, $data)
 {
     $sth = $dbh->prepare($sql);
     if ($sth->execute($data)) {
-        debug('クエリが成功しました');
+        debug('クエリが成功しました：' . print_r($sth, true));
         return $sth;
     } else {
         global $errorMessages;
