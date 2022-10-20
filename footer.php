@@ -49,9 +49,20 @@
     if ($flashMessage.text().trim() !== '') {
       $flashMessage.parent().slideToggle('slow');
       $flashMessage.parent().slideToggle(3000);
-
-
     }
+
+//  画像のドラッグ中のフォームの変化
+    var $dragArea = $('.js-drag-area');
+
+    $dragArea.on('dragover', function (e) {
+      e.preventDefault();
+      $(this).addClass('--on-dragging');
+    });
+
+    $dragArea.on('dragleave', function (e) {
+      e.preventDefault();
+      $(this).removeClass('--on-dragging');
+    });
 
 
   });
