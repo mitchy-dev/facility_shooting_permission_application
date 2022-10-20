@@ -4,6 +4,8 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
+$dbUserData = fetchUserData($_SESSION['user_id']);
+
 if (!empty($_POST)) {
   $organization = $_POST['organization'];
   $representativeTitle = $_POST['representative_title'];
@@ -77,7 +79,7 @@ require "header.php";
     <p class="c-main__message --error"><?php
       getErrorMessage('common'); ?></p>
 
-    <form method="post" action="">
+    <form method="post" action="" enctype="multipart/form-data">
       <div class="c-input__container">
         <!--          <span class="c-status-label">ラベル</span>-->
         <label for="organization" class="c-input__label">組織名</label>
@@ -90,9 +92,8 @@ require "header.php";
         <input type="text" name="organization" id="organization"
                class="c-input__body js-count js-valid-email <?php
                addErrorClass('organization'); ?>" value="<?php
-        if (!empty($_POST['organization'])) {
-          echo $_POST['organization'];
-        } ?>">
+        echo keepInputAndDatabase('organization', $dbUserData);
+        ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
       <div class="c-input__container">
@@ -107,9 +108,8 @@ require "header.php";
         <input type="text" name="representative_title" id="representative_title"
                class="c-input__body js-count js-valid-email <?php
                addErrorClass('representative_title'); ?>" value="<?php
-        if (!empty($_POST['representative_title'])) {
-          echo $_POST['representative_title'];
-        } ?>">
+        echo keepInputAndDatabase('representative_title', $dbUserData);
+        ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
       <div class="c-input__container">
@@ -124,9 +124,7 @@ require "header.php";
         <input type="text" name="representatives_name" id="representatives_name"
                class="c-input__body js-count js-valid-email <?php
                addErrorClass('representatives_name'); ?>" value="<?php
-        if (!empty($_POST['representatives_name'])) {
-          echo $_POST['representatives_name'];
-        } ?>">
+        echo keepInputAndDatabase('representatives_name', $dbUserData); ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
       <div class="c-input__container">
@@ -141,9 +139,7 @@ require "header.php";
         <input type="text" name="department" id="department"
                class="c-input__body js-count js-valid-email <?php
                addErrorClass('department'); ?>" value="<?php
-        if (!empty($_POST['department'])) {
-          echo $_POST['department'];
-        } ?>">
+        echo keepInputAndDatabase('department', $dbUserData); ?>">
         <!--                <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
       <div class="c-input__container">
@@ -158,9 +154,7 @@ require "header.php";
         <input type="text" name="person_in_charge" id="person_in_charge"
                class="c-input__body js-count js-valid-email <?php
                addErrorClass('person_in_charge'); ?>" value="<?php
-        if (!empty($_POST['person_in_charge'])) {
-          echo $_POST['person_in_charge'];
-        } ?>">
+        echo keepInputAndDatabase('person_in_charge', $dbUserData); ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
       <div class="c-input__container">
@@ -175,9 +169,7 @@ require "header.php";
         <input type="text" name="phone_number" id="phone_number"
                class="c-input__body js-count js-valid-email <?php
                addErrorClass('phone_number'); ?>" value="<?php
-        if (!empty($_POST['phone_number'])) {
-          echo $_POST['phone_number'];
-        } ?>">
+        echo keepInputAndDatabase('phone_number', $dbUserData); ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
       <div class="c-input__container">
@@ -192,9 +184,7 @@ require "header.php";
         <input type="text" name="comment" id="comment"
                class="c-input__body js-count js-valid-email <?php
                addErrorClass('comment'); ?>" value="<?php
-        if (!empty($_POST['comment'])) {
-          echo $_POST['comment'];
-        } ?>">
+        echo keepInputAndDatabase('comment', $dbUserData); ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
 
@@ -204,10 +194,12 @@ require "header.php";
         <p class="c-input__sub-label">コメント時に表示されます</p>
         <!--  <p class="c-input__help-message">help message</p>-->
         <!--  <p class="c-input__error-message">error</p>-->
-        <label class="c-image-upload__label js-drag-area" for="image-uploads">
+        <label class="c-image-upload__label js-drag-area" for="avatar_path">
           ここに画像をドラッグ
-          <input class="c-image-upload__body" type="file" class="" name="image-uploads" id="image-uploads"
+          <input class="c-image-upload__body" type="file" class="" name="avatar_path" id="avatar_path"
                  accept=".jpg, .peg, .png">
+          <input type="hidden" name="max_file_size" value="<?php
+          echo 2 * MEGA_BYTES; ?>">
           <img class="c-image-upload__img" src="img/sample.jpg" alt="">
         </label>
       </div>

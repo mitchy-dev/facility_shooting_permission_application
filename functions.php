@@ -254,7 +254,24 @@ function exceptionHandler($e)
 //////////////////////////////////////////////
 //入力値保持
 //////////////////////////////////////////////
-//
+
+function keepInputAndDatabase($key, $dataFetchedFromDatabase = array(), $useGetMethod = false)
+{
+    $method = $useGetMethod ? $_GET : $_POST;
+
+    if (array_key_exists($key, $dataFetchedFromDatabase)) {
+        if (array_key_exists($key, $method) && $method[$key] !== $dataFetchedFromDatabase[$key]) {
+            return $method[$key];
+        } else {
+            return $dataFetchedFromDatabase[$key];
+        }
+    } else {
+        if (array_key_exists($key, $method)) {
+            return $method[$key];
+        }
+    }
+}
+
 //////////////////////////////////////////////
 //リダイレクト
 //////////////////////////////////////////////
@@ -277,10 +294,39 @@ function getSessionFlash($key)
         return $message;
     }
 }
-///
-///
-///
-///
+
+
+//////////////////////////////////////////////
+//データの取得
+//////////////////////////////////////////////
+//ユーザー情報
+function fetchUserData($userId)
+{
+    debug('ログインユーザーのデータを取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select organization, representative_title, representatives_name, department, person_in_charge, phone_number, comment, avatar_path, has_facility_registration_authority
+from users where user_id = :user_id and is_deleted = false';
+        $data = array(
+            ':user_id' => $userId,
+
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetch();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
+
+//////////////////////////////////////////////
+//ファイルサイズ用の定数
+//////////////////////////////////////////////
+const KIRO_BYTES = 1024;
+const MEGA_BYTES = KIRO_BYTES * 1024;
+//
 ///
 ///
 ///
