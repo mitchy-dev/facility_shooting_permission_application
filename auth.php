@@ -5,7 +5,7 @@ if (!empty($_SESSION['login_limit'])) {
     if (time() < $_SESSION['login_limit']) {
         debug('ログイン有効期限内です。');
         $_SESSION['login_limit'] = time() + WEEK;
-        if (basename($_SERVER['PHP_SELF']) !== 'mypage.php') {
+        if (basename($_SERVER['PHP_SELF']) === 'login.php') {
             debug('マイページに遷移します');
             redirect('mypage.php');
         }
