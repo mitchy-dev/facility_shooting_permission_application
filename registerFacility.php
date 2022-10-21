@@ -1,66 +1,84 @@
-<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="destyle.css">
-  <link rel="stylesheet" href="style.css">
+<?php
 
-  <title>海岸の登録</title>
-</head>
-<body>
-<div class="l-wrapper">
-  <header class="l-header">
-    <div class="c-header-title">
-      <a href="" class="c-header-title__link">
-        海岸ロケ
-      </a>
-    </div>
-    <ul class="c-header-nav">
-      <li class="c-header-nav__item c-button c-button__text">
-        <a>
-          ログイン
-        </a>
-      </li>
-      <li class="c-header-nav__item c-button c-button__secondary">
-        <a>
-          ユーザー登録
-        </a>
-      </li>
-    </ul>
-  </header>
+require('functions.php');
+startPageDisplay();
+require "auth.php";
+
+$dbUserData = fetchUserData($_SESSION['user_id']);
+
+if (!empty($_POST)) {
+  $organization = $_POST['organization'];
+  $representativeTitle = $_POST['representative_title'];
+  $representativesName = $_POST['representatives_name'];
+  $department = $_POST['department'];
+  $personInCharge = $_POST['person_in_charge'];
+  $phoneNumber = $_POST['phone_number'];
+  $comment = $_POST['comment'];
+  $avatarPath = keepFilePath('avatar_path', 'avatar_path', $dbUserData);
+
+
+  validMaxLength($organization, 'organization');
+  validMaxLength($representativeTitle, 'representativeTitle');
+  validMaxLength($representativesName, 'representativesName');
+  validMaxLength($department, 'department');
+  validMaxLength($personInCharge, 'personInCharge');
+  validMaxLength($phoneNumber, 'phoneNumber');
+  validMaxLength($comment, 'comment');
+
+  if (empty($errorMessages)) {
+    debug('プロフィールを更新します');
+    try {
+      $dbh = dbConnect();
+      $sql = 'update users set
+                 organization = :organization,
+                 representative_title = :representative_title,
+                 representatives_name = :representatives_name,
+                 department = :department,
+                 person_in_charge = :person_in_charge,
+                 phone_number = :phone_number,
+                 comment = :comment,
+                 avatar_path = :avatar_path
+              where
+                    user_id = :user_id and
+                    is_deleted = false';
+      $data = array(
+              ':organization' => $organization,
+              ':representative_title' => $representativeTitle,
+              ':representatives_name' => $representativesName,
+              ':department' => $department,
+              ':person_in_charge' => $personInCharge,
+              ':phone_number' => $phoneNumber,
+              ':comment' => $comment,
+              ':avatar_path' => $avatarPath,
+              ':user_id' => $_SESSION['user_id'],
+
+      );
+      if (!empty(queryPost($dbh, $sql, $data))) {
+        $_SESSION['message'] = SUCCESS['PROFILE_EDIT'];
+
+        redirect('profileEdit.php');
+      }
+    } catch (Exception $e) {
+      exceptionHandler($e);
+    }
+  }
+}
+
+
+endPageDisplay();
+?>
+<?php
+$pageTitle = '海岸の登録';
+require "head.php";
+require "header.php";
+?>
 
   <main class="l-main">
-    <section class="l-sidebar__container">
-      <ul class="c-sidebar__list">
-        <li class="c-sidebar__item --border-top"><a href="">お気に入り</a></li>
-      </ul>
-      <h3 class="c-sidebar__list-title">海岸の管理</h3>
-      <ul class="c-sidebar__list">
-        <li class="c-sidebar__item"><a href="">登録した海岸</a></li>
-        <li class="c-sidebar__item"><a href="">下書き</a></li>
-        <li class="c-sidebar__item --active"><a href="">海岸の登録</a></li>
-      </ul>
-      <h3 class="c-sidebar__list-title">事前相談・撮影申請先</h3>
-      <ul class="c-sidebar__list">
-        <li class="c-sidebar__item"><a href="">登録した情報</a></li>
-        <li class="c-sidebar__item"><a href="">事前相談・撮影申請先の登録</a></li>
-      </ul>
-      <h3 class="c-sidebar__list-title">個人設定</h3>
-      <ul class="c-sidebar__list">
-        <li class="c-sidebar__item"><a href="">プロフィール</a></li>
-        <li class="c-sidebar__item"><a href="">パスワード</a></li>
-        <li class="c-sidebar__item"><a href="">メールアドレス</a></li>
-        <li class="c-sidebar__item"><a href="">退会</a></li>
-      </ul>
-    </section>
+    <?php
+    require "sidebar.php"; ?>
     <div class="l-main__my-page">
-      <h1 class="c-main__title u-text-center">海岸の登録</h1>
+      <h1 class="c-main__title u-text-center"><?php
+        echo $pageTitle; ?></h1>
       <form method="post" action="">
         <div class="c-input__container">
           <span class="c-status-label --orange">必須</span>
@@ -226,68 +244,5 @@
     </div>
   </main>
 
-  <footer id="footer" class="l-footer u-text-center">
-    <ul class="c-footer-nav">
-      <li class="c-footer-nav__list --active"><a href="" class="c-footer-nav__item">利用規約</a></li>
-      <li class="c-footer-nav__list"><a href="" class="c-footer-nav__item">プライバシーポリシー</a></li>
-      <li class="c-footer-nav__list"><a href="" class="c-footer-nav__item">お問い合わせ</a></li>
-    </ul>
-    <div class="c-footer-copyright">
-      <p class="c-footer-copyright__item">©2023 みっちー</p>
-    </div>
-  </footer>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
-        integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
-<script>
-  $(function () {
-    //フッターの固定
-    var $footer = $('#footer');
-    console.log($footer);
-
-    if (window.innerHeight > $footer.offset().top + $footer.outerHeight()) {
-      $footer.attr({
-        'style': 'position:fixed;top:' + (window.innerHeight - $footer.outerHeight()) + 'px;'
-      });
-    }
-
-
-    //文字数カウント
-    $('.js-count').keyup(function () {
-
-      var count = $(this).val().length;
-      $('.js-counter').text(count);
-    });
-
-    //  バリデーション
-    $('.js-valid-email').keyup(function () {
-      var $errorMassage = $(this).siblings('.c-input__error-message');
-
-      if ($(this).val().length === 0) {
-        $(this).addClass('error');
-        $errorMassage.text('入力必須です。');
-      } else {
-        $(this).removeClass('error');
-        $errorMassage.text('');
-
-      }
-    })
-
-    //  画像のドラッグ中のフォームの変化
-    var $dragArea = $('.js-drag-area');
-
-    $dragArea.on('dragover', function (e) {
-      e.preventDefault();
-      $(this).addClass('--on-dragging');
-    });
-
-    $dragArea.on('dragleave', function (e) {
-      e.preventDefault();
-      $(this).removeClass('--on-dragging');
-    });
-
-  });
-</script>
-
-</body>
-</html>
+<?php
+require "footer.php"; ?>
