@@ -28,7 +28,7 @@ from users where email = :email and is_deleted = false';
         $_SESSION['login_time'] = time();
         $_SESSION['user_id'] = $result['user_id'];
         $_SESSION['message'] = SUCCESS['LOGIN'];
-       
+
         if (!empty($extendLogin)) {
           debug('次回ログインを省略にチェックがあります');
           $_SESSION['login_limit'] = time() + MONTH;
@@ -116,7 +116,7 @@ require "header.php";
       </button>
     </form>
     <div class="u-mb-24 u-text-right">
-      <a href="passwordRemindSend.html" class="c-text c-text__link --underline">パスワードを忘れた方はコチラ</a>
+      <a href="passwordRemindSend.php" class="c-text c-text__link --underline">パスワードを忘れた方はコチラ</a>
     </div>
 
   </div>
