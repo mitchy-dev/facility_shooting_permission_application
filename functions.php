@@ -340,6 +340,21 @@ from users where user_id = :user_id and is_deleted = false';
     }
 }
 
+function fetchPrefectures()
+{
+    debug('都道府県データを取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select prefecture_id, name from prefectures';
+        $data = array();
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetchAll();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
 
 //////////////////////////////////////////////
 //ファイルアップロード
