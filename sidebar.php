@@ -11,7 +11,7 @@
   <h3 class="c-sidebar__list-title">事前相談・撮影申請先</h3>
   <ul class="c-sidebar__list">
     <li class="c-sidebar__item"><a href="">登録した情報</a></li>
-    <li class="c-sidebar__item"><a href="">事前相談・撮影申請先の登録</a></li>
+    <li class="c-sidebar__item"><a href="registrationOfApplicationDestination.php">事前相談・撮影申請先の登録</a></li>
   </ul>
   <h3 class="c-sidebar__list-title">個人設定</h3>
   <ul class="c-sidebar__list">
