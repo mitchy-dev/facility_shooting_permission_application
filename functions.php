@@ -76,6 +76,7 @@ const ERROR = array(
     'MIN_LENGTH' => '文字以上でご入力ください',
     'HALF' => '半角英数字でご入力ください',
     'PASSWORD_MATCH' => 'パスワードとパスワード再入力が合致しません',
+    'MATCHING_WITH_PASSWORD_HASH_VALUE' => '登録されているパスワードと一致しません',
     'AGREEMENT' => '利用規約とプライバシーポリシーへの同意が必要です',
     'EXCEPTION' => '不具合が発生しました。時間をおいてやり直してください。',
     'QUERY_POST_FALSE' => '不具合が発生しました。お手数ですがお問い合わせください',
@@ -90,6 +91,9 @@ const SUCCESS = array(
     'LOGIN' => 'ログインしました',
     'PROFILE_EDIT' => 'プロフィールを更新しました',
     'FILE_UPLOAD' => 'ファイルが正常にアップロードされました',
+    'PASSWORD_CHANGE' => 'パスワードを変更しました',
+    '' => '',
+    '' => '',
     '' => '',
     '' => '',
 );
@@ -165,6 +169,13 @@ function validMatch($value, $value2, $key, $message = ERROR['PASSWORD_MATCH'])
     }
 }
 
+function validPasswordMatch($password, $hash, $key, $message = ERROR['MATCHING_WITH_PASSWORD_HASH_VALUE'])
+{
+    global $errorMessages;
+    if (!password_verify($password, $hash)) {
+        $errorMessages[$key] = $message;
+    }
+}
 
 function validDuplicateEmail($value, $key)
 {
@@ -314,7 +325,7 @@ function fetchUserData($userId)
     debug('ログインユーザーのデータを取得します');
     try {
         $dbh = dbConnect();
-        $sql = 'select organization, representative_title, representatives_name, department, person_in_charge, phone_number, comment, avatar_path, has_facility_registration_authority
+        $sql = 'select password, organization, representative_title, representatives_name, department, person_in_charge, phone_number, comment, avatar_path, has_facility_registration_authority
 from users where user_id = :user_id and is_deleted = false';
         $data = array(
             ':user_id' => $userId,
@@ -363,7 +374,6 @@ function uploadImage($key, $errorMessageKey)
 
             // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し、ファイルを保存する
             $path = sprintf('uploads/%s%s', sha1_file($_FILES[$key]['tmp_name']), image_type_to_extension($type));
-//            $path = sprintf('/uploads/%s%s', sha1_file($_FILES[$key]['tmp_name']), image_type_to_extension($type));
             if (!move_uploaded_file($_FILES[$key]['tmp_name'], $path)) {
                 throw new RuntimeException('ファイル保存時にエラーが発生しました');
             }

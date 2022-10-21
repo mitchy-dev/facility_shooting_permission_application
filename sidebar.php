@@ -16,7 +16,7 @@
   <h3 class="c-sidebar__list-title">個人設定</h3>
   <ul class="c-sidebar__list">
     <li class="c-sidebar__item"><a href="profileEdit.php">プロフィール</a></li>
-    <li class="c-sidebar__item"><a href="">パスワード</a></li>
+    <li class="c-sidebar__item"><a href="passwordEdit.php">パスワード</a></li>
     <li class="c-sidebar__item"><a href="">メールアドレス</a></li>
     <li class="c-sidebar__item"><a href="withdrawal.php">退会</a></li>
   </ul>
