@@ -100,10 +100,13 @@ require "header.php";
       </div>
 
 
-      <button class="c-button --full-width c-button__primary" type="submit">
+      <button class="c-button --full-width c-button__primary u-mb-24" type="submit">
         変更する
       </button>
     </form>
+    <div class="u-mb-24 u-text-right">
+      <a href="passwordRemindSend.php" class="c-text c-text__link --underline">パスワードを忘れた方はコチラ</a>
+    </div>
   </div>
 
 </main>
