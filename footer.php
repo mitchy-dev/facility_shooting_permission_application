@@ -51,7 +51,7 @@
       $flashMessage.parent().slideToggle(3000);
     }
 
-//  画像のドラッグ中のフォームの変化
+    //  画像のドラッグ中のフォームの変化
     var $dragArea = $('.js-drag-area');
 
     $dragArea.on('dragover', function (e) {
@@ -63,6 +63,23 @@
       e.preventDefault();
       $(this).removeClass('--on-dragging');
     });
+
+    //画像のプレビュー機能
+    $('.js-image-upload').on('change', function (e) {
+      e.preventDefault();
+      $dragArea.removeClass('--on-dragging');
+
+      var $imagePreview = $('.js-image-preview');
+      var fileReader = new FileReader();
+
+      fileReader.addEventListener("load", function () {
+        $imagePreview.attr('src', this.result).show();
+
+      });
+
+      fileReader.readAsDataURL(this.files[0]);
+
+    })
 
 
   });

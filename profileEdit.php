@@ -201,12 +201,12 @@ require "header.php";
           echo getErrorMessage('avatar_path'); ?></p>
         <label class="c-image-upload__label js-drag-area" for="avatar_path">
           ここに画像をドラッグ
-          <input class="c-image-upload__body" type="file" class="" name="avatar_path" id="avatar_path"
+          <input class="c-image-upload__body js-image-upload" type="file" class="" name="avatar_path" id="avatar_path"
                  accept=".jpg, .peg, .png">
           <input type="hidden" name="max_file_size" value="<?php
           echo 2 * MEGA_BYTES; ?>">
           <!--          <img class="c-image-upload__img" src="img/sample.jpg" alt="">-->
-          <img class="c-image-upload__img" src="<?php
+          <img class="c-image-upload__img js-image-preview" src="<?php
           if (!empty($dbUserData['avatar_path'])) {
             echo $dbUserData['avatar_path'];
           } ?>" style="<?php
