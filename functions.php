@@ -50,15 +50,13 @@ function startPageDisplay()
     if (!empty($_SESSION['login_time']) && !empty($_SESSION['login_limit'])) {
         debug('ログイン有効期限：' . ($_SESSION['login_time'] + $_SESSION['login_limit']));
     }
-    debug('================================');
 }
 
 //ページ表示の終了ログ
 function endPageDisplay()
 {
-    debug('================================');
     debug(basename($_SERVER['PHP_SELF']) . 'の表示処理終了');
-    debug('================================');
+//    debug('================================');
 }
 
 //////////////////////////////////////////////
@@ -92,8 +90,8 @@ const SUCCESS = array(
     'PROFILE_EDIT' => 'プロフィールを更新しました',
     'FILE_UPLOAD' => 'ファイルが正常にアップロードされました',
     'PASSWORD_CHANGE' => 'パスワードを変更しました',
-    '' => '',
-    '' => '',
+    'REGISTERED_STAKEHOLDER' => '登録しました',
+    'UPDATE_STAKEHOLDER' => '更新しました',
     '' => '',
     '' => '',
 );
@@ -340,6 +338,7 @@ from users where user_id = :user_id and is_deleted = false';
     }
 }
 
+//県名
 function fetchPrefectures()
 {
     debug('都道府県データを取得します');
@@ -350,6 +349,28 @@ function fetchPrefectures()
         $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
             return $sth->fetchAll();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
+
+//相談先・申請先の情報
+function fetchStakeholder($userId, $stakeholderId)
+{
+    debug('相談・申請先の情報を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select organization, department, avatar_path, url_of_shooting_application_guide, title_of_shooting_application_guide, application_deadline, phone_number, email, url_of_contact_form, url_of_application_format, title_of_application_format
+from stakeholders where user_id = :user_id and stakeholder_id = :stakeholder_id and is_deleted = false';
+        $data = array(
+            ':user_id' => $userId,
+            ':stakeholder_id' => $stakeholderId
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetch();
         }
     } catch (Exception $e) {
         exceptionHandler($e);
@@ -367,7 +388,7 @@ const MEGA_BYTES = KIRO_BYTES * 1024;
 function uploadImage($key, $errorMessageKey)
 {
     if (isset($_FILES[$key]['error']) && is_int($_FILES[$key]['error'])) {
-        debug('画像のアップロードを開始ログアウトします');
+        debug('画像のアップロードを開始します');
         try {
             switch ($_FILES[$key]['error']) {
                 case UPLOAD_ERR_OK: // OK
