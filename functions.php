@@ -377,6 +377,46 @@ from stakeholders where user_id = :user_id and stakeholder_id = :stakeholder_id 
     }
 }
 
+//関係者の種別の取得
+function fetchStakeholderCategories()
+{
+    debug('関係者の種別を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select stakeholder_category_id, name from stakeholder_categories';
+        $data = array();
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetchAll();
+        } else {
+            false;
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
+function fetchStakeholderCategorizations($stakeholderId)
+{
+    debug('関係者の種別を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select stakeholder_category_id from stakeholder_categorization where stakeholder_id = :stakeholder_id';
+        $data = array(
+            ':stakeholder_id' => $stakeholderId
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        $records = $sth->fetchAll();
+        if (!empty($records)) {
+            return array_column($records, 'stakeholder_category_id');
+        } else {
+            return array();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //////////////////////////////////////////////
 //ファイルアップロード
 //////////////////////////////////////////////

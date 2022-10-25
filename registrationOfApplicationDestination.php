@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$_GET['stakeholder_id'] = 2;
+$_GET['stakeholder_id'] = 78;
 if (!empty($_GET['stakeholder_id']) && !is_numeric($_GET['stakeholder_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -17,7 +17,14 @@ if (!empty($stakeholderId) && empty($dbStakeholderData)) {
   redirect('index.php');
 }
 
+$stakeholderCategories = fetchStakeholderCategories();
+//var_dump($stakeholderCategories);
+$stakeholderCategorizations = !empty($stakeholderId) ? fetchStakeholderCategorizations($stakeholderId) : array();
+var_dump($stakeholderCategorizations);
+
 if (!empty($_POST)) {
+  debug('POST:' . print_r($_POST, true));
+  $stakeholderCategory = !empty($_POST['stakeholder_category']) ? $_POST['stakeholder_category'] : array();
   $organization = !empty($_POST['organization']) ? $_POST['organization'] : '';
   $department = !empty($_POST['department']) ? $_POST['department'] : '';
   $avatarPath = keepFilePath('avatar_path', 'avatar_path', $dbStakeholderData);
@@ -35,6 +42,7 @@ if (!empty($_POST)) {
   if (empty($errorMessages)) {
     try {
       $dbh = dbConnect();
+      $dbh->beginTransaction();
       if (!empty($stakeholderId)) {
         debug('事前相談先・申請先の情報を更新します');
         $sql = 'update stakeholders set
@@ -66,6 +74,12 @@ if (!empty($_POST)) {
                 ':user_id' => $_SESSION['user_id'],
                 ':stakeholder_id' => $stakeholderId,
         );
+        if (empty(queryPost($dbh, $sql, $data))) {
+          throw new Exception(ERROR['EXCEPTION']);
+        }
+        $dbh->commit();
+        $_SESSION['message'] = SUCCESS['UPDATE_STAKEHOLDER'];
+        redirect('registrationOfApplicationDestination.php?stakeholder_id=' . $stakeholderId);
       } else {
         debug('事前相談先・申請先の情報を登録します');
         $sql = 'insert into stakeholders (
@@ -92,17 +106,30 @@ if (!empty($_POST)) {
                 ':title_of_application_format' => $titleOfApplicationFormat,
                 ':created_at' => date("Y-m-d H:i:s"),
         );
-      }
-      if (!empty(queryPost($dbh, $sql, $data))) {
-        if (!empty($stakeholderId)) {
-          $_SESSION['message'] = SUCCESS['UPDATE_STAKEHOLDER'];
-          redirect('registrationOfApplicationDestination.php?stakeholder_id=' . $stakeholderId);
-        } else {
-          $_SESSION['message'] = SUCCESS['REGISTERED_STAKEHOLDER'];
-          redirect('registrationOfApplicationDestination.php?stakeholder_id=' . $dbh->lastInsertId());
+        if (empty(queryPost($dbh, $sql, $data))) {
+          throw new Exception(ERROR['EXCEPTION']);
         }
+        $stakeholderId = $dbh->lastInsertId();
+        if (!empty($stakeholderCategory)) {
+          debug('関係者のカテゴリが入力されています');
+          foreach ($stakeholderCategory as $key => $value) {
+            $sql = 'insert into stakeholder_categorization(stakeholder_id, stakeholder_category_id, created_at) values (:stakeholder_id, :stakeholder_category_id, :created_at)';
+            $data = array(
+                    ':stakeholder_id' => $stakeholderId,
+                    ':stakeholder_category_id' => $value,
+                    ':created_at' => date('Y-m-d H:i:s'),
+            );
+            if (empty(queryPost($dbh, $sql, $data))) {
+              throw new Exception(ERROR['EXCEPTION']);
+            }
+          }
+        }
+        $dbh->commit();
+        $_SESSION['message'] = SUCCESS['REGISTERED_STAKEHOLDER'];
+        redirect('registrationOfApplicationDestination.php?stakeholder_id=' . $stakeholderId);
       }
     } catch (Exception $e) {
+      $dbh->rollBack();
       exceptionHandler($e);
     }
   }
@@ -127,6 +154,33 @@ require "header.php";
     <p class="c-main__message --error"><?php
       getErrorMessage('common'); ?></p>
     <form method="post" action="" enctype="multipart/form-data">
+      <div class="c-checkbox__container">
+        <p for="organization" class="c-input__label">登録種別</p>
+        <!--          <p class="c-input__sub-label">sub-label</p>-->
+        <p class="c-input__help-message u-mb-8">撮影申請先が撮影相談先を兼ねる場合は両方チェックしてください</p>
+
+        <?php
+        foreach ($stakeholderCategories as $key => $value): ?>
+          <label for="stakeholder_category<?php
+          echo $value['stakeholder_category_id']; ?>" class="c-checkbox__label u-mr-24">
+            <input type="checkbox" class="c-checkbox__body" name="stakeholder_category[]"
+                   id="stakeholder_category<?php
+                   echo $value['stakeholder_category_id']; ?>" value="<?php
+            echo $value['stakeholder_category_id']; ?>" <?php
+            if (in_array($value['stakeholder_category_id'], $stakeholderCategorizations, true)) {
+              echo 'checked';
+            } ?>>
+            <span class="c-checkbox__name"><?php
+              echo $value['name']; ?></span>
+            <p class="c-input__error-message">
+              <?php
+              echo getErrorMessage('stakeholder_category[]'); ?>
+            </p>
+          </label>
+        <?php
+        endforeach; ?>
+      </div>
+
       <div class="c-input__container">
         <!--          <span class="c-status-label">ラベル</span>-->
         <label for="organization" class="c-input__label">組織名</label>
