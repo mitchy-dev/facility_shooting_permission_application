@@ -417,6 +417,41 @@ function fetchStakeholderCategorizations($stakeholderId)
     }
 }
 
+//相談・申請先の情報の取得
+function fetchStakeholdersWithCategories($userId)
+{
+    debug('関係者とその登録区分の一覧情報を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select * from stakeholders where user_id = :user_id and is_deleted = false';
+        $data = array(':user_id' => $userId);
+        $sth = queryPost($dbh, $sql, $data);
+        $stakeholders = $sth->fetchAll();
+
+        if (!empty($stakeholders)) {
+            foreach ($stakeholders as $key => $value) {
+                $sql2 = ' select stakeholder_id, scn.stakeholder_category_id as category_id, name as category_name from stakeholder_categorization as scn left join stakeholder_categories sc on sc.stakeholder_category_id = scn.stakeholder_category_id where scn.stakeholder_id = :stakeholder_id ';
+                $data2 = array(
+                    ':stakeholder_id' => $value['stakeholder_id']
+                );
+                $sth2 = queryPost($dbh, $sql2, $data2);
+                if (!empty($sth2)) {
+                    $categories = $sth2->fetchAll();
+                    $value['categories'] = $categories;
+                    $result[] = $value;
+                } else {
+                    $result[] = $value;
+                }
+            }
+            return $result;
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //////////////////////////////////////////////
 //ファイルアップロード
 //////////////////////////////////////////////
