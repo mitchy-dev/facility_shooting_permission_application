@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$_GET['stakeholder_id'] = 78;
+//$_GET['stakeholder_id'] = 78;
 if (!empty($_GET['stakeholder_id']) && !is_numeric($_GET['stakeholder_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -164,7 +164,7 @@ if (!empty($_POST)) {
 endPageDisplay();
 ?>
 <?php
-$pageTitle = !empty($stakeholderId) ? '撮影申請先の編集' : '撮影撮影先の登録';
+$pageTitle = !empty($stakeholderId) ? '事前相談・撮影申請先の編集' : '事前相談・撮影申請先の登録';
 require "head.php";
 require "header.php";
 ?>
