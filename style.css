@@ -953,6 +953,14 @@ strong {
     margin-bottom: var(--spacing-sm);
 }
 
+.u-mb-8 {
+    margin-bottom: var(--spacing-xs);
+}
+
+.u-mr-24 {
+    margin-right: var(--spacing-sm);
+}
+
 .p-button-horizontal-wrapper {
     overflow: hidden;
 }
