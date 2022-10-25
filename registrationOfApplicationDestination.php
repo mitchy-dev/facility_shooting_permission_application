@@ -77,6 +77,31 @@ if (!empty($_POST)) {
         if (empty(queryPost($dbh, $sql, $data))) {
           throw new Exception(ERROR['EXCEPTION']);
         }
+        if ($stakeholderCategory !== $stakeholderCategorizations) {
+//          現在のレコードを削除
+          $sql = 'delete from stakeholder_categorization where stakeholder_id = :stakeholder_id';
+          $data = array(
+                  ':stakeholder_id' => $stakeholderId,
+          );
+          if (empty(queryPost($dbh, $sql, $data))) {
+            throw new Exception(ERROR['EXCEPTION']);
+          }
+//          レコードの追加
+          if (!empty($stakeholderCategory)) {
+            debug('関係者のカテゴリが入力されています');
+            foreach ($stakeholderCategory as $key => $value) {
+              $sql = 'insert into stakeholder_categorization(stakeholder_id, stakeholder_category_id, created_at) values (:stakeholder_id, :stakeholder_category_id, :created_at)';
+              $data = array(
+                      ':stakeholder_id' => $stakeholderId,
+                      ':stakeholder_category_id' => $value,
+                      ':created_at' => date('Y-m-d H:i:s'),
+              );
+              if (empty(queryPost($dbh, $sql, $data))) {
+                throw new Exception(ERROR['EXCEPTION']);
+              }
+            }
+          }
+        }
         $dbh->commit();
         $_SESSION['message'] = SUCCESS['UPDATE_STAKEHOLDER'];
         redirect('registrationOfApplicationDestination.php?stakeholder_id=' . $stakeholderId);
