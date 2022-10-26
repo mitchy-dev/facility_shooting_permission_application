@@ -288,6 +288,8 @@ function keepFilePath($file, $errorMessageKey = 'common', $dbData = array())
         return uploadImage($file, $errorMessageKey);
     } elseif (!empty($dbData)) {
         return $dbData;
+    } else {
+        return '';
     }
 }
 

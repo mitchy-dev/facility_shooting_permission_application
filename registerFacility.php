@@ -33,7 +33,6 @@ if (!empty($_POST)) {
   debug('facilityImages:' . print_r($facilityImages, true));
   if (!empty($facilityImages)) {
     foreach ($facilityImages as $key => $value) {
-//      $facilityImagePath[] = uploadImage($value, 'common');
       $facilityImagePath[] = keepFilePath(
               $value,
               'common',
@@ -156,9 +155,6 @@ require "header.php";
             <span class="c-input__label">写真<?php
               echo sanitize($i + 1); ?></span>
             <!--        <p class="c-input__sub-label">コメント時に表示されます</p>-->
-            <!--  <p class="c-input__help-message">help message</p>-->
-            <!--            <p class="c-input__error-message">--><?php
-            //              echo getErrorMessage('facility_image' . $i); ?><!--</p>-->
             <label class="c-image-upload__label --facility js-drag-area" for="facility_image<?php
             echo sanitize($i); ?>">
               ここに画像をドラッグ
@@ -169,7 +165,6 @@ require "header.php";
               <input type="hidden" name="max_file_size" value="<?php
               echo 2 * MEGA_BYTES; ?>">
               <img class="c-image-upload__img js-image-preview" src="<?php
-              //            この部分は２つ目以降はfacility_imageでOK
               if (!empty($dbFacilityImagePaths[$i])) {
                 echo $dbFacilityImagePaths[$i];
               } ?>" style="<?php
