@@ -7,6 +7,8 @@ require "auth.php";
 //$dbFacilityData = fetchFacilityData($_SESSION['user_id']);
 $dbUserData = array();
 $dbPrefectures = fetchPrefectures();
+$dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
+debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
 
 if (!empty($_POST)) {
   if (empty($errorMessages)) {
@@ -194,7 +196,7 @@ require "header.php";
           <!--          <span class="c-status-label">ラベル</span>-->
           <label for="" class="c-input__label">撮影前の事前相談先</label>
           <p class="c-input__sub-label">
-            相談先を先に作成する必要があります。<br>
+            撮影の相談先を先に作成する必要があります。<br>
             作成すると以下のセレクトボックスから選択できるようになります。
           </p>
           <p class="c-input__help-message">
@@ -203,16 +205,40 @@ require "header.php";
           <!--          <p class="c-input__error-message">error</p>-->
           <div class="c-select__wrap--register">
             <select name="region" id="" class="c-select__box--register">
-              <option value="0" class="c-select__option">事前相談先が登録されていません</option>
-              <option value="2" class="c-select__option">撮影申請先と同じ</option>
+              <?php
+              if (!empty($dbStakeholdersWithCategory)): ?>
+                <option value="" class="c-select__option">撮影の相談先はない</option>
+                <option value="0" class="c-select__option">撮影申請先と同じ</option>
+                <?php
+                foreach ($dbStakeholdersWithCategory as $key => $value): ?>
+                  <?php
+                  if (!empty($value['categories'])): ?>
+                    <?php
+                    $categoryIds = array_column($value['categories'], 'category_id');
+                    debug('各関係者に紐付いているカテゴリのID:' . print_r($categoryIds, true));
+                    if (in_array(1, $categoryIds)): ?>
+                      <option value="<?php
+                      echo sanitize($value['stakeholder_id']); ?>" class="c-select__option"><?php
+                        echo sanitize($value['organization']); ?></option>
+                    <?php
+                    endif; ?>
+
+                  <?php
+                  endif; ?>
+                <?php
+                endforeach; ?>
+              <?php
+              else: ?>
+                <option value="" class="c-select__option">事前相談先が登録されていません</option>
+              <?php
+              endif; ?>
             </select>
           </div>
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
-
         <div class="c-input__container">
           <!--          <span class="c-status-label">ラベル</span>-->
-          <label for="" class="c-input__label">撮影申請先</label>
+          <label for="" class="c-input__label">撮影の申請先</label>
           <p class="c-input__sub-label">
             申請先を先に作成する必要があります。<br>
             作成すると以下のセレクトボックスから選択できるようになります。
@@ -223,12 +249,36 @@ require "header.php";
           <!--          <p class="c-input__error-message">error</p>-->
           <div class="c-select__wrap--register">
             <select name="region" id="" class="c-select__box--register">
-              <option value="0" class="c-select__option">撮影申請不要</option>
-              <option value="2" class="c-select__option">神奈川県横須賀土木事務所</option>
+              <?php
+              if (!empty($dbStakeholdersWithCategory)): ?>
+                <option value="0" class="c-select__option">撮影の申請不要</option>
+                <?php
+                foreach ($dbStakeholdersWithCategory as $key => $value): ?>
+                  <?php
+                  if (!empty($value['categories'])): ?>
+                    <?php
+                    $categoryIds = array_column($value['categories'], 'category_id');
+                    if (in_array(2, $categoryIds)): ?>
+                      <option value="<?php
+                      echo sanitize($value['stakeholder_id']); ?>" class="c-select__option"><?php
+                        echo sanitize($value['organization']); ?></option>
+                    <?php
+                    endif; ?>
+
+                  <?php
+                  endif; ?>
+                <?php
+                endforeach; ?>
+              <?php
+              else: ?>
+                <option value="" class="c-select__option">撮影申請先が登録されていません</option>
+              <?php
+              endif; ?>
             </select>
           </div>
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
+
 
         <button class="c-button --full-width c-button__primary u-mb-24" type="submit">
           登録する
