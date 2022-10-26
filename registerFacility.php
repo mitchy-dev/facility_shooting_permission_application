@@ -25,7 +25,7 @@ debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCatego
 if (!empty($_POST)) {
   debug('POST:' . print_r($_POST, true));
   $facilityName = $_POST['facility_name'];
-  $thumbnailPath = 'test';
+  $thumbnailPath = keepFilePath('thumbnail_path', 'thumbnail_path', $dbFacilityData);
   $prefectureId = $_POST['prefecture_id'];
   $facilityAddress = $_POST['facility_address'];
   $shootingFee = $_POST['shooting_fee'];
@@ -118,20 +118,31 @@ require "header.php";
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
 
+       
         <div class="c-input__container">
           <span class="c-status-label --orange">必須</span>
           <span class="c-input__label">写真(メイン）</span>
-          <!--  <p class="c-input__sub-label">sub-label</p>-->
+          <!--        <p class="c-input__sub-label">コメント時に表示されます</p>-->
           <!--  <p class="c-input__help-message">help message</p>-->
-          <!--  <p class="c-input__error-message">error</p>-->
-          <label class="c-image-upload__label --facility js-drag-area" for="image-uploads">
+          <p class="c-input__error-message"><?php
+            echo getErrorMessage('thumbnail_path'); ?></p>
+          <label class="c-image-upload__label --facility js-drag-area" for="thumbnail_path">
             ここに画像をドラッグ
-            <input class="c-image-upload__body js-drag-area" type="file" class="" name="image-uploads"
-                   id="image-uploads"
+            <input class="c-image-upload__body js-image-upload" type="file" name="thumbnail_path" id="thumbnail_path"
                    accept=".jpg, .peg, .png">
-            <img class="c-image-upload__img" src="img/sample.jpg" alt="">
+            <input type="hidden" name="max_file_size" value="<?php
+            echo 2 * MEGA_BYTES; ?>">
+            <img class="c-image-upload__img js-image-preview" src="<?php
+            if (!empty($dbFacilityData['thumbnail_path'])) {
+              echo $dbFacilityData['thumbnail_path'];
+            } ?>" style="<?php
+            if (!empty($dbFacilityData['avatar_path'])) {
+              echo 'display:block;';
+            } ?>" alt="">
           </label>
         </div>
+
+
         <div class="c-input__container">
           <!--          <span class="c-status-label &#45;&#45;orange">必須</span>-->
           <span class="c-input__label">写真</span>
