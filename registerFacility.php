@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$_GET['facility_id'] = 60;
+//$_GET['facility_id'] = 60;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -33,8 +33,8 @@ if (!empty($_POST)) {
   debug('facilityImages:' . print_r($facilityImages, true));
   if (!empty($facilityImages)) {
     foreach ($facilityImages as $key => $value) {
-      $facilityImagePath[] = uploadImage($value, 'common');
-//      $facilityImagePath[] = keepFilePath($value, $)
+//      $facilityImagePath[] = uploadImage($value, 'common');
+      $facilityImagePath[] = keepFilePath($value, 'common', $dbFacilityImagePaths[$key]);
     }
   }
   $thumbnailPath = !empty($facilityImagePath) ? $facilityImagePath[0] : '';

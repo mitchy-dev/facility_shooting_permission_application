@@ -282,12 +282,12 @@ function keepInputAndDatabase($key, $dataFetchedFromDatabase = array(), $useGetM
     }
 }
 
-function keepFilePath($file, $key, $errorMessageKey = 'common', $dataFetchedFromDatabase = array())
+function keepFilePath($file, $errorMessageKey = 'common', $dbData = array())
 {
     if (!empty($file['name'])) {
         return uploadImage($file, $errorMessageKey);
-    } elseif (!empty($dataFetchedFromDatabase[$key])) {
-        return $dataFetchedFromDatabase[$key];
+    } elseif (!empty($dbData)) {
+        return $dbData;
     }
 }
 
