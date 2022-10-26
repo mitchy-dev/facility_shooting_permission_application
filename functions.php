@@ -91,6 +91,7 @@ const SUCCESS = array(
     'FILE_UPLOAD' => 'ファイルが正常にアップロードされました',
     'PASSWORD_CHANGE' => 'パスワードを変更しました',
     'REGISTERED_STAKEHOLDER' => '登録しました',
+    'REGISTERED' => '登録しました',
     'UPDATE_STAKEHOLDER' => '更新しました',
     '' => '',
     '' => '',

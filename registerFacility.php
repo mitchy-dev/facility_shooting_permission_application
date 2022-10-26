@@ -23,14 +23,15 @@ $dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id
 debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
 
 if (!empty($_POST)) {
-//  $facilityName = $_POST['facility_name'];
-//  $thumbnailPath = $_POST['thumbnail_path'];
-//  $prefectureId = $_POST['prefecture_id'];
-//  $facilityAddress = $_POST['facility_address'];
-//  $shooting_fee = $_POST['shooting_fee'];
-//  $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
-//  $titleOfFacilityInformationPage = $_POST['title_of_facility_information_page'];
-//  $published = $_POST['published'];
+  debug('POST:' . print_r($_POST, true));
+  $facilityName = $_POST['facility_name'];
+  $thumbnailPath = 'test';
+  $prefectureId = $_POST['prefecture_id'];
+  $facilityAddress = $_POST['facility_address'];
+  $shootingFee = $_POST['shooting_fee'];
+  $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
+  $titleOfFacilityInformationPage = 'test';
+  $published = !empty($_POST['published']) ? 1 : 0;
 
 
   if (empty($errorMessages)) {
@@ -44,38 +45,39 @@ if (!empty($_POST)) {
         debug('海岸の情報を登録します');
         $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :published, :created_at)';
         $data = array(
-//                ':user_id' => $_SESSION['user_id'],
-//                ':facility_name' => $,
-//        ':thumbnail_path' => $,
-//        ':prefecture_id' => $,
-//        ':facility_address' => $,
-//        ':shooting_fee' => $,
-//        ':url_of_facility_information_page' => $,
-//        ':title_of_facility_information_page' => $,
-//        ':published' => $,
-//        ':created_at' => $,
+                ':user_id' => $_SESSION['user_id'],
+                ':facility_name' => $facilityName,
+                ':thumbnail_path' => $thumbnailPath,
+                ':prefecture_id' => $prefectureId,
+                ':facility_address' => $facilityAddress,
+                ':shooting_fee' => $shootingFee,
+                ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
+                ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
+                ':published' => $published,
+                ':created_at' => date('Y-m-d H:i:s'),
         );
         if (empty(queryPost($dbh, $sql, $data))) {
           throw new Exception(ERROR['EXCEPTION']);
         }
         $stakeholderId = $dbh->lastInsertId();
-        if (!empty($stakeholderCategory)) {
-          debug('関係者のカテゴリが入力されています');
-          foreach ($stakeholderCategory as $key => $value) {
-            $sql = 'insert into stakeholder_categorization(stakeholder_id, stakeholder_category_id, created_at) values (:stakeholder_id, :stakeholder_category_id, :created_at)';
-            $data = array(
-                    ':stakeholder_id' => $stakeholderId,
-                    ':stakeholder_category_id' => $value,
-                    ':created_at' => date('Y-m-d H:i:s'),
-            );
-            if (empty(queryPost($dbh, $sql, $data))) {
-              throw new Exception(ERROR['EXCEPTION']);
-            }
-          }
-        }
+
+//        if (!empty($stakeholderCategory)) {
+//          debug('関係者のカテゴリが入力されています');
+//          foreach ($stakeholderCategory as $key => $value) {
+//            $sql = 'insert into stakeholder_categorization(stakeholder_id, stakeholder_category_id, created_at) values (:stakeholder_id, :stakeholder_category_id, :created_at)';
+//            $data = array(
+//                    ':stakeholder_id' => $stakeholderId,
+//                    ':stakeholder_category_id' => $value,
+//                    ':created_at' => date('Y-m-d H:i:s'),
+//            );
+//            if (empty(queryPost($dbh, $sql, $data))) {
+//              throw new Exception(ERROR['EXCEPTION']);
+//            }
+//          }
+//        }
         $dbh->commit();
-        $_SESSION['message'] = SUCCESS['REGISTERED_STAKEHOLDER'];
-        redirect('registeredContactAndApplication.php');
+        $_SESSION['message'] = SUCCESS['REGISTERED'];
+        redirect('listings.html');
       }
     } catch (Exception $e) {
       exceptionHandler($e);
@@ -337,7 +339,8 @@ require "header.php";
         </div>
 
 
-        <button class="c-button --full-width c-button__primary u-mb-24" type="submit">
+        <button class="c-button --full-width c-button__primary u-mb-24" name="published" value="published"
+                type="submit">
           <?php
           if (!empty($dbFacilityData)) {
             echo '変更する';
@@ -346,7 +349,7 @@ require "header.php";
           }
           ?>
         </button>
-        <button class="c-button --full-width c-button__secondary u-mb-24" type="submit">
+        <button class="c-button --full-width c-button__secondary u-mb-24" name="published" value="" type="submit">
           下書きに保存する
         </button>
         <button class="c-button --full-width c-button__text" type="submit">
