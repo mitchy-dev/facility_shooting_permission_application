@@ -4,21 +4,78 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-//$dbFacilityData = fetchFacilityData($_SESSION['user_id']);
-$dbUserData = array();
+//$_GET['facility_id'] = 1;
+if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
+  debug('取得したGETパラメータが数値でないためリダイレクトします');
+  redirect('index.php');
+}
+
+$facilityId = !empty($_GET['facility_id']) ? $_GET['facility_id'] : '';
+$dbFacilityData = !empty($facilityId) ? fetchFacility($_SESSION['user_id'], $facilityId) : array();
+if (!empty($facilityId) && empty($dbFacilityData)) {
+  debug('不正なアクセスのためリダイレクトします');
+  redirect('index.php');
+}
+
+
 $dbPrefectures = fetchPrefectures();
 $dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
 debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
 
 if (!empty($_POST)) {
+//  $facilityName = $_POST['facility_name'];
+//  $thumbnailPath = $_POST['thumbnail_path'];
+//  $prefectureId = $_POST['prefecture_id'];
+//  $facilityAddress = $_POST['facility_address'];
+//  $shooting_fee = $_POST['shooting_fee'];
+//  $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
+//  $titleOfFacilityInformationPage = $_POST['title_of_facility_information_page'];
+//  $published = $_POST['published'];
+
+
   if (empty($errorMessages)) {
     debug('');
     try {
       $dbh = dbConnect();
-      $sql = '';
-      $data = array();
-      if (!empty(queryPost($dbh, $sql, $data))) {
-        redirect('profileEdit.php');
+      $dbh->beginTransaction();
+      if (!empty($dbFacilityData)) {
+        debug('海岸の情報を更新します');
+      } else {
+        debug('海岸の情報を登録します');
+        $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :published, :created_at)';
+        $data = array(
+//                ':user_id' => $_SESSION['user_id'],
+//                ':facility_name' => $,
+//        ':thumbnail_path' => $,
+//        ':prefecture_id' => $,
+//        ':facility_address' => $,
+//        ':shooting_fee' => $,
+//        ':url_of_facility_information_page' => $,
+//        ':title_of_facility_information_page' => $,
+//        ':published' => $,
+//        ':created_at' => $,
+        );
+        if (empty(queryPost($dbh, $sql, $data))) {
+          throw new Exception(ERROR['EXCEPTION']);
+        }
+        $stakeholderId = $dbh->lastInsertId();
+        if (!empty($stakeholderCategory)) {
+          debug('関係者のカテゴリが入力されています');
+          foreach ($stakeholderCategory as $key => $value) {
+            $sql = 'insert into stakeholder_categorization(stakeholder_id, stakeholder_category_id, created_at) values (:stakeholder_id, :stakeholder_category_id, :created_at)';
+            $data = array(
+                    ':stakeholder_id' => $stakeholderId,
+                    ':stakeholder_category_id' => $value,
+                    ':created_at' => date('Y-m-d H:i:s'),
+            );
+            if (empty(queryPost($dbh, $sql, $data))) {
+              throw new Exception(ERROR['EXCEPTION']);
+            }
+          }
+        }
+        $dbh->commit();
+        $_SESSION['message'] = SUCCESS['REGISTERED_STAKEHOLDER'];
+        redirect('registeredContactAndApplication.php');
       }
     } catch (Exception $e) {
       exceptionHandler($e);
@@ -30,7 +87,7 @@ if (!empty($_POST)) {
 endPageDisplay();
 ?>
 <?php
-$pageTitle = '海岸の登録';
+$pageTitle = !empty($dbFacilityData) ? '海岸の情報の編集' : '海岸の登録';
 require "head.php";
 require "header.php";
 ?>
@@ -54,7 +111,7 @@ require "header.php";
           </p>
           <input type="text" name="facility_name" id="facility_name" class="c-input__body <?php
           addErrorClass('facility_name'); ?>" value="<?php
-          echo keepInputAndDatabase('facility_name', $dbUserData);
+          echo keepInputAndDatabase('facility_name', $dbFacilityData);
           ?>">
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
@@ -111,7 +168,7 @@ require "header.php";
           <div class="c-select__wrap--register">
             <select name="prefecture_id" id="" class="c-select__box--register">
               <option value="0" class="c-select__option" <?php
-              if (keepInputAndDatabase('prefecture_id', $dbUserData) == 0) echo 'selected' ?>>未選択
+              if (keepInputAndDatabase('prefecture_id', $dbFacilityData) == 0) echo 'selected' ?>>未選択
               </option>
               <?php
               foreach ($dbPrefectures as $key => $value) : ?>
@@ -136,7 +193,7 @@ require "header.php";
           </p>
           <input type="text" name="facility_address" id="facility_address" class="c-input__body <?php
           addErrorClass('facility_address'); ?>" value="<?php
-          echo keepInputAndDatabase('facility_address', $dbUserData);
+          echo keepInputAndDatabase('facility_address', $dbFacilityData);
           ?>">
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
@@ -152,7 +209,7 @@ require "header.php";
           </p>
           <input type="text" name="shooting_fee" id="shooting_fee" class="c-input__body <?php
           addErrorClass('shooting_fee'); ?>" value="<?php
-          echo keepInputAndDatabase('shooting_fee', $dbUserData);
+          echo keepInputAndDatabase('shooting_fee', $dbFacilityData);
           ?>">
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
@@ -172,7 +229,7 @@ require "header.php";
           <input type="text" name="url_of_facility_information_page" id="url_of_facility_information_page"
                  class="c-input__body <?php
                  addErrorClass('url_of_facility_information_page'); ?>" value="<?php
-          echo keepInputAndDatabase('url_of_facility_information_page', $dbUserData);
+          echo keepInputAndDatabase('url_of_facility_information_page', $dbFacilityData);
           ?>">
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
@@ -281,7 +338,13 @@ require "header.php";
 
 
         <button class="c-button --full-width c-button__primary u-mb-24" type="submit">
-          登録する
+          <?php
+          if (!empty($dbFacilityData)) {
+            echo '変更する';
+          } else {
+            echo '登録する';
+          }
+          ?>
         </button>
         <button class="c-button --full-width c-button__secondary u-mb-24" type="submit">
           下書きに保存する
