@@ -282,10 +282,10 @@ function keepInputAndDatabase($key, $dataFetchedFromDatabase = array(), $useGetM
     }
 }
 
-function keepFilePath($key, $errorMessageKey = 'common', $dataFetchedFromDatabase = array())
+function keepFilePath($file, $key, $errorMessageKey = 'common', $dataFetchedFromDatabase = array())
 {
-    if (!empty($_FILES[$key]['name'])) {
-        return uploadImage($key, $errorMessageKey);
+    if (!empty($file['name'])) {
+        return uploadImage($file, $errorMessageKey);
     } elseif (!empty($dataFetchedFromDatabase[$key])) {
         return $dataFetchedFromDatabase[$key];
     }
@@ -481,12 +481,12 @@ function fetchFacility($userId, $facilityId)
 const KIRO_BYTES = 1024;
 const MEGA_BYTES = KIRO_BYTES * 1024;
 //アップロード関数
-function uploadImage($key, $errorMessageKey)
+function uploadImage($file, $errorMessageKey)
 {
-    if (isset($_FILES[$key]['error']) && is_int($_FILES[$key]['error'])) {
+    if (isset($file['error']) && is_int($file['error'])) {
         debug('画像のアップロードを開始します');
         try {
-            switch ($_FILES[$key]['error']) {
+            switch ($file['error']) {
                 case UPLOAD_ERR_OK: // OK
                     break;
                 case UPLOAD_ERR_NO_FILE:   // ファイル未選択
@@ -499,14 +499,14 @@ function uploadImage($key, $errorMessageKey)
             }
 
             // $_FILES[$key]['mime']の値はブラウザ側で偽装可能なので、MIMEタイプを自前でチェックする
-            $type = @exif_imagetype($_FILES[$key]['tmp_name']);
+            $type = @exif_imagetype($file['tmp_name']);
             if (!in_array($type, [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG], true)) {
                 throw new RuntimeException('画像形式が未対応です');
             }
 
             // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し、ファイルを保存する
-            $path = sprintf('uploads/%s%s', sha1_file($_FILES[$key]['tmp_name']), image_type_to_extension($type));
-            if (!move_uploaded_file($_FILES[$key]['tmp_name'], $path)) {
+            $path = sprintf('uploads/%s%s', sha1_file($file['tmp_name']), image_type_to_extension($type));
+            if (!move_uploaded_file($file['tmp_name'], $path)) {
                 throw new RuntimeException('ファイル保存時にエラーが発生しました');
             }
             chmod($path, 0644);
@@ -517,6 +517,22 @@ function uploadImage($key, $errorMessageKey)
     }
 }
 
+//複数アップロード時に配列の形式を使いやすくする関数
+//https://www.php.net/manual/ja/features.file-upload.multiple.php#53240
+function reArrayFiles($file_post)
+{
+    $file_ary = array();
+    $file_count = count($file_post['name']);
+    $file_keys = array_keys($file_post);
+
+    for ($i = 0; $i < $file_count; $i++) {
+        foreach ($file_keys as $key) {
+            $file_ary[$i][$key] = $file_post[$key][$i];
+        }
+    }
+
+    return $file_ary;
+}
 
 //////////////////////////////////////////////
 //文字列操作

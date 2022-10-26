@@ -27,7 +27,7 @@ if (!empty($_POST)) {
   $stakeholderCategory = !empty($_POST['stakeholder_category']) ? $_POST['stakeholder_category'] : array();
   $organization = !empty($_POST['organization']) ? $_POST['organization'] : '';
   $department = !empty($_POST['department']) ? $_POST['department'] : '';
-  $avatarPath = keepFilePath('avatar_path', 'avatar_path', $dbStakeholderData);
+  $avatarPath = keepFilePath($_FILES['avatar_path'], 'avatar_path', 'avatar_path', $dbStakeholderData);
   $urlOfShootingApplicationGuide = !empty($_POST['url_of_shooting_application_guide']) ? $_POST['url_of_shooting_application_guide'] : '';
   $titleOfShootingApplicationGuide = !empty($_POST['title_of_shooting_application_guide']) ? $_POST['title_of_shooting_application_guide'] : '';
   $applicationDeadline = !empty($_POST['application_deadline']) ? $_POST['application_deadline'] : '';

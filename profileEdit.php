@@ -14,7 +14,7 @@ if (!empty($_POST)) {
   $personInCharge = $_POST['person_in_charge'];
   $phoneNumber = $_POST['phone_number'];
   $comment = $_POST['comment'];
-  $avatarPath = keepFilePath('avatar_path', 'avatar_path', $dbUserData);
+  $avatarPath = keepFilePath($_FILES['avatar_path'], 'avatar_path', 'avatar_path', $dbUserData);
 
 
   validMaxLength($organization, 'organization');
