@@ -452,6 +452,26 @@ function fetchStakeholdersWithCategories($userId)
     }
 }
 
+//海岸のデータの取得
+function fetchFacility($userId, $facilityId)
+{
+    debug('海岸の情報を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = ' select * from facilities where user_id = :user_id and facility_id = :facility_id and is_deleted = false; ';
+        $data = array(
+            ':user_id' => $userId,
+            ':facility_id' => $facilityId
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetch();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //////////////////////////////////////////////
 //ファイルアップロード
 //////////////////////////////////////////////
