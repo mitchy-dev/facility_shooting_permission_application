@@ -495,7 +495,33 @@ function uploadImage($key, $errorMessageKey)
         }
     }
 }
+
+
+//////////////////////////////////////////////
+//文字列操作
+//////////////////////////////////////////////
+//サニタイズ
+function sanitize($string)
+{
+    return htmlspecialchars($string, ENT_NOQUOTES);
+}
 ///
 ///
-///
-///
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

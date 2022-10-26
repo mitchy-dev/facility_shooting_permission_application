@@ -48,7 +48,7 @@ require "header.php";
               endif; ?>
             </div>
             <p class="p-registered-applications__text">電話：<?php
-              echo $value['phone_number']; ?></p>
+              echo sanitize($value['phone_number']); ?></p>
           </a>
         </div>
       <?php
