@@ -104,7 +104,7 @@ if (!empty($_POST)) {
         }
         $dbh->commit();
         $_SESSION['message'] = SUCCESS['UPDATE_STAKEHOLDER'];
-        redirect('registrationOfApplicationDestination.php?stakeholder_id=' . $stakeholderId);
+        redirect('registeredContactAndApplication.php');
       } else {
         debug('事前相談先・申請先の情報を登録します');
         $sql = 'insert into stakeholders (
@@ -151,7 +151,7 @@ if (!empty($_POST)) {
         }
         $dbh->commit();
         $_SESSION['message'] = SUCCESS['REGISTERED_STAKEHOLDER'];
-        redirect('registrationOfApplicationDestination.php?stakeholder_id=' . $stakeholderId);
+        redirect('registeredContactAndApplication.php');
       }
     } catch (Exception $e) {
       $dbh->rollBack();
