@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-//$_GET['facility_id'] = 1;
+$_GET['facility_id'] = 60;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -19,7 +19,8 @@ if (!empty($facilityId) && empty($dbFacilityData)) {
 
 
 //DBから写真のデータを取得する必要がある
-//$dbFacilityImageData
+$dbFacilityImagePaths = fetchFacilityImagePaths($facilityId);
+debug('$dbFacilityImagePaths:' . print_r($dbFacilityImagePaths, true));
 $dbPrefectures = fetchPrefectures();
 $dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
 //debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
@@ -33,6 +34,7 @@ if (!empty($_POST)) {
   if (!empty($facilityImages)) {
     foreach ($facilityImages as $key => $value) {
       $facilityImagePath[] = uploadImage($value, 'common');
+//      $facilityImagePath[] = keepFilePath($value, $)
     }
   }
   $thumbnailPath = !empty($facilityImagePath) ? $facilityImagePath[0] : '';
@@ -162,10 +164,10 @@ require "header.php";
               echo 2 * MEGA_BYTES; ?>">
               <img class="c-image-upload__img js-image-preview" src="<?php
               //            この部分は２つ目以降はfacility_imageでOK
-              if (!empty($dbFacilityData['facility_image'])) {
-                echo $dbFacilityData['facility_image'];
+              if (!empty($dbFacilityImagePaths[$i])) {
+                echo $dbFacilityImagePaths[$i];
               } ?>" style="<?php
-              if (!empty($dbFacilityData['facility_image'])) {
+              if (!empty($dbFacilityImagePaths[$i])) {
                 echo 'display:block;';
               } ?>" alt="">
             </label>

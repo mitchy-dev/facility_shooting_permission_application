@@ -473,6 +473,28 @@ function fetchFacility($userId, $facilityId)
     }
 }
 
+//海岸の写真のパスを取得
+function fetchFacilityImagePaths($facilityId)
+{
+    debug('海岸の写真を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select image_path from facility_images where facility_id = :facility_id';
+        $data = array(
+            ':facility_id' => $facilityId
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        $records = $sth->fetchAll();
+        if (!empty($records)) {
+            return array_column($records, 'image_path');
+        } else {
+            return array();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //////////////////////////////////////////////
 //ファイルアップロード
 //////////////////////////////////////////////
