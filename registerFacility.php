@@ -34,7 +34,11 @@ if (!empty($_POST)) {
   if (!empty($facilityImages)) {
     foreach ($facilityImages as $key => $value) {
 //      $facilityImagePath[] = uploadImage($value, 'common');
-      $facilityImagePath[] = keepFilePath($value, 'common', $dbFacilityImagePaths[$key]);
+      $facilityImagePath[] = keepFilePath(
+              $value,
+              'common',
+              !empty($dbFacilityImagePaths[$key]) ? $dbFacilityImagePaths[$key] : ''
+      );
     }
   }
   $thumbnailPath = !empty($facilityImagePath) ? $facilityImagePath[0] : '';
@@ -124,6 +128,8 @@ require "header.php";
     <div class="l-main__my-page">
       <h1 class="c-main__title u-text-center"><?php
         echo $pageTitle; ?></h1>
+      <p class="c-main__message --error"><?php
+        getErrorMessage('common'); ?></p>
       <form method="post" action="" enctype="multipart/form-data">
 
         <div class="c-input__container">
@@ -151,8 +157,8 @@ require "header.php";
               echo sanitize($i + 1); ?></span>
             <!--        <p class="c-input__sub-label">コメント時に表示されます</p>-->
             <!--  <p class="c-input__help-message">help message</p>-->
-            <p class="c-input__error-message"><?php
-              echo getErrorMessage('facility_image'); ?></p>
+            <!--            <p class="c-input__error-message">--><?php
+            //              echo getErrorMessage('facility_image' . $i); ?><!--</p>-->
             <label class="c-image-upload__label --facility js-drag-area" for="facility_image<?php
             echo sanitize($i); ?>">
               ここに画像をドラッグ
