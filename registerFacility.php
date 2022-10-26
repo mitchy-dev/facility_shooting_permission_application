@@ -18,14 +18,24 @@ if (!empty($facilityId) && empty($dbFacilityData)) {
 }
 
 
+//DBから写真のデータを取得する必要がある
+//$dbFacilityImageData
 $dbPrefectures = fetchPrefectures();
 $dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
-debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
+//debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
 
 if (!empty($_POST)) {
   debug('POST:' . print_r($_POST, true));
+  debug('FILES:' . print_r($_FILES, true));
   $facilityName = $_POST['facility_name'];
-  $thumbnailPath = keepFilePath('thumbnail_path', 'thumbnail_path', $dbFacilityData);
+  $facilityImages = reArrayFiles($_FILES['facility_image']);
+  debug('facilityImages:' . print_r($facilityImages, true));
+  if (!empty($facilityImages)) {
+    foreach ($facilityImages as $key => $value) {
+      $facilityImagePath[] = uploadImage($value, 'common');
+    }
+  }
+  $thumbnailPath = !empty($facilityImagePath) ? $facilityImagePath[0] : '';
   $prefectureId = $_POST['prefecture_id'];
   $facilityAddress = $_POST['facility_address'];
   $shootingFee = $_POST['shooting_fee'];
@@ -35,7 +45,6 @@ if (!empty($_POST)) {
 
 
   if (empty($errorMessages)) {
-    debug('');
     try {
       $dbh = dbConnect();
       $dbh->beginTransaction();
@@ -59,7 +68,20 @@ if (!empty($_POST)) {
         if (empty(queryPost($dbh, $sql, $data))) {
           throw new Exception(ERROR['EXCEPTION']);
         }
-        $stakeholderId = $dbh->lastInsertId();
+        $facilityId = $dbh->lastInsertId();
+        if (!empty($facilityImagePath)) {
+          foreach ($facilityImagePath as $key => $value) {
+            $sql = 'insert into facility_images(facility_id, image_path, created_at) values (:facility_id, :image_path, :created_at)';
+            $data = array(
+                    ':facility_id' => $facilityId,
+                    ':image_path' => $value,
+                    ':created_at' => date('Y-m-d H:i:s'),
+            );
+            if (empty(queryPost($dbh, $sql, $data))) {
+              throw new Exception(ERROR['EXCEPTION']);
+            }
+          }
+        }
 
 //        if (!empty($stakeholderCategory)) {
 //          debug('関係者のカテゴリが入力されています');
@@ -118,59 +140,39 @@ require "header.php";
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
 
-       
-        <div class="c-input__container">
-          <span class="c-status-label --orange">必須</span>
-          <span class="c-input__label">写真(メイン）</span>
-          <!--        <p class="c-input__sub-label">コメント時に表示されます</p>-->
-          <!--  <p class="c-input__help-message">help message</p>-->
-          <p class="c-input__error-message"><?php
-            echo getErrorMessage('thumbnail_path'); ?></p>
-          <label class="c-image-upload__label --facility js-drag-area" for="thumbnail_path">
-            ここに画像をドラッグ
-            <input class="c-image-upload__body js-image-upload" type="file" name="thumbnail_path" id="thumbnail_path"
-                   accept=".jpg, .peg, .png">
-            <input type="hidden" name="max_file_size" value="<?php
-            echo 2 * MEGA_BYTES; ?>">
-            <img class="c-image-upload__img js-image-preview" src="<?php
-            if (!empty($dbFacilityData['thumbnail_path'])) {
-              echo $dbFacilityData['thumbnail_path'];
-            } ?>" style="<?php
-            if (!empty($dbFacilityData['avatar_path'])) {
-              echo 'display:block;';
-            } ?>" alt="">
-          </label>
-        </div>
 
+        <?php
+        for ($i = 0; $i < 3; $i++): ?>
+          <div class="c-input__container">
+            <!--            <span class="c-status-label --orange">必須</span>-->
+            <span class="c-input__label">写真<?php
+              echo sanitize($i + 1); ?></span>
+            <!--        <p class="c-input__sub-label">コメント時に表示されます</p>-->
+            <!--  <p class="c-input__help-message">help message</p>-->
+            <p class="c-input__error-message"><?php
+              echo getErrorMessage('facility_image'); ?></p>
+            <label class="c-image-upload__label --facility js-drag-area" for="facility_image<?php
+            echo sanitize($i); ?>">
+              ここに画像をドラッグ
+              <input class="c-image-upload__body js-image-upload" type="file" name="facility_image[]"
+                     id="facility_image<?php
+                     echo sanitize($i); ?>"
+                     accept=".jpg, .peg, .png">
+              <input type="hidden" name="max_file_size" value="<?php
+              echo 2 * MEGA_BYTES; ?>">
+              <img class="c-image-upload__img js-image-preview" src="<?php
+              //            この部分は２つ目以降はfacility_imageでOK
+              if (!empty($dbFacilityData['facility_image'])) {
+                echo $dbFacilityData['facility_image'];
+              } ?>" style="<?php
+              if (!empty($dbFacilityData['facility_image'])) {
+                echo 'display:block;';
+              } ?>" alt="">
+            </label>
+          </div>
+        <?php
+        endfor; ?>
 
-        <div class="c-input__container">
-          <!--          <span class="c-status-label &#45;&#45;orange">必須</span>-->
-          <span class="c-input__label">写真</span>
-          <!--  <p class="c-input__sub-label">sub-label</p>-->
-          <!--  <p class="c-input__help-message">help message</p>-->
-          <!--  <p class="c-input__error-message">error</p>-->
-          <label class="c-image-upload__label --facility js-drag-area" for="image-uploads">
-            ここに画像をドラッグ
-            <input class="c-image-upload__body js-drag-area" type="file" class="" name="image-uploads"
-                   id="image-uploads"
-                   accept=".jpg, .peg, .png">
-            <img class="c-image-upload__img" src="img/sample.jpg" alt="">
-          </label>
-        </div>
-        <div class="c-input__container">
-          <!--          <span class="c-status-label &#45;&#45;orange">必須</span>-->
-          <span class="c-input__label">写真</span>
-          <!--  <p class="c-input__sub-label">sub-label</p>-->
-          <!--  <p class="c-input__help-message">help message</p>-->
-          <!--  <p class="c-input__error-message">error</p>-->
-          <label class="c-image-upload__label --facility js-drag-area" for="image-uploads">
-            ここに画像をドラッグ
-            <input class="c-image-upload__body js-drag-area" type="file" class="" name="image-uploads"
-                   id="image-uploads"
-                   accept=".jpg, .peg, .png">
-            <img class="c-image-upload__img" src="img/sample.jpg" alt="">
-          </label>
-        </div>
 
         <div class="c-input__container">
           <!--          <span class="c-status-label">ラベル</span>-->
@@ -285,7 +287,7 @@ require "header.php";
                   if (!empty($value['categories'])): ?>
                     <?php
                     $categoryIds = array_column($value['categories'], 'category_id');
-                    debug('各関係者に紐付いているカテゴリのID:' . print_r($categoryIds, true));
+//                    debug('各関係者に紐付いているカテゴリのID:' . print_r($categoryIds, true));
                     if (in_array(1, $categoryIds)): ?>
                       <option value="<?php
                       echo sanitize($value['stakeholder_id']); ?>" class="c-select__option"><?php
