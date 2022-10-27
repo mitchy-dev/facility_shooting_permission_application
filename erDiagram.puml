@@ -143,8 +143,10 @@ entity "facilities_categorization" as facilities_categorization {
 }
 
 entity "facilities_stakeholders" as facilities_stakeholders {
-  facility_id<<FK>>:int not null primary key
-  stakeholder_id <<FK>>:int not null primary key
+  facilities_stakeholders_id:int not null primary key
+  facility_id<<FK>>:int not null
+  stakeholder_id <<FK>>:int not null
+  stakeholder_categories<<FK>>:int not null
   --
   created_at:datetime not null
   updated_at:timestamp not null default current_timestamp on update current_timestamp
@@ -183,5 +185,7 @@ stakeholders ||--|{ stakeholder_categorization
 stakeholder_categorization }|--|| stakeholder_categories
 stakeholders ||--o{ shooting_application_acceptance_type_tagging
 shooting_application_acceptance_type_tagging }o--|| shooting_application_acceptance_type_tags
+'facilities_stakeholders
+facilities_stakeholders ||--|{ stakeholder_categories
 
 @enduml
