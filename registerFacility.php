@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-//$_GET['facility_id'] = 60;
+$_GET['facility_id'] = 77;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -23,8 +23,8 @@ $dbFacilityImagePaths = fetchFacilityImagePaths($facilityId);
 debug('$dbFacilityImagePaths:' . print_r($dbFacilityImagePaths, true));
 $dbPrefectures = fetchPrefectures();
 $dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
-//debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
-
+debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
+//
 if (!empty($_POST)) {
   debug('POST:' . print_r($_POST, true));
   debug('FILES:' . print_r($_FILES, true));
@@ -48,6 +48,7 @@ if (!empty($_POST)) {
   $titleOfFacilityInformationPage = 'test';
   $published = !empty($_POST['published']) ? 1 : 0;
 
+//  $
 
   if (empty($errorMessages)) {
     try {
@@ -252,6 +253,7 @@ require "header.php";
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
 
+
         <div class="c-input__container">
           <!--          <span class="c-status-label">ラベル</span>-->
           <label for="" class="c-input__label">撮影前の事前相談の要否</label>
@@ -260,12 +262,50 @@ require "header.php";
           <!--          <p class="c-input__error-message">error</p>-->
           <div class="c-select__wrap--register">
             <select name="region" id="" class="c-select__box--register">
-              <option value="0" class="c-select__option">必要</option>
-              <option value="2" class="c-select__option">不要</option>
+              <option value="1" class="c-select__option">必要</option>
+              <option value="2" class="c-select__option">撮影申請先と同じ</option>
+              <option value="3" class="c-select__option">不要</option>
             </select>
           </div>
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
+        <div class="c-checkbox__container">
+          <p for="organization" class="c-input__label">チェックボックスに改修：登撮影前の事前相談先</p>
+          <!--          <p class="c-input__sub-label">sub-label</p>-->
+          <p class="c-input__help-message u-mb-8">
+            撮影の相談先を先に作成する必要があります。<br>
+            作成すると以下のチェックボックスから選択できるようになります。
+          </p>
+
+          <?php
+          if (!empty($dbStakeholdersWithCategory)): ?>
+            <?php
+            foreach ($dbStakeholdersWithCategory as $key => $value): ?>
+              <label for="stakeholder_id<?php
+              echo $value['stakeholder_id']; ?>" class="c-checkbox__label u-mr-24">
+                <input type="checkbox" class="c-checkbox__body" name="prior_consultation[]"
+                       id="stakeholder_id<?php
+                       echo $value['stakeholder_id']; ?>" value="<?php
+                echo $value['stakeholder_id']; ?>">
+                <span class="c-checkbox__name"><?php
+                  echo $value['organization']; ?></span>
+                <p class="c-input__error-message">
+                  <?php
+                  echo getErrorMessage('prior_consultation'); ?>
+                </p>
+              </label>
+            <?php
+            endforeach; ?>
+          <?php
+          else: ?>
+            <option value="" class="c-select__option">事前相談先が登録されていません</option>
+          <?php
+          endif; ?>
+          </select>
+
+
+        </div>
+
 
         <div class="c-input__container">
           <!--          <span class="c-status-label">ラベル</span>-->
@@ -311,6 +351,8 @@ require "header.php";
           </div>
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
+
+
         <div class="c-input__container">
           <!--          <span class="c-status-label">ラベル</span>-->
           <label for="" class="c-input__label">撮影の申請先</label>
