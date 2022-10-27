@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$_GET['facility_id'] = 77;
+$_GET['facility_id'] = 80;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -22,8 +22,29 @@ if (!empty($facilityId) && empty($dbFacilityData)) {
 $dbFacilityImagePaths = fetchFacilityImagePaths($facilityId);
 debug('$dbFacilityImagePaths:' . print_r($dbFacilityImagePaths, true));
 $dbPrefectures = fetchPrefectures();
-$dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
-debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
+//$dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
+//debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
+$dbStakeholdersAssociatedWithCategory = fetchStakeholdersAssociatedWithTheFacility($facilityId);
+$dbPriorConsultationIds = array();
+$dbApplicationDestinationIds = array();
+
+if (!empty($dbStakeholdersAssociatedWithCategory)) {
+  foreach ($dbStakeholdersAssociatedWithCategory as $key => $value) {
+    if ($value['stakeholder_category_id'] == 1) {
+      $dbPriorConsultaitions[] = $value;
+    } elseif ($value['stakeholder_category'] == 2) {
+      $dbApplicationDestinations[] = $value;
+    }
+
+    if (!empty($dbPriorConsultaitions)) {
+      $dbPriorConsultationIds = array_column($dbPriorConsultaitions, 'stakeholder_id');
+    }
+
+    if (!empty($dbApplicationDestinations)) {
+      $dbApplicationDestinationIds = array_column($dbApplicationDestinations, 'stakeholder_id');
+    }
+  }
+}
 //
 if (!empty($_POST)) {
   debug('POST:' . print_r($_POST, true));
@@ -48,7 +69,7 @@ if (!empty($_POST)) {
   $titleOfFacilityInformationPage = 'test';
   $published = !empty($_POST['published']) ? 1 : 0;
 
-//  $
+  $priorConsultation = $_POST['prior_consultation'];
 
   if (empty($errorMessages)) {
     try {
@@ -88,15 +109,30 @@ if (!empty($_POST)) {
             }
           }
         }
+        if (!empty($priorConsultation)) {
+          foreach ($priorConsultation as $key => $value) {
+            $sql = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
+            $data = array(
+                    ':facility_id' => $facilityId,
+                    ':stakeholder_id' => $value,
+                    ':stakeholder_category_id' => 1,
+                    ':created_at' => date('Y-m-d H:i:s')
+            );
+            if (empty(queryPost($dbh, $sql, $data))) {
+              throw new Exception(ERROR['EXCEPTION']);
+            }
+          }
+        }
+
 
 //        if (!empty($stakeholderCategory)) {
 //          debug('関係者のカテゴリが入力されています');
 //          foreach ($stakeholderCategory as $key => $value) {
-//            $sql = 'insert into stakeholder_categorization(stakeholder_id, stakeholder_category_id, created_at) values (:stakeholder_id, :stakeholder_category_id, :created_at)';
+//            $sql = 'insert into stakeholder_categorization( stakeholder_id, stakeholder_category_id, created_at ) values(:stakeholder_id, :stakeholder_category_id, :created_at)';
 //            $data = array(
 //                    ':stakeholder_id' => $stakeholderId,
 //                    ':stakeholder_category_id' => $value,
-//                    ':created_at' => date('Y-m-d H:i:s'),
+//                    ':created_at' => date('Y - m - d H:i:s'),
 //            );
 //            if (empty(queryPost($dbh, $sql, $data))) {
 //              throw new Exception(ERROR['EXCEPTION']);
@@ -270,7 +306,7 @@ require "header.php";
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
         <div class="c-checkbox__container">
-          <p for="organization" class="c-input__label">チェックボックスに改修：登撮影前の事前相談先</p>
+          <p for="organization" class="c-input__label">登撮影前の事前相談先</p>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
           <p class="c-input__help-message u-mb-8">
             撮影の相談先を先に作成する必要があります。<br>
@@ -286,7 +322,11 @@ require "header.php";
                 <input type="checkbox" class="c-checkbox__body" name="prior_consultation[]"
                        id="stakeholder_id<?php
                        echo $value['stakeholder_id']; ?>" value="<?php
-                echo $value['stakeholder_id']; ?>">
+                echo $value['stakeholder_id']; ?>" <?php
+                if (in_array($value['stakeholder_id'], $dbPriorConsultationIds)) {
+                  echo 'checked';
+                }
+                ?>>
                 <span class="c-checkbox__name"><?php
                   echo $value['organization']; ?></span>
                 <p class="c-input__error-message">
@@ -298,58 +338,21 @@ require "header.php";
             endforeach; ?>
           <?php
           else: ?>
-            <option value="" class="c-select__option">事前相談先が登録されていません</option>
+            <label for="stakeholder_id" class="c-checkbox__label u-mr-24">
+              <input type="checkbox" class="c-checkbox__body" name="prior_consultation[]"
+                     id="stakeholder_id" value="" disabled>
+              <span class="c-checkbox__name">事前相談先が登録されていません。<a class="c-text__link"
+                                                                href="registrationOfApplicationDestination.php">相談先の登録はコチラ</a></span>
+              <p class="c-input__error-message">
+                <?php
+                echo getErrorMessage('prior_consultation'); ?>
+              </p>
+            </label>
           <?php
           endif; ?>
           </select>
 
 
-        </div>
-
-
-        <div class="c-input__container">
-          <!--          <span class="c-status-label">ラベル</span>-->
-          <label for="" class="c-input__label">撮影前の事前相談先</label>
-          <p class="c-input__sub-label">
-            撮影の相談先を先に作成する必要があります。<br>
-            作成すると以下のセレクトボックスから選択できるようになります。
-          </p>
-          <p class="c-input__help-message">
-            (例)湘南藤沢フィルムコミッション
-          </p>
-          <!--          <p class="c-input__error-message">error</p>-->
-          <div class="c-select__wrap--register">
-            <select name="region" id="" class="c-select__box--register">
-              <?php
-              if (!empty($dbStakeholdersWithCategory)): ?>
-                <option value="" class="c-select__option">撮影の相談先はない</option>
-                <option value="0" class="c-select__option">撮影申請先と同じ</option>
-                <?php
-                foreach ($dbStakeholdersWithCategory as $key => $value): ?>
-                  <?php
-                  if (!empty($value['categories'])): ?>
-                    <?php
-                    $categoryIds = array_column($value['categories'], 'category_id');
-//                    debug('各関係者に紐付いているカテゴリのID:' . print_r($categoryIds, true));
-                    if (in_array(1, $categoryIds)): ?>
-                      <option value="<?php
-                      echo sanitize($value['stakeholder_id']); ?>" class="c-select__option"><?php
-                        echo sanitize($value['organization']); ?></option>
-                    <?php
-                    endif; ?>
-
-                  <?php
-                  endif; ?>
-                <?php
-                endforeach; ?>
-              <?php
-              else: ?>
-                <option value="" class="c-select__option">事前相談先が登録されていません</option>
-              <?php
-              endif; ?>
-            </select>
-          </div>
-          <!--          <p class="c-input__counter">0/10</p>-->
         </div>
 
 
@@ -388,7 +391,7 @@ require "header.php";
                 endforeach; ?>
               <?php
               else: ?>
-                <option value="" class="c-select__option">撮影申請先が登録されていません</option>
+                <p class="u-text-center">撮影申請先が登録されていません</p>
               <?php
               endif; ?>
             </select>

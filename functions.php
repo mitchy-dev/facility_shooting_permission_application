@@ -497,6 +497,28 @@ function fetchFacilityImagePaths($facilityId)
     }
 }
 
+//相談先・申請先の関係者の取得
+function fetchStakeholdersAssociatedWithTheFacility($facilityId)
+{
+    debug('登録されている相談先と申請先の関係者IDを取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = ' select stakeholder_id, stakeholder_category_id from facilities_stakeholders where facility_id = :facility_id';
+        $data = array(
+            ':facility_id' => $facilityId
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetchAll();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
+$result = fetchStakeholdersAssociatedWithTheFacility(80);
+debug('$resutl:' . print_r($result, true));
+
 //////////////////////////////////////////////
 //ファイルアップロード
 //////////////////////////////////////////////
