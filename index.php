@@ -47,7 +47,7 @@ require "header.php";
   <div class="p-card__container">
     <div class="p-card__layout">
       <div class="p-card">
-        <a href="facilityDetail.html" class="p-card__link">
+        <a href="facilityDetail.php" class="p-card__link">
           <div class="p-card__head">
             <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">
           </div>
@@ -154,13 +154,13 @@ require "header.php";
   </div>
   <div class="c-paging__layout">
     <ul class="c-paging__list">
-      <li class="c-paging__item"><a href="facilityDetail.html">&lt;</a></li>
-      <li class="c-paging__item is-active"><a href="facilityDetail.html">1</a></li>
-      <li class="c-paging__item"><a href="facilityDetail.html">2</a></li>
-      <li class="c-paging__item"><a href="facilityDetail.html">3</a></li>
-      <li class="c-paging__item"><a href="facilityDetail.html">4</a></li>
-      <li class="c-paging__item"><a href="facilityDetail.html">5</a></li>
-      <li class="c-paging__item"><a href="facilityDetail.html">&gt;</a></li>
+      <li class="c-paging__item"><a href="facilityDetail.php">&lt;</a></li>
+      <li class="c-paging__item is-active"><a href="facilityDetail.php">1</a></li>
+      <li class="c-paging__item"><a href="facilityDetail.php">2</a></li>
+      <li class="c-paging__item"><a href="facilityDetail.php">3</a></li>
+      <li class="c-paging__item"><a href="facilityDetail.php">4</a></li>
+      <li class="c-paging__item"><a href="facilityDetail.php">5</a></li>
+      <li class="c-paging__item"><a href="facilityDetail.php">&gt;</a></li>
     </ul>
   </div>
 </main>
