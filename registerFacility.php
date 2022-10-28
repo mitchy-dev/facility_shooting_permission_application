@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$_GET['facility_id'] = 89;
+$_GET['facility_id'] = 92;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -35,6 +35,7 @@ if (!empty($dbStakeholdersWithCategory)) {
       }
     }
   }
+  unset($key, $value);
   foreach ($dbStakeholdersWithCategory as $key => $value) {
     if (!empty($value['categories'])) {
       $value['categoryIds'] = array_column($value['categories'], 'category_id');
@@ -43,6 +44,7 @@ if (!empty($dbStakeholdersWithCategory)) {
       }
     }
   }
+  unset($key, $value);
 }
 
 debug('$dbPriorConsultationsWithCategory:' . print_r($dbPriorConsultationsWithCategory, true));
@@ -83,14 +85,15 @@ if (!empty($_POST)) {
   debug('facilityImages:' . print_r($facilityImages, true));
   if (!empty($facilityImages)) {
     foreach ($facilityImages as $key => $value) {
-      $facilityImagePath[] = keepFilePath(
+      $facilityImagePaths[] = keepFilePath(
               $value,
               'common',
               !empty($dbFacilityImagePaths[$key]) ? $dbFacilityImagePaths[$key] : ''
       );
     }
+    unset($key, $value);
   }
-  $thumbnailPath = !empty($facilityImagePath) ? $facilityImagePath[0] : '';
+  $thumbnailPath = !empty($facilityImagePaths) ? $facilityImagePaths[0] : '';
   $prefectureId = $_POST['prefecture_id'];
   $facilityAddress = $_POST['facility_address'];
   $shootingFee = $_POST['shooting_fee'];
@@ -98,8 +101,8 @@ if (!empty($_POST)) {
   $titleOfFacilityInformationPage = 'test';
   $published = !empty($_POST['published']) ? 1 : 0;
 
-  $priorConsultation = $_POST['prior_consultation'];
-  $applicationDestination = $_POST['application_destination'];
+  $priorConsultation = !empty($_POST['prior_consultation']) ? $_POST['prior_consultation'] : array();
+  $applicationDestination = !empty($_POST['application_destination']) ? $_POST['application_destination'] : array();
 
 
   if (empty($errorMessages)) {
@@ -108,6 +111,117 @@ if (!empty($_POST)) {
       $dbh->beginTransaction();
       if (!empty($dbFacilityData)) {
         debug('海岸の情報を更新します');
+        $sql = 'update facilities set 
+                      facility_name = :facility_name, 
+                      thumbnail_path = :thumbnail_path, 
+                      prefecture_id = :prefecture_id, 
+                      facility_address = :facility_address, 
+                      shooting_fee = :shooting_fee, 
+                      url_of_facility_information_page = :url_of_facility_information_page, 
+                      title_of_facility_information_page = :title_of_facility_information_page, 
+                      published = :published
+                    where user_id = :user_id and 
+                      facility_id = :facility_id and 
+                      is_deleted = false';
+        $data = array(
+                ':facility_name' => $facilityName,
+                ':thumbnail_path' => $thumbnailPath,
+                ':prefecture_id' => $prefectureId,
+                ':facility_address' => $facilityAddress,
+                ':shooting_fee' => $shootingFee,
+                ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
+                ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
+                ':published' => $published,
+                ':facility_id' => $facilityId,
+                ':user_id' => $_SESSION['user_id'],
+        );
+        if (empty(queryPost($dbh, $sql, $data))) {
+          throw new Exception(ERROR['EXCEPTION']);
+        }
+
+//        画像のパスの更新
+        if ($facilityImagePaths != $dbFacilityImagePaths) {
+          $sql = 'delete from facility_images where facility_id = :facility_id';
+          $data = array(':facility_id' => $facilityId);
+          if (empty(queryPost($dbh, $sql, $data))) {
+            throw new Exception(ERROR['EXCEPTION']);
+          }
+          if (!empty($facilityImagePaths)) {
+            foreach ($facilityImagePaths as $key => $value) {
+              $sql = 'insert into facility_images(facility_id, image_path, created_at) values (:facility_id, :image_path, :created_at)';
+              $data = array(
+                      ':facility_id' => $facilityId,
+                      ':image_path' => $value,
+                      ':created_at' => date('Y-m-d H:i:s'),
+              );
+              if (empty(queryPost($dbh, $sql, $data))) {
+                throw new Exception(ERROR['EXCEPTION']);
+              }
+            }
+            unset($key, $value);
+          }
+        }
+
+//        相談先の更新
+//        postがあって、DBと異なる場合　もしくは　postがなくて、DBと異なる場合
+//        両方とも値があって、かつ異なるとき
+        if (empty($priorConsultation) || $priorConsultation != $dbPriorConsultaitions) {
+          debug('相談先の更新をします');
+          $sql = 'delete from facilities_stakeholders where facility_id = :facility_id and stakeholder_category_id = :stakeholder_category_id';
+          $data = array(
+                  ':facility_id' => $facilityId,
+                  ':stakeholder_category_id' => 1
+          );
+          if (empty(queryPost($dbh, $sql, $data))) {
+            throw new Exception(ERROR['EXCEPTION']);
+          }
+          if (!empty($priorConsultation)) {
+            foreach ($priorConsultation as $key => $value) {
+              $sql = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
+              $data = array(
+                      ':facility_id' => $facilityId,
+                      ':stakeholder_id' => $value,
+                      ':stakeholder_category_id' => 1,
+                      ':created_at' => date('Y-m-d H:i:s'),
+              );
+              if (empty(queryPost($dbh, $sql, $data))) {
+                throw new Exception(ERROR['EXCEPTION']);
+              }
+            }
+            unset($key, $value);
+          }
+        }
+
+        //        申請先の更新
+        if ($applicationDestination != $dbApplicationDestinations) {
+          $sql2 = ' delete from facilities_stakeholders where facility_id = :facility_id and stakeholder_category_id = :stakeholder_category_id; ';
+          $data2 = array(
+                  ':facility_id' => $facilityId,
+                  ':stakeholder_category_id' => 2
+          );
+          if (empty(queryPost($dbh, $sql2, $data2))) {
+            throw new Exception(ERROR['EXCEPTION']);
+          }
+          if (!empty($applicationDestination)) {
+            foreach ($applicationDestination as $key2 => $value2) {
+              $sql2 = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) 
+values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
+              $data2 = array(
+                      ':facility_id' => $facilityId,
+                      ':stakeholder_id' => $value2,
+                      ':stakeholder_category_id' => 2,
+                      ':created_at' => date('Y-m-d H:i:s'),
+              );
+              if (empty(queryPost($dbh, $sql2, $data2))) {
+                throw new Exception(ERROR['EXCEPTION']);
+              }
+            }
+            unset($key, $value);
+          }
+        }
+        $dbh->commit();
+        $_SESSION['message'] = SUCCESS['UPDATE'];
+        redirect('listings.html');
       } else {
         debug('海岸の情報を登録します');
         $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :published, :created_at)';
@@ -127,8 +241,8 @@ if (!empty($_POST)) {
           throw new Exception(ERROR['EXCEPTION']);
         }
         $facilityId = $dbh->lastInsertId();
-        if (!empty($facilityImagePath)) {
-          foreach ($facilityImagePath as $key => $value) {
+        if (!empty($facilityImagePaths)) {
+          foreach ($facilityImagePaths as $key => $value) {
             $sql = 'insert into facility_images(facility_id, image_path, created_at) values (:facility_id, :image_path, :created_at)';
             $data = array(
                     ':facility_id' => $facilityId,
@@ -139,10 +253,12 @@ if (!empty($_POST)) {
               throw new Exception(ERROR['EXCEPTION']);
             }
           }
+          unset($key, $value);
         }
         if (!empty($priorConsultation)) {
           foreach ($priorConsultation as $key => $value) {
-            $sql = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
+            $sql = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) 
+values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
             $data = array(
                     ':facility_id' => $facilityId,
                     ':stakeholder_id' => $value,
@@ -153,10 +269,12 @@ if (!empty($_POST)) {
               throw new Exception(ERROR['EXCEPTION']);
             }
           }
+          unset($key, $value);
         }
         if (!empty($applicationDestination)) {
           foreach ($applicationDestination as $key => $value) {
-            $sql = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
+            $sql = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) 
+values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
             $data = array(
                     ':facility_id' => $facilityId,
                     ':stakeholder_id' => $value,
@@ -167,22 +285,8 @@ if (!empty($_POST)) {
               throw new Exception(ERROR['EXCEPTION']);
             }
           }
+          unset($key, $value);
         }
-
-//        if (!empty($stakeholderCategory)) {
-//          debug('関係者のカテゴリが入力されています');
-//          foreach ($stakeholderCategory as $key => $value) {
-//            $sql = 'insert into stakeholder_categorization( stakeholder_id, stakeholder_category_id, created_at ) values(:stakeholder_id, :stakeholder_category_id, :created_at)';
-//            $data = array(
-//                    ':stakeholder_id' => $stakeholderId,
-//                    ':stakeholder_category_id' => $value,
-//                    ':created_at' => date('Y - m - d H:i:s'),
-//            );
-//            if (empty(queryPost($dbh, $sql, $data))) {
-//              throw new Exception(ERROR['EXCEPTION']);
-//            }
-//          }
-//        }
         $dbh->commit();
         $_SESSION['message'] = SUCCESS['REGISTERED'];
         redirect('listings.html');

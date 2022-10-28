@@ -93,6 +93,7 @@ const SUCCESS = array(
     'REGISTERED_STAKEHOLDER' => '登録しました',
     'REGISTERED' => '登録しました',
     'UPDATE_STAKEHOLDER' => '更新しました',
+    'UPDATE' => '更新しました',
     '' => '',
     '' => '',
 );
