@@ -559,6 +559,15 @@ function fetchFacilityAndStakeholders($facilityId)
         if (!empty($sth)) {
             $result['stakeholders'] = $sth->fetchAll();
         }
+
+        $sql3 = 'select image_path from facility_images where facility_id = :facility_id';
+        $data3 = array(
+            ':facility_id' => $facilityId
+        );
+        $sth = queryPost($dbh, $sql3, $data3);
+        if (!empty($sth)) {
+            $result['images'] = $sth->fetchAll();
+        }
         if (!empty($result)) {
             return $result;
         } else {
