@@ -154,7 +154,20 @@ if (!empty($_POST)) {
             }
           }
         }
-
+        if (!empty($applicationDestination)) {
+          foreach ($applicationDestination as $key => $value) {
+            $sql = 'insert into facilities_stakeholders(facility_id, stakeholder_id, stakeholder_category_id, created_at) values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
+            $data = array(
+                    ':facility_id' => $facilityId,
+                    ':stakeholder_id' => $value,
+                    ':stakeholder_category_id' => 2,
+                    ':created_at' => date('Y-m-d H:i:s')
+            );
+            if (empty(queryPost($dbh, $sql, $data))) {
+              throw new Exception(ERROR['EXCEPTION']);
+            }
+          }
+        }
 
 //        if (!empty($stakeholderCategory)) {
 //          debug('関係者のカテゴリが入力されています');
