@@ -773,7 +773,8 @@ strong {
     float: left;
     margin-right: var(--spacing-xs);
     margin-bottom: var(--spacing-sm);
-    width: 308px;
+    width: calc((100% - 16px) / 2);
+    min-width: 272px;
 }
 
 
