@@ -376,7 +376,11 @@ require "header.php";
               <?php
               foreach ($dbPrefectures as $key => $value) : ?>
                 <option value="<?php
-                echo $value['prefecture_id']; ?>" class="c-select__option"><?php
+                echo $value['prefecture_id']; ?>" class="c-select__option" <?php
+                if (keepInputAndDatabase(
+                                'prefecture_id',
+                                $dbFacilityData
+                        ) == $value['prefecture_id']) echo 'selected' ?>><?php
                   echo $value['name']; ?></option>
               <?php
               endforeach; ?>
