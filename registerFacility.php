@@ -24,6 +24,24 @@ debug('$dbFacilityImagePaths:' . print_r($dbFacilityImagePaths, true));
 $dbPrefectures = fetchPrefectures();
 $dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
 debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
+$dbPriorConsultationsWithCategory = array();
+$dbApplicationDestinationsWithCategory = array();
+if (!empty($dbStakeholdersWithCategory)) {
+  foreach ($dbStakeholdersWithCategory as $key => $value) {
+    if (!empty($value['categories'])) {
+      $value['categoryIds'] = array_column($value['categories'], 'category_id');
+      if (in_array(1, $value['categoryIds'])) {
+        $dbPriorConsultationsWithCategory[] = $value;
+      } elseif (in_array(2, $value['categoryIds'])) {
+        $dbApplicationDestinationsWithCategory = $value;
+      }
+    }
+  }
+}
+
+//debug('$dbPriorConsultationsWithCategory:' . print_r($dbPriorConsultationsWithCategory, true));
+//debug('$dbApplicationDestinationsWithCategory:' . print_r($dbApplicationDestinationsWithCategory, true));
+
 $dbStakeholdersAssociatedWithCategory = fetchStakeholdersAssociatedWithTheFacility($facilityId);
 $dbStakeholdersAssociatedWithCategoryIds = array();
 
@@ -320,7 +338,8 @@ require "header.php";
           </p>
 
           <?php
-          if (!empty($dbStakeholdersWithCategory)): ?>
+          if (!empty($dbPriorConsultationsWithCategory)):
+            ?>
             <?php
             $priorConsultationIds = !empty(
             keepInputAndDatabase(
@@ -328,7 +347,7 @@ require "header.php";
                     $dbStakeholdersAssociatedWithCategoryIds
             )
             ) ? keepInputAndDatabase('prior_consultation', $dbStakeholdersAssociatedWithCategoryIds) : array();
-            foreach ($dbStakeholdersWithCategory as $key => $value): ?>
+            foreach ($dbPriorConsultationsWithCategory as $key => $value): ?>
               <label for="stakeholder_id<?php
               echo $value['stakeholder_id']; ?>" class="c-checkbox__label u-mr-24">
                 <input type="checkbox" class="c-checkbox__body" name="prior_consultation[]"
