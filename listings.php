@@ -32,7 +32,7 @@ require "header.php";
               <a href="facilityDetail.html" class="p-card__link">
                 <div class="p-card__head">
                   <img src="<?php
-                  echo sanitize($value['thumbnail_path']); ?>" alt="海岸の写真" class="p-card__img">
+                  echo showFacilityImage($value['thumbnail_path']); ?>" alt="海岸の写真" class="p-card__img">
                 </div>
                 <div class="p-card__foot">
                   <div class="p-card__title-container">

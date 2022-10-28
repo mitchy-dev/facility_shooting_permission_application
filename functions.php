@@ -602,7 +602,7 @@ function reArrayFiles($file_post)
     return $file_ary;
 }
 
-//////////////////////////////////////////////
+//////////////////////////////////////
 //文字列操作
 //////////////////////////////////////////////
 //サニタイズ
@@ -610,8 +610,20 @@ function sanitize($string)
 {
     return htmlspecialchars($string, ENT_NOQUOTES);
 }
-///
-///
+
+
+//////////////////////////////////////
+//画像の表示
+//////////////////////////////////////////////
+//海岸画像の表示
+function showFacilityImage($path)
+{
+    if (!empty($path)) {
+        return sanitize($path);
+    } else {
+        return 'img/1920 887.jpg';
+    }
+}
 
 
 
