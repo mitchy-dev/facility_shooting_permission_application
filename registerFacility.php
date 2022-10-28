@@ -99,6 +99,7 @@ if (!empty($_POST)) {
   $published = !empty($_POST['published']) ? 1 : 0;
 
   $priorConsultation = $_POST['prior_consultation'];
+  $applicationDestination = $_POST['application_destination'];
 
 
   if (empty($errorMessages)) {
@@ -360,10 +361,10 @@ require "header.php";
             )
             ) ? keepInputAndDatabase('prior_consultation', $dbStakeholdersAssociatedWithCategoryIds) : array();
             foreach ($dbPriorConsultationsWithCategory as $key => $value): ?>
-              <label for="stakeholder_id<?php
+              <label for="prior_consultation_id<?php
               echo $value['stakeholder_id']; ?>" class="c-checkbox__label u-mr-24">
                 <input type="checkbox" class="c-checkbox__body" name="prior_consultation[]"
-                       id="stakeholder_id<?php
+                       id="prior_consultation_id<?php
                        echo $value['stakeholder_id']; ?>" value="<?php
                 echo $value['stakeholder_id']; ?>" <?php
                 if (in_array($value['stakeholder_id'], $priorConsultationIds)) {
@@ -411,10 +412,10 @@ require "header.php";
             )
             ) ? keepInputAndDatabase('application_destination', $dbStakeholdersAssociatedWithCategoryIds) : array();
             foreach ($dbApplicationDestinationsWithCategory as $key => $value): ?>
-              <label for="stakeholder_id<?php
+              <label for="application_destination_id<?php
               echo $value['stakeholder_id']; ?>" class="c-checkbox__label u-mr-24">
                 <input type="checkbox" class="c-checkbox__body" name="application_destination[]"
-                       id="stakeholder_id<?php
+                       id="application_destination_id<?php
                        echo $value['stakeholder_id']; ?>" value="<?php
                 echo $value['stakeholder_id']; ?>" <?php
                 if (in_array($value['stakeholder_id'], $applicationDestinationIds)) {
