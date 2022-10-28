@@ -21,7 +21,8 @@ require "header.php";
 
     <div class="l-main__my-page">
       <h1 class="c-main__title u-text-center"><?php
-        $pageTitle = '登録した海岸'; ?></h1>
+        echo $pageTitle ?></h1>
+
       <?php
       if (!empty($viewData)): ?>
         <?php
