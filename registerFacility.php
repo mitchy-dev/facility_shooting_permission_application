@@ -22,11 +22,10 @@ if (!empty($facilityId) && empty($dbFacilityData)) {
 $dbFacilityImagePaths = fetchFacilityImagePaths($facilityId);
 debug('$dbFacilityImagePaths:' . print_r($dbFacilityImagePaths, true));
 $dbPrefectures = fetchPrefectures();
-//$dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
-//debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
+$dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
+debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
 $dbStakeholdersAssociatedWithCategory = fetchStakeholdersAssociatedWithTheFacility($facilityId);
-$dbPriorConsultationIds = array();
-$dbApplicationDestinationIds = array();
+$dbStakeholdersAssociatedWithCategoryIds = array();
 
 if (!empty($dbStakeholdersAssociatedWithCategory)) {
   foreach ($dbStakeholdersAssociatedWithCategory as $key => $value) {
@@ -37,18 +36,24 @@ if (!empty($dbStakeholdersAssociatedWithCategory)) {
     }
 
     if (!empty($dbPriorConsultaitions)) {
-      $dbPriorConsultationIds = array_column($dbPriorConsultaitions, 'stakeholder_id');
+      $dbStakeholdersAssociatedWithCategoryIds['prior_consultation'] = array_column(
+              $dbPriorConsultaitions,
+              'stakeholder_id'
+      );
     }
 
     if (!empty($dbApplicationDestinations)) {
-      $dbApplicationDestinationIds = array_column($dbApplicationDestinations, 'stakeholder_id');
+      $dbStakeholdersAssociatedWithCategoryIds['application_destination'] = array_column(
+              $dbApplicationDestinations,
+              'stakeholder_id'
+      );
     }
   }
 }
 //
 if (!empty($_POST)) {
   debug('POST:' . print_r($_POST, true));
-  debug('FILES:' . print_r($_FILES, true));
+//  debug('FILES:' . print_r($_FILES, true));
   $facilityName = $_POST['facility_name'];
   $facilityImages = reArrayFiles($_FILES['facility_image']);
   debug('facilityImages:' . print_r($facilityImages, true));
@@ -70,6 +75,7 @@ if (!empty($_POST)) {
   $published = !empty($_POST['published']) ? 1 : 0;
 
   $priorConsultation = $_POST['prior_consultation'];
+
 
   if (empty($errorMessages)) {
     try {
@@ -316,6 +322,12 @@ require "header.php";
           <?php
           if (!empty($dbStakeholdersWithCategory)): ?>
             <?php
+            $priorConsultationIds = !empty(
+            keepInputAndDatabase(
+                    'prior_consultation',
+                    $dbStakeholdersAssociatedWithCategoryIds
+            )
+            ) ? keepInputAndDatabase('prior_consultation', $dbStakeholdersAssociatedWithCategoryIds) : array();
             foreach ($dbStakeholdersWithCategory as $key => $value): ?>
               <label for="stakeholder_id<?php
               echo $value['stakeholder_id']; ?>" class="c-checkbox__label u-mr-24">
@@ -323,7 +335,7 @@ require "header.php";
                        id="stakeholder_id<?php
                        echo $value['stakeholder_id']; ?>" value="<?php
                 echo $value['stakeholder_id']; ?>" <?php
-                if (in_array($value['stakeholder_id'], $dbPriorConsultationIds)) {
+                if (in_array($value['stakeholder_id'], $priorConsultationIds)) {
                   echo 'checked';
                 }
                 ?>>
