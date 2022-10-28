@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$_GET['facility_id'] = 80;
+//$_GET['facility_id'] = 80;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -33,14 +33,14 @@ if (!empty($dbStakeholdersWithCategory)) {
       if (in_array(1, $value['categoryIds'])) {
         $dbPriorConsultationsWithCategory[] = $value;
       } elseif (in_array(2, $value['categoryIds'])) {
-        $dbApplicationDestinationsWithCategory = $value;
+        $dbApplicationDestinationsWithCategory[] = $value;
       }
     }
   }
 }
 
-//debug('$dbPriorConsultationsWithCategory:' . print_r($dbPriorConsultationsWithCategory, true));
-//debug('$dbApplicationDestinationsWithCategory:' . print_r($dbApplicationDestinationsWithCategory, true));
+debug('$dbPriorConsultationsWithCategory:' . print_r($dbPriorConsultationsWithCategory, true));
+debug('$dbApplicationDestinationsWithCategory:' . print_r($dbApplicationDestinationsWithCategory, true));
 
 $dbStakeholdersAssociatedWithCategory = fetchStakeholdersAssociatedWithTheFacility($facilityId);
 $dbStakeholdersAssociatedWithCategoryIds = array();
@@ -329,12 +329,18 @@ require "header.php";
           </div>
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
+
+        <!--相談先ここから-->
         <div class="c-checkbox__container">
           <p for="organization" class="c-input__label">登撮影前の事前相談先</p>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
           <p class="c-input__help-message u-mb-8">
-            撮影の相談先を先に作成する必要があります。<br>
-            作成すると以下のチェックボックスから選択できるようになります。
+            撮影の相談先を先に作成する必要があります。
+            <br>
+            <a class="c-text__link"
+               href="registrationOfApplicationDestination.php" target="_blank">相談先の登録はコチラ</a>
+            <br>
+            作成すると以下にチェックボックスが表示され選択できるようになります。
           </p>
 
           <?php
@@ -369,67 +375,62 @@ require "header.php";
             endforeach; ?>
           <?php
           else: ?>
-            <label for="stakeholder_id" class="c-checkbox__label u-mr-24">
-              <input type="checkbox" class="c-checkbox__body" name="prior_consultation[]"
-                     id="stakeholder_id" value="" disabled>
-              <span class="c-checkbox__name">事前相談先が登録されていません。<a class="c-text__link"
-                                                                href="registrationOfApplicationDestination.php">相談先の登録はコチラ</a></span>
-              <p class="c-input__error-message">
-                <?php
-                echo getErrorMessage('prior_consultation'); ?>
-              </p>
-            </label>
+            <p>事前相談先が登録されていません</p>
           <?php
           endif; ?>
-          </select>
-
-
         </div>
 
+        <!--相談先ここまで-->
 
-        <div class="c-input__container">
-          <!--          <span class="c-status-label">ラベル</span>-->
-          <label for="" class="c-input__label">撮影の申請先</label>
-          <p class="c-input__sub-label">
-            申請先を先に作成する必要があります。<br>
-            作成すると以下のセレクトボックスから選択できるようになります。
+        <div class="c-checkbox__container">
+          <p for="organization" class="c-input__label">撮影の申請先</p>
+          <!--          <p class="c-input__sub-label">sub-label</p>-->
+          <p class="c-input__help-message u-mb-8">
+            撮影の申請先の情報を先を作成する必要があります。
+            <br>
+            <a class="c-text__link"
+               href="registrationOfApplicationDestination.php" target="_blank">申請先の登録はコチラ</a>
+            <br>
+            作成すると以下のチェックボックス表示され選択できるようになります。
           </p>
-          <p class="c-input__help-message">
-            (例)神奈川県横須賀土木事務所
-          </p>
-          <!--          <p class="c-input__error-message">error</p>-->
-          <div class="c-select__wrap--register">
-            <select name="region" id="" class="c-select__box--register">
-              <?php
-              if (!empty($dbStakeholdersWithCategory)): ?>
-                <option value="0" class="c-select__option">撮影の申請不要</option>
-                <?php
-                foreach ($dbStakeholdersWithCategory as $key => $value): ?>
-                  <?php
-                  if (!empty($value['categories'])): ?>
-                    <?php
-                    $categoryIds = array_column($value['categories'], 'category_id');
-                    if (in_array(2, $categoryIds)): ?>
-                      <option value="<?php
-                      echo sanitize($value['stakeholder_id']); ?>" class="c-select__option"><?php
-                        echo sanitize($value['organization']); ?></option>
-                    <?php
-                    endif; ?>
 
+          <?php
+          if (!empty($dbApplicationDestinationsWithCategory)):
+            ?>
+            <?php
+            $applicationDestinationIds = !empty(
+            keepInputAndDatabase(
+                    'application_destination',
+                    $dbStakeholdersAssociatedWithCategoryIds
+            )
+            ) ? keepInputAndDatabase('application_destination', $dbStakeholdersAssociatedWithCategoryIds) : array();
+            foreach ($dbApplicationDestinationsWithCategory as $key => $value): ?>
+              <label for="stakeholder_id<?php
+              echo $value['stakeholder_id']; ?>" class="c-checkbox__label u-mr-24">
+                <input type="checkbox" class="c-checkbox__body" name="application_destination[]"
+                       id="stakeholder_id<?php
+                       echo $value['stakeholder_id']; ?>" value="<?php
+                echo $value['stakeholder_id']; ?>" <?php
+                if (in_array($value['stakeholder_id'], $applicationDestinationIds)) {
+                  echo 'checked';
+                }
+                ?>>
+                <span class="c-checkbox__name"><?php
+                  echo $value['organization']; ?></span>
+                <p class="c-input__error-message">
                   <?php
-                  endif; ?>
-                <?php
-                endforeach; ?>
-              <?php
-              else: ?>
-                <p class="u-text-center">撮影申請先が登録されていません</p>
-              <?php
-              endif; ?>
-            </select>
-          </div>
-          <!--          <p class="c-input__counter">0/10</p>-->
+                  echo getErrorMessage('application_destination'); ?>
+                </p>
+              </label>
+            <?php
+            endforeach; ?>
+          <?php
+          else: ?>
+            <p>申請先が登録されていません</p>
+          <?php
+          endif; ?>
         </div>
-
+        <!--申請先ここまで-->
 
         <button class="c-button --full-width c-button__primary u-mb-24" name="published" value="published"
                 type="submit">
