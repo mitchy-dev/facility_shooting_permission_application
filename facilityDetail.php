@@ -2,7 +2,19 @@
 
 require('functions.php');
 startPageDisplay();
-$facilityId = 1;
+
+$_GET['facility_id'] = 89;
+if (empty($_GET['facility_id']) || !is_numeric($_GET['facility_id'])) {
+  debug('GETパラメータが有効でないためリダイレクトします');
+  redirect('index.php');
+}
+$facilityId = !empty($_GET['facility_id']) ? $_GET['facility_id'] : '';
+$viewData = !empty($facilityId) ? fetchFacilityAndStakeholders($facilityId) : array();
+if (!empty($facilityId) && empty($viewData)) {
+  debug('不正なアクセスのためリダイレクトします');
+  redirect('index.php');
+}
+//var_dump($viewData);
 
 endPageDisplay();
 ?>

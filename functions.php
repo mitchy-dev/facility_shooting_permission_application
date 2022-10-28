@@ -538,8 +538,36 @@ function fetchStakeholdersAssociatedWithTheFacility($facilityId)
     }
 }
 
-$result = fetchStakeholdersAssociatedWithTheFacility(80);
-debug('$resutl:' . print_r($result, true));
+function fetchFacilityAndStakeholders($facilityId)
+{
+    debug('海岸とその関係者のデータを取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = ' select *from facilities where facility_id = :facility_id and published = true and is_deleted = false';
+        $data = array(
+            ':facility_id' => $facilityId
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            $result = $sth->fetch();
+        }
+        $sql2 = 'select fs.stakeholder_category_id,fs.stakeholder_id, s.organization, s.department, s.avatar_path, s.url_of_shooting_application_guide, s.title_of_shooting_application_guide, s.application_deadline, s.phone_number, s.email, s.url_of_contact_form, s.url_of_application_format, s.title_of_application_format from facilities_stakeholders as fs left  join stakeholders as s on fs.stakeholder_id = s.stakeholder_id where fs.facility_id = :facility_id and s.is_deleted = false';
+        $data2 = array(
+            ':facility_id' => $facilityId
+        );
+        $sth = queryPost($dbh, $sql2, $data2);
+        if (!empty($sth)) {
+            $result['stakeholders'] = $sth->fetchAll();
+        }
+        if (!empty($result)) {
+            return $result;
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
 
 //////////////////////////////////////////////
 //ファイルアップロード
