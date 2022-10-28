@@ -476,6 +476,27 @@ function fetchFacility($userId, $facilityId)
     }
 }
 
+//登録した海岸の一覧を取得
+function fetchListOfRegisteredFacilities($userId)
+{
+    debug('登録した海岸の情報を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = ' select * from facilities where user_id = :user_id and is_deleted = false; ';
+        $data = array(
+            ':user_id' => $userId,
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetchAll();
+        } else {
+            return array();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //海岸の写真のパスを取得
 function fetchFacilityImagePaths($facilityId)
 {
