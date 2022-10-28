@@ -221,7 +221,7 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
         }
         $dbh->commit();
         $_SESSION['message'] = SUCCESS['UPDATE'];
-        redirect('listings.html');
+        redirect('listings.php');
       } else {
         debug('海岸の情報を登録します');
         $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :published, :created_at)';
@@ -289,7 +289,7 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
         }
         $dbh->commit();
         $_SESSION['message'] = SUCCESS['REGISTERED'];
-        redirect('listings.html');
+        redirect('listings.php');
       }
     } catch (Exception $e) {
       exceptionHandler($e);
