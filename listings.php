@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$viewData = fetchStakeholdersWithCategories($_SESSION['user_id']);
+$viewData = fetchListOfRegisteredFacilities($_SESSION['user_id']);
 //var_dump($viewData);
 
 endPageDisplay();
@@ -29,16 +29,19 @@ require "header.php";
         foreach ($viewData as $key => $value): ?>
           <div class="p-card__layout --my-page">
             <div class="p-card">
-              <a href="" class="p-card__link">
+              <a href="facilityDetail.html" class="p-card__link">
                 <div class="p-card__head">
-                  <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">
+                  <img src="<?php
+                  echo sanitize($value['thumbnail_path']); ?>" alt="海岸の写真" class="p-card__img">
                 </div>
                 <div class="p-card__foot">
                   <div class="p-card__title-container">
-                    <h2 class="p-card__title">真鶴海岸</h2>
+                    <h2 class="p-card__title"><?php
+                      echo sanitize($value['facility_name']); ?></h2>
                   </div>
                   <div class="p-card__sub-title-container">
-                    <p class="p-card__sub-title">神奈川県</p>
+                    <p class="p-card__sub-title"><?php
+                      echo sanitize($value['prefecture']); ?></p>
                   </div>
                 </div>
               </a>

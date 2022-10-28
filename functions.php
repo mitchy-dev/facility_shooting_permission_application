@@ -482,7 +482,7 @@ function fetchListOfRegisteredFacilities($userId)
     debug('登録した海岸の情報を取得します');
     try {
         $dbh = dbConnect();
-        $sql = ' select * from facilities where user_id = :user_id and is_deleted = false; ';
+        $sql = ' select f.facility_name, f.thumbnail_path, p.name as prefecture from facilities as f left join prefectures as p on f.prefecture_id = p.prefecture_id where f.user_id = :user_id and f.is_deleted = false; ';
         $data = array(
             ':user_id' => $userId,
         );
