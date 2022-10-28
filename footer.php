@@ -69,7 +69,7 @@
       e.preventDefault();
       $dragArea.removeClass('--on-dragging');
 
-      var $imagePreview = $('.js-image-preview');
+      var $imagePreview = $(this).siblings('.js-image-preview');
       var fileReader = new FileReader();
 
       fileReader.addEventListener("load", function () {
