@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-//$_GET['facility_id'] = 80;
+$_GET['facility_id'] = 89;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');
@@ -55,7 +55,7 @@ if (!empty($dbStakeholdersAssociatedWithCategory)) {
   foreach ($dbStakeholdersAssociatedWithCategory as $key => $value) {
     if ($value['stakeholder_category_id'] == 1) {
       $dbPriorConsultaitions[] = $value;
-    } elseif ($value['stakeholder_category'] == 2) {
+    } elseif ($value['stakeholder_category_id'] == 2) {
       $dbApplicationDestinations[] = $value;
     }
 
