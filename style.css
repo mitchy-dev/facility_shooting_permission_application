@@ -958,6 +958,10 @@ strong {
     margin-bottom: var(--spacing-sm);
 }
 
+.u-mb-48 {
+    margin-bottom: var(--spacing-xl);
+}
+
 .u-mb-8 {
     margin-bottom: var(--spacing-xs);
 }
