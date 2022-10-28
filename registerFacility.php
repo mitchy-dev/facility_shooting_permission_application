@@ -32,7 +32,13 @@ if (!empty($dbStakeholdersWithCategory)) {
       $value['categoryIds'] = array_column($value['categories'], 'category_id');
       if (in_array(1, $value['categoryIds'])) {
         $dbPriorConsultationsWithCategory[] = $value;
-      } elseif (in_array(2, $value['categoryIds'])) {
+      }
+    }
+  }
+  foreach ($dbStakeholdersWithCategory as $key => $value) {
+    if (!empty($value['categories'])) {
+      $value['categoryIds'] = array_column($value['categories'], 'category_id');
+      if (in_array(2, $value['categoryIds'])) {
         $dbApplicationDestinationsWithCategory[] = $value;
       }
     }
