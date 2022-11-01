@@ -20,10 +20,10 @@ if (!empty($facilityId) && empty($dbFacilityData)) {
 
 //DBから写真のデータを取得する必要がある
 $dbFacilityImagePaths = fetchFacilityImagePaths($facilityId);
-debug('$dbFacilityImagePaths:' . print_r($dbFacilityImagePaths, true));
+//debug('$dbFacilityImagePaths:' . print_r($dbFacilityImagePaths, true));
 $dbPrefectures = fetchPrefectures();
 $dbStakeholdersWithCategory = fetchStakeholdersWithCategories($_SESSION['user_id']);
-debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
+//debug('取得した関係者のデータ：' . print_r($dbStakeholdersWithCategory, true));
 $dbPriorConsultationsWithCategory = array();
 $dbApplicationDestinationsWithCategory = array();
 if (!empty($dbStakeholdersWithCategory)) {
@@ -82,7 +82,7 @@ if (!empty($_POST)) {
 //  debug('FILES:' . print_r($_FILES, true));
   $facilityName = $_POST['facility_name'];
   $facilityImages = reArrayFiles($_FILES['facility_image']);
-  debug('facilityImages:' . print_r($facilityImages, true));
+//  debug('facilityImages:' . print_r($facilityImages, true));
   if (!empty($facilityImages)) {
     foreach ($facilityImages as $key => $value) {
       $facilityImagePaths[] = keepFilePath(
@@ -100,6 +100,8 @@ if (!empty($_POST)) {
   $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
   $titleOfFacilityInformationPage = 'test';
   $published = !empty($_POST['published']) ? 1 : 0;
+  $isNeedConsultationOfShooting = $_POST['is_need_consultation_of_shooting'];
+  $isNeedApplicationOfShooting = $_POST['is_need_application_of_shooting'];
 
   $priorConsultation = !empty($_POST['prior_consultation']) ? $_POST['prior_consultation'] : array();
   $applicationDestination = !empty($_POST['application_destination']) ? $_POST['application_destination'] : array();
@@ -119,6 +121,8 @@ if (!empty($_POST)) {
                       shooting_fee = :shooting_fee, 
                       url_of_facility_information_page = :url_of_facility_information_page, 
                       title_of_facility_information_page = :title_of_facility_information_page, 
+                      is_need_consultation_of_shooting = :is_need_consultation_of_shooting,
+                      is_need_application_of_shooting = :is_need_application_of_shooting,
                       published = :published
                     where user_id = :user_id and 
                       facility_id = :facility_id and 
@@ -131,6 +135,8 @@ if (!empty($_POST)) {
                 ':shooting_fee' => $shootingFee,
                 ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
                 ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
+                ':is_need_consultation_of_shooting' => $isNeedConsultationOfShooting,
+                ':is_need_application_of_shooting' => $isNeedApplicationOfShooting,
                 ':published' => $published,
                 ':facility_id' => $facilityId,
                 ':user_id' => $_SESSION['user_id'],
@@ -224,7 +230,7 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
         redirect('facilityDetail.php?facility_id=' . $facilityId);
       } else {
         debug('海岸の情報を登録します');
-        $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :published, :created_at)';
+        $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :published, :created_at)';
         $data = array(
                 ':user_id' => $_SESSION['user_id'],
                 ':facility_name' => $facilityName,
@@ -234,6 +240,8 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
                 ':shooting_fee' => $shootingFee,
                 ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
                 ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
+                ':is_need_consultation_of_shooting' => $isNeedConsultationOfShooting,
+                ':is_need_application_of_shooting' => $isNeedApplicationOfShooting,
                 ':published' => $published,
                 ':created_at' => date('Y-m-d H:i:s'),
         );
@@ -444,15 +452,32 @@ require "header.php";
 
         <div class="c-input__container">
           <!--          <span class="c-status-label">ラベル</span>-->
-          <label for="" class="c-input__label">撮影前の事前相談の要否</label>
+          <label for="is_need_consultation_of_shooting" class="c-input__label">撮影前の事前相談の要否</label>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
           <!--          <p class="c-input__help-message"></p>-->
           <!--          <p class="c-input__error-message">error</p>-->
           <div class="c-select__wrap--register">
-            <select name="region" id="" class="c-select__box--register">
-              <option value="1" class="c-select__option">必要</option>
-              <option value="2" class="c-select__option">撮影申請先と同じ</option>
-              <option value="3" class="c-select__option">不要</option>
+            <select name="is_need_consultation_of_shooting" id="" class="c-select__box--register">
+              <option value="0" class="c-select__option" <?php
+              if (keepInputAndDatabase('is_need_consultation_of_shooting', $dbFacilityData) == 0) {
+                echo 'selected';
+              } ?>>未選択
+              </option>
+              <option value="1" class="c-select__option" <?php
+              if (keepInputAndDatabase('is_need_consultation_of_shooting', $dbFacilityData) == 1) {
+                echo 'selected';
+              } ?>>必要
+              </option>
+              <option value="2" class="c-select__option" <?php
+              if (keepInputAndDatabase('is_need_consultation_of_shooting', $dbFacilityData) == 2) {
+                echo 'selected';
+              } ?>>撮影申請先と同じ
+              </option>
+              <option value="3" class="c-select__option" <?php
+              if (keepInputAndDatabase('is_need_consultation_of_shooting', $dbFacilityData) == 3) {
+                echo 'selected';
+              } ?>>不要
+              </option>
             </select>
           </div>
           <!--          <p class="c-input__counter">0/10</p>-->
@@ -509,7 +534,33 @@ require "header.php";
         </div>
 
         <!--相談先ここまで-->
-
+        <div class="c-input__container">
+          <!--          <span class="c-status-label">ラベル</span>-->
+          <label for="is_need_application_of_shooting" class="c-input__label">撮影申請の要否</label>
+          <!--          <p class="c-input__sub-label">sub-label</p>-->
+          <!--          <p class="c-input__help-message"></p>-->
+          <!--          <p class="c-input__error-message">error</p>-->
+          <div class="c-select__wrap--register">
+            <select name="is_need_application_of_shooting" id="" class="c-select__box--register">
+              <option value="0" class="c-select__option" <?php
+              if (keepInputAndDatabase('is_need_application_of_shooting', $dbFacilityData) == 0) {
+                echo 'selected';
+              } ?>>未選択
+              </option>
+              <option value="1" class="c-select__option" <?php
+              if (keepInputAndDatabase('is_need_application_of_shooting', $dbFacilityData) == 1) {
+                echo 'selected';
+              } ?>>必要
+              </option>
+              <option value="2" class="c-select__option" <?php
+              if (keepInputAndDatabase('is_need_application_of_shooting', $dbFacilityData) == 2) {
+                echo 'selected';
+              } ?>>不要
+              </option>
+            </select>
+          </div>
+          <!--          <p class="c-input__counter">0/10</p>-->
+        </div>
         <div class="c-checkbox__container">
           <p for="organization" class="c-input__label">撮影の申請先</p>
           <!--          <p class="c-input__sub-label">sub-label</p>-->
