@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
-$_GET['facility_id'] = 92;
+//$_GET['facility_id'] = 92;
 if (!empty($_GET['facility_id']) && !is_numeric($_GET['facility_id'])) {
   debug('取得したGETパラメータが数値でないためリダイレクトします');
   redirect('index.php');

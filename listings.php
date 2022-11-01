@@ -29,7 +29,8 @@ require "header.php";
         foreach ($viewData as $key => $value): ?>
           <div class="p-card__layout --my-page">
             <div class="p-card">
-              <a href="facilityDetail.php" class="p-card__link">
+              <a href="facilityDetail.php?facility_id=<?php
+              echo sanitize($value['facility_id']); ?>" class="p-card__link">
                 <div class="p-card__head">
                   <img src="<?php
                   echo showFacilityImage($value['thumbnail_path']); ?>" alt="海岸の写真" class="p-card__img">

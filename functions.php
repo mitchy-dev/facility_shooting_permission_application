@@ -482,7 +482,7 @@ function fetchListOfRegisteredFacilities($userId)
     debug('登録した海岸の情報を取得します');
     try {
         $dbh = dbConnect();
-        $sql = ' select f.facility_name, f.thumbnail_path, p.name as prefecture from facilities as f left join prefectures as p on f.prefecture_id = p.prefecture_id where f.user_id = :user_id and f.is_deleted = false; ';
+        $sql = ' select f.facility_id, f.facility_name, f.thumbnail_path, p.name as prefecture from facilities as f left join prefectures as p on f.prefecture_id = p.prefecture_id where f.user_id = :user_id and f.is_deleted = false; ';
         $data = array(
             ':user_id' => $userId,
         );
@@ -538,7 +538,7 @@ function fetchStakeholdersAssociatedWithTheFacility($facilityId)
     }
 }
 
-function fetchFacilityAndStakeholders($facilityId)
+function fetchFacilityAndStakeholdersAndImagePaths($facilityId)
 {
     debug('海岸とその関係者のデータを取得します');
     try {
@@ -551,22 +551,31 @@ function fetchFacilityAndStakeholders($facilityId)
         if (!empty($sth)) {
             $result = $sth->fetch();
         }
+
+//        関係者データの取得
         $sql2 = 'select fs.stakeholder_category_id,fs.stakeholder_id, s.organization, s.department, s.avatar_path, s.url_of_shooting_application_guide, s.title_of_shooting_application_guide, s.application_deadline, s.phone_number, s.email, s.url_of_contact_form, s.url_of_application_format, s.title_of_application_format from facilities_stakeholders as fs left  join stakeholders as s on fs.stakeholder_id = s.stakeholder_id where fs.facility_id = :facility_id and s.is_deleted = false';
         $data2 = array(
             ':facility_id' => $facilityId
         );
         $sth = queryPost($dbh, $sql2, $data2);
         if (!empty($sth)) {
-            $result['stakeholders'] = $sth->fetchAll();
+            $stakeholders = $sth->fetchAll();
+            if (!empty($stakeholders)) {
+                $result['stakeholders'] = $stakeholders;
+            }
         }
 
+//        施設の写真を取得
         $sql3 = 'select image_path from facility_images where facility_id = :facility_id';
         $data3 = array(
             ':facility_id' => $facilityId
         );
         $sth = queryPost($dbh, $sql3, $data3);
         if (!empty($sth)) {
-            $result['images'] = $sth->fetchAll();
+            $images = $sth->fetchAll();
+            if (!empty($images)) {
+                $result['images'] = $images;
+            }
         }
         if (!empty($result)) {
             return $result;
@@ -656,7 +665,7 @@ function sanitize($string)
 function showFacilityImage($path)
 {
     if (!empty($path)) {
-        return sanitize($path);
+        return $path;
     } else {
         return 'img/1920 887.jpg';
     }
