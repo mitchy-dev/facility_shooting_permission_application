@@ -36,6 +36,8 @@ entity "facilities" as facilities {
   shooting fee:varchar(255)
   url_of_facility_information_page:varchar(255)
   title_of_facility_information_page:varchar(255)
+  is_need_consultation_of_shooting: int not null
+  is_need_application_of_shooting: int not null
   is_deleted:boolean not null default false
   created_at:datetime not null
   updated_at:timestamp not null default current_timestamp on update current_timestamp
