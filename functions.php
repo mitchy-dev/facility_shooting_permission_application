@@ -543,7 +543,7 @@ function fetchFacilityAndStakeholdersAndImagePaths($facilityId)
     debug('海岸とその関係者のデータを取得します');
     try {
         $dbh = dbConnect();
-        $sql = ' select *from facilities where facility_id = :facility_id and published = true and is_deleted = false';
+        $sql = ' select * from facilities where facility_id = :facility_id and published = true and is_deleted = false';
         $data = array(
             ':facility_id' => $facilityId
         );
@@ -561,7 +561,13 @@ function fetchFacilityAndStakeholdersAndImagePaths($facilityId)
         if (!empty($sth)) {
             $stakeholders = $sth->fetchAll();
             if (!empty($stakeholders)) {
-                $result['stakeholders'] = $stakeholders;
+                foreach ($stakeholders as $key => $value) {
+                    if ($value['stakeholder_category_id'] == 1) {
+                        $result['prior_consultations'][] = $value;
+                    } elseif ($value['stakeholder_category_id'] == 2) {
+                        $result['application_destinations'][] = $value;
+                    }
+                }
             }
         }
 
