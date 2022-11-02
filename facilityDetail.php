@@ -15,6 +15,7 @@ if (!empty($facilityId) && empty($viewData)) {
   redirect('index.php');
 }
 var_dump($viewData);
+//$viewData['application_destinations'] = array();
 
 endPageDisplay();
 ?>
@@ -85,6 +86,9 @@ require "header.php";
             </a>
 
           </dd>
+          <dt>撮影料</dt>
+          <dd><?php
+            echo sanitize($viewData['shooting_fee']); ?></dd>
         </dl>
       </div>
 
@@ -94,63 +98,145 @@ require "header.php";
         <p class="p-facility-description__title">
           撮影の事前相談
         </p>
-        <!--        相談不要、申請先と同じなど、セレクトボックスの実装が必要-->
-        <dl class="p-facility-description__list">
-          <dt>相談先</dt>
-          <dd>湘南藤沢フィルムコミッション</dd>
-          <dt>電話番号</dt>
-          <dd>046-834-1234</dd>
-          <dt>FAX</dt>
-          <dd>046-834-1234</dd>
-          <dt>メールアドレス</dt>
-          <dd>enoshima@gmial.com</dd>
-        </dl>
+        <?php
+        switch ($viewData['is_need_consultation_of_shooting']) {
+          case 0:
+            ?>
+            <div class="c-alternate-text__container">
+              <p class="c-alternate-text">情報が登録されていません</p>
+            </div>
+            <?php
+            break;
+          case 1:
+            if (!empty($viewData['prior_consultations'])) :
+              ?>
+              <?php
+              foreach ($viewData['prior_consultations'] as $key => $value): ?>
+                <dl class="p-facility-description__list">
+                  <dt>相談先</dt>
+                  <dd>
+                    <a href="<?php
+                    echo sanitize($value['url_of_shooting_application_guide']); ?>">
+                      <?php
+                      echo sanitize($value['organization'] . ' ' . $value['department']); ?>
+                    </a>
+                  </dd>
+                  <dt>電話番号</dt>
+                  <dd><?php
+                    echo sanitize($value['phone_number']); ?></dd>
+                  <dt>メールアドレス</dt>
+                  <dd><?php
+                    echo sanitize($value['email']); ?></dd>
+                </dl>
+              <?php
+              endforeach;
+            else:
+              ?>
+              <div class="c-alternate-text__container">
+                <p class="c-alternate-text">情報が登録されていません</p>
+              </div>
+            <?php
+            endif;
+            break;
+          case 2:
+            ?>
+            <div class="c-alternate-text__container">
+              <p class="c-alternate-text">撮影申請先にご相談ください</p>
+            </div>
+            <?php
+            break;
+          case 3:
+            ?>
+            <div class="c-alternate-text__container">
+              <p class="c-alternate-text">相談不要です</p>
+            </div>
+            <?php
+            break;
+        }
+        ?>
       </div>
-
       <hr class="c-hr">
 
       <div class="p-facility-description__container">
         <p class="p-facility-description__title">
           撮影許可の申請
         </p>
-        <dl class="p-facility-description__list">
-          <dt>
-            申請期限
-          </dt>
-          <dd>
-            撮影日の10日前まで
-          </dd>
-          <dt>
-            撮影料
-          </dt>
-          <dd>
-            ￥０
-          </dd>
-          <dt>
-            申請先
-          </dt>
-          <dd>
-            神奈川県藤沢土木事務所
-          </dd>
-          <dt>
-            申請様式
-          </dt>
-          <dd>
-            リンク先の「海岸一時使用届」
-          </dd>
-          <dt>
-            問い合わせフォーム
-          </dt>
-          <dd>
-            046-845-1234
-          </dd>
-          <dt>
-            申請方法
-          </dt>
-          <dd>
-            メール
-          </dd>
-        </dl>
+        <?php
+        switch ($viewData['is_need_application_of_shooting']) {
+          case 0:
+            ?>
+            <div class="c-alternate-text__container">
+              <p class="c-alternate-text">情報が登録されていません</p>
+            </div>
+            <?php
+            break;
+          case 1:
+            if (!empty($viewData['application_destinations'])):
+              ?>
+              <?php
+              foreach ($viewData['application_destinations'] as $key => $value): ?>
+                <dl class="p-facility-description__list">
+                  <dt>
+                    申請期限
+                  </dt>
+                  <dd>
+                    <?php
+                    echo sanitize($value['application_deadline']); ?>
+                  </dd>
+                  <dt>
+                    申請先
+                  </dt>
+                  <dd>
+                    <a href="<?php
+                    $value['url_of_shooting_application_guide']; ?>"></a>
+                    <?php
+                    echo sanitize($value['organization'] . ' ' . $value['department']); ?>
+                  </dd>
+                  <dt>
+                    申請様式
+                  </dt>
+                  <dd>
+                    リンク先の<a href="<?php
+                    echo sanitize($value['url_of_application_format']); ?>">「<?php
+                      echo sanitize($value['title_of_application_format']); ?>」</a>
+                  </dd>
+                  <dt>
+                    <a href="<?php
+                    echo sanitize($value['url_of_contact_form']); ?>">
+                      問い合わせフォーム
+                    </a>
+                  </dt>
+                  <dd>
+                    <a href="tel:">
+                      <?php
+                      echo sanitize($value['phone_number']); ?>
+                    </a>
+                  </dd>
+                  <dt>
+                    申請方法
+                  </dt>
+                  <dd>
+                  </dd>
+                </dl>
+              <?php
+              endforeach;
+            else: ?>
+              <div class="c-alternate-text__container">
+                <p class="c-alternate-text">情報が登録されていません</p>
+              </div>
+            <?php
+            endif;
+            break;
+          case 2:
+            ?>
+            <div class="c-alternate-text__container">
+              <p class="c-alternate-text">撮影申請不要です</p>
+            </div>
+            <?php
+            break;
+        } ?>
+
+
       </div>
       <hr class="c-hr">
       <!--    コメント欄-->
