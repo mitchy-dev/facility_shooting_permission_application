@@ -476,6 +476,22 @@ function fetchFacility($userId, $facilityId)
     }
 }
 
+function fetchFacilities($regionId = 0, $prefectureId = 0, $currentPageNumber = 1)
+{
+    debug('トップページに表示する海岸のデータを取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = ' select * from facilities where is_deleted = false';
+        $data = array();
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetchAll();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //登録した海岸の一覧を取得
 function fetchListOfRegisteredFacilities($userId)
 {
