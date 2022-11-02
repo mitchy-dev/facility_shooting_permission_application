@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 
 //DBからデータを取得する
-$viewData = fetchFacilities();
+$viewData = fetchFacilitiesWithPrefectureId(1, 1);
 //var_dump($viewData);
 endPageDisplay();
 ?>

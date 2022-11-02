@@ -342,6 +342,24 @@ from users where user_id = :user_id and is_deleted = false';
     }
 }
 
+//地域
+//最初の表示用
+function fetchRegionsAndPrefectures()
+{
+    debug('地域と都道府県データを取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select prefecture_id, name from prefectures';
+        $data = array();
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            return $sth->fetchAll();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //県名
 function fetchPrefectures()
 {
@@ -476,13 +494,21 @@ function fetchFacility($userId, $facilityId)
     }
 }
 
-function fetchFacilities($regionId = 0, $prefectureId = 0, $currentPageNumber = 1)
+function fetchFacilitiesWithPrefectureId($regionId = 0, $prefectureId = 0, $currentPageNumber = 1)
 {
     debug('トップページに表示する海岸のデータを取得します');
     try {
         $dbh = dbConnect();
-        $sql = ' select * from facilities where is_deleted = false';
+        $sql = 'select * from facilities as f right join prefectures as p on f.prefecture_id = p.prefecture_id where f.published = 1 and f.is_deleted = false';
         $data = array();
+        if (!empty($regionId)) {
+            $sql .= ' and p.region_id = :region_id';
+            $data[':region_id'] = $regionId;
+        }
+        if (!empty($prefectureId)) {
+            $sql .= ' and p.prefecture_id = :prefecture_id';
+            $data[':prefecture_id'] = $prefectureId;
+        }
         $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
             return $sth->fetchAll();
