@@ -344,23 +344,33 @@ from users where user_id = :user_id and is_deleted = false';
 
 //地域
 //最初の表示用
-function fetchRegionsAndPrefectures()
+function fetchRegionsAndPrefectures($regionId = 0)
 {
     debug('地域と都道府県データを取得します');
     try {
-        $dbh = dbConnect();
-        $sql = 'select prefecture_id, region_id, name from prefectures';
-        $data = array();
-        $sth = queryPost($dbh, $sql, $data);
         $result = array();
+        $dbh = dbConnect();
+
+        $sql = 'select region_id, name from regions';
+        $data = array();
+//        if (!empty($regionId)) {
+//            $sql .= ' where region_id = :region_id';
+//            $data['region_id'] = $regionId;
+//        }
+        $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
-            $result['prefectures'] = $sth->fetchAll();
+            $result['regions'] = $sth->fetchAll();
         }
-        $sql2 = 'select region_id, name from regions';
+
+        $sql2 = 'select prefecture_id, region_id, name from prefectures';
         $data2 = array();
+        if (!empty($regionId)) {
+            $sql2 .= ' where region_id = :region_id';
+            $data2['region_id'] = $regionId;
+        }
         $sth2 = queryPost($dbh, $sql2, $data2);
         if (!empty($sth2)) {
-            $result['regions'] = $sth2->fetchAll();
+            $result['prefectures'] = $sth2->fetchAll();
         }
         return $result;
     } catch (Exception $e) {

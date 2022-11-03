@@ -4,7 +4,7 @@ require('functions.php');
 startPageDisplay();
 
 $_GET['region_id'] = 1;
-$_GET['prefecture_id'] = 1;
+//$_GET['prefecture_id'] = 1;
 
 //DBからデータを取得する
 $regionId = !empty($_GET['region_id']) ? $_GET['region_id'] : 0;
@@ -13,7 +13,8 @@ $viewData = fetchFacilitiesWithPrefectureId($regionId, $prefectureId);
 //var_dump($viewData);
 
 //地域データの取得
-$regionsAndPreferences = fetchRegionsAndPrefectures();
+//この関数の引数に地域のidを受け取って、県名の表示を絞り込む
+$regionsAndPreferences = fetchRegionsAndPrefectures($regionId);
 //var_dump($regionsAndPreferences);
 endPageDisplay();
 ?>
@@ -61,7 +62,7 @@ require "header.php";
             <option value="0" class="c-select__option" <?php
             if ($prefectureId == 0) {
               echo 'selected';
-            } ?>>全国
+            } ?>>全域
             </option>
             <?php
             if (!empty($regionsAndPreferences['prefectures'])): ?>
@@ -77,7 +78,6 @@ require "header.php";
               endforeach; ?>
             <?php
             endif; ?>
-            <option value="2" class="c-select__option">東北</option>
           </select>
         </div>
       </div>
