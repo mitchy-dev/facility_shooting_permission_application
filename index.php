@@ -9,6 +9,9 @@ startPageDisplay();
 //DBからデータを取得する
 $regionId = !empty($_GET['region_id']) ? $_GET['region_id'] : 0;
 $prefectureId = !empty($_GET['prefecture_id']) ? $_GET['prefecture_id'] : 0;
+if (!is_numeric($regionId) || !is_numeric($prefectureId)) {
+  redirect('index.php');
+}
 $viewData = fetchFacilitiesWithPrefectureId($regionId, $prefectureId);
 //var_dump($viewData);
 
