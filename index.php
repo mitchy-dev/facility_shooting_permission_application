@@ -3,9 +3,18 @@
 require('functions.php');
 startPageDisplay();
 
+$_GET['region_id'] = 1;
+$_GET['prefecture_id'] = 1;
+
 //DBからデータを取得する
-$viewData = fetchFacilitiesWithPrefectureId(1, 1);
+$regionId = !empty($_GET['region_id']) ? $_GET['region_id'] : 0;
+$prefectureId = !empty($_GET['prefecture_id']) ? $_GET['prefecture_id'] : 0;
+$viewData = fetchFacilitiesWithPrefectureId($regionId, $prefectureId);
 //var_dump($viewData);
+
+//地域データの取得
+$regionsAndPreferences = fetchRegionsAndPrefectures();
+//var_dump($regionsAndPreferences);
 endPageDisplay();
 ?>
 <?php
@@ -19,21 +28,55 @@ require "header.php";
 
     <div class="c-filters-container">
 
-      <div class="c-filters-column">
-        <div class="c-select__wrap">
-          <select name="region" class="c-select__box">
-            <option value="0" class="c-select__option">全国</option>
-            <option value="1" class="c-select__option">北海道</option>
-            <option value="2" class="c-select__option">東北</option>
-          </select>
-        </div>
-      </div>
 
       <div class="c-filters-column">
         <div class="c-select__wrap">
           <select name="region" class="c-select__box">
-            <option value="0" class="c-select__option">全域</option>
-            <option value="1" class="c-select__option">北海道</option>
+            <option value="0" class="c-select__option" <?php
+            if ($regionId == 0) {
+              echo 'selected';
+            } ?>>全国
+            </option>
+            <?php
+            if (!empty($regionsAndPreferences['regions'])): ?>
+              <?php
+              foreach ($regionsAndPreferences['regions'] as $key => $value): ?>
+                <option value="<?php
+                echo sanitize($value['region_id']); ?>" class="c-select__option" <?php
+                if ($regionId == $value['region_id']) {
+                  echo 'selected';
+                } ?>><?php
+                  echo sanitize($value['name']); ?></option>
+              <?php
+              endforeach; ?>
+            <?php
+            endif; ?>
+            <!--            <option value="2" class="c-select__option">東北</option>-->
+          </select>
+        </div>
+      </div>
+      <div class="c-filters-column">
+        <div class="c-select__wrap">
+          <select name="prefecture" class="c-select__box">
+            <option value="0" class="c-select__option" <?php
+            if ($prefectureId == 0) {
+              echo 'selected';
+            } ?>>全国
+            </option>
+            <?php
+            if (!empty($regionsAndPreferences['prefectures'])): ?>
+              <?php
+              foreach ($regionsAndPreferences['prefectures'] as $key => $value): ?>
+                <option value="<?php
+                echo sanitize($value['prefecture_id']); ?>" class="c-select__option" <?php
+                if ($prefectureId == $value['prefecture_id']) {
+                  echo 'selected';
+                } ?>><?php
+                  echo sanitize($value['name']); ?></option>
+              <?php
+              endforeach; ?>
+            <?php
+            endif; ?>
             <option value="2" class="c-select__option">東北</option>
           </select>
         </div>
@@ -74,91 +117,7 @@ require "header.php";
         </div>
       <?php
       endforeach; ?>
-      <!--      <div class="p-card__layout">-->
-      <!--        <div class="p-card">-->
-      <!--          <a href="" class="p-card__link">-->
-      <!--            <div class="p-card__head">-->
-      <!--              <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">-->
-      <!--            </div>-->
-      <!--            <div class="p-card__foot">-->
-      <!--              <div class="p-card__title-container">-->
-      <!--                <h2 class="p-card__title">真鶴海岸</h2>-->
-      <!--              </div>-->
-      <!--              <div class="p-card__sub-title-container">-->
-      <!--                <p class="p-card__sub-title">神奈川県</p>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--          </a>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--      <div class="p-card__layout">-->
-      <!--        <div class="p-card">-->
-      <!--          <a href="" class="p-card__link">-->
-      <!--            <div class="p-card__head">-->
-      <!--              <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">-->
-      <!--            </div>-->
-      <!--            <div class="p-card__foot">-->
-      <!--              <div class="p-card__title-container">-->
-      <!--                <h2 class="p-card__title">真鶴海岸</h2>-->
-      <!--              </div>-->
-      <!--              <div class="p-card__sub-title-container">-->
-      <!--                <p class="p-card__sub-title">神奈川県</p>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--          </a>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--      <div class="p-card__layout">-->
-      <!--        <div class="p-card">-->
-      <!--          <a href="" class="p-card__link">-->
-      <!--            <div class="p-card__head">-->
-      <!--              <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">-->
-      <!--            </div>-->
-      <!--            <div class="p-card__foot">-->
-      <!--              <div class="p-card__title-container">-->
-      <!--                <h2 class="p-card__title">真鶴海岸</h2>-->
-      <!--              </div>-->
-      <!--              <div class="p-card__sub-title-container">-->
-      <!--                <p class="p-card__sub-title">神奈川県</p>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--          </a>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--      <div class="p-card__layout">-->
-      <!--        <div class="p-card">-->
-      <!--          <a href="" class="p-card__link">-->
-      <!--            <div class="p-card__head">-->
-      <!--              <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">-->
-      <!--            </div>-->
-      <!--            <div class="p-card__foot">-->
-      <!--              <div class="p-card__title-container">-->
-      <!--                <h2 class="p-card__title">真鶴海岸</h2>-->
-      <!--              </div>-->
-      <!--              <div class="p-card__sub-title-container">-->
-      <!--                <p class="p-card__sub-title">神奈川県</p>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--          </a>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--      <div class="p-card__layout">-->
-      <!--        <div class="p-card">-->
-      <!--          <a href="" class="p-card__link">-->
-      <!--            <div class="p-card__head">-->
-      <!--              <img src="img/sample.jpg" alt="海岸の写真" class="p-card__img">-->
-      <!--            </div>-->
-      <!--            <div class="p-card__foot">-->
-      <!--              <div class="p-card__title-container">-->
-      <!--                <h2 class="p-card__title">真鶴海岸</h2>-->
-      <!--              </div>-->
-      <!--              <div class="p-card__sub-title-container">-->
-      <!--                <p class="p-card__sub-title">神奈川県</p>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--          </a>-->
-      <!--        </div>-->
-      <!--      </div>-->
+
     </div>
 
 
