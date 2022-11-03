@@ -3,7 +3,7 @@
 require('functions.php');
 startPageDisplay();
 
-$_GET['region_id'] = 1;
+//$_GET['region_id'] = 1;
 //$_GET['prefecture_id'] = 1;
 
 //DBからデータを取得する
@@ -32,7 +32,7 @@ require "header.php";
 
       <div class="c-filters-column">
         <div class="c-select__wrap">
-          <select name="region" class="c-select__box">
+          <select name="region" class="c-select__box js-select js-region">
             <option value="0" class="c-select__option" <?php
             if ($regionId == 0) {
               echo 'selected';
@@ -58,7 +58,7 @@ require "header.php";
       </div>
       <div class="c-filters-column">
         <div class="c-select__wrap">
-          <select name="prefecture" class="c-select__box">
+          <select name="prefecture" class="c-select__box js-select js-prefecture">
             <option value="0" class="c-select__option" <?php
             if ($prefectureId == 0) {
               echo 'selected';

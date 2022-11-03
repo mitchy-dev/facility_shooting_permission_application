@@ -81,6 +81,14 @@
 
     })
 
+    //  一覧の絞り込み機能
+    $('.js-region').on('change', function () {
+      window.location.href = 'index.php?region_id=' + $(this).val();
+    });
+
+    $('.js-prefecture').on('change', function () {
+      window.location.href = 'index.php?region_id=' + $('.js-region').val() + '&prefecture_id=' + $(this).val();
+    })
 
   });
 </script>
