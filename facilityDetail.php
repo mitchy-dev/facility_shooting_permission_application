@@ -72,8 +72,15 @@ require "header.php";
         </p>
         <dl class="p-facility-description__list">
           <dt>所在地</dt>
-          <dd>神奈川県<?php
-            echo sanitize($viewData['facility_address']); ?></dd>
+          <dd><a href="<?php
+            //            echo fetchGoogleMapUrl(sanitize($viewData['prefecture_name'] . $viewData['facility_address']));
+            echo fetchGoogleMapUrl(sanitize($viewData['facility_address']));
+            ?>" target="_blank">
+              <?php
+              echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
+              ?>
+            </a>
+          </dd>
           <dt>アクセス・駐車場・トイレなど</dt>
           <dd class="end">
             <a href="<?php

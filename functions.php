@@ -603,7 +603,7 @@ function fetchFacilityAndStakeholdersAndImagePaths($facilityId)
     debug('海岸とその関係者のデータを取得します');
     try {
         $dbh = dbConnect();
-        $sql = ' select * from facilities where facility_id = :facility_id and published = true and is_deleted = false';
+        $sql = 'select facility_id, user_id, facility_name, thumbnail_path, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at, updated_at, name as prefecture_name from facilities as f left join prefectures as p on f.prefecture_id = p.prefecture_id where f.facility_id = :facility_id and f.published = true and f.is_deleted = false';
         $data = array(
             ':facility_id' => $facilityId
         );
@@ -738,8 +738,35 @@ function showFacilityImage($path)
 }
 
 
+//////////////////////////////////////
+//外部サイトからの情報取得
+//////////////////////////////////////////////
+//GoogleMap
+function fetchGoogleMapUrl($address)
+{
+    $address = urlencode($address);
+    $zoom = 15;
+    return "https://maps.google.co.jp/maps?q={$address}&z={$zoom}";
+}
 
-
+//サイト名取得
+function fetchTitleFromURL($url)
+{
+    $options = stream_context_create(array(
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false
+        )
+    ));
+    $source = @file_get_contents($url, false, $options);
+    $html = mb_convert_encoding($source, 'UTF-8', 'auto');
+    var_dump($source);
+    var_dump($html);
+    if (preg_match('/<title>(.*?)<\/title>/', $html, $result) !== false) {
+        var_dump($result);
+        return $result[1];
+    }
+}
 
 
 
