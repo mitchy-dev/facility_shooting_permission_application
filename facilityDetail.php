@@ -97,7 +97,7 @@ require "header.php";
         </ul>
       </div>
 
-      <!--撮影申請-->
+      <!--相談先-->
       <div class="p-facility-detail__container">
         <h2 class="p-facility-detail__sub-title">撮影の事前相談（２件）</h2>
         <?php
@@ -148,7 +148,7 @@ require "header.php";
                     </li>
                   </ul>
                 </div>
-             
+
               <?php
               endforeach;
             else:
@@ -178,10 +178,8 @@ require "header.php";
       </div>
 
       <!--      撮影許可-->
-      <div class="p-facility-description__container">
-        <p class="p-facility-description__title">
-          撮影許可の申請
-        </p>
+      <div class="p-facility-detail__container">
+        <h2 class="p-facility-detail__sub-title">撮影申請先（３件）</h2>
         <?php
         switch ($viewData['is_need_application_of_shooting']) {
           case 0:
@@ -196,49 +194,78 @@ require "header.php";
               ?>
               <?php
               foreach ($viewData['application_destinations'] as $key => $value): ?>
-                <dl class="p-facility-description__list">
-                  <dt>
-                    申請期限
-                  </dt>
-                  <dd>
-                    <?php
-                    echo sanitize($value['application_deadline']); ?>
-                  </dd>
-                  <dt>
-                    申請先
-                  </dt>
-                  <dd>
-                    <a href="<?php
-                    $value['url_of_shooting_application_guide']; ?>"></a>
-                    <?php
-                    echo sanitize($value['organization'] . ' ' . $value['department']); ?>
-                  </dd>
-                  <dt>
-                    申請様式
-                  </dt>
-                  <dd>
-                    リンク先の<a href="<?php
-                    echo sanitize($value['url_of_application_format']); ?>">「<?php
-                      echo sanitize($value['title_of_application_format']); ?>」</a>
-                  </dd>
-                  <dt>
-                    <a href="<?php
-                    echo sanitize($value['url_of_contact_form']); ?>">
-                      問い合わせフォーム
-                    </a>
-                  </dt>
-                  <dd>
-                    <a href="tel:">
-                      <?php
-                      echo sanitize($value['phone_number']); ?>
-                    </a>
-                  </dd>
-                  <dt>
-                    申請方法
-                  </dt>
-                  <dd>
-                  </dd>
-                </dl>
+                <!--              申請先の表示箇所-->
+                <!--             元の記述-->
+                <div class="p-facility-stakeholder__container">
+                  <div class="p-facility-stakeholder__title-container">
+                    <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
+                    <h3 class="p-facility-stakeholder__title">
+                      <a href="<?php
+                      $value['url_of_shooting_application_guide']; ?>">
+                        <?php
+                        echo sanitize($value['organization'] . ' ' . $value['department']); ?>
+                      </a>
+                    </h3>
+                  </div>
+                  <h4 class="p-facility-stakeholder__sub-title">撮影申請</h4>
+                  <!--                  To Do 申請画面で申請案内のHP名を保存する処理を記述-->
+                  <ul class="p-facility-stakeholder__list">
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/information-sharp.svg" alt="" class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">海岸の許認可　ー　神奈川県ホームページ</p>
+                    </li>
+
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/emojione-monotone_japanese-application-button.svg" alt=""
+                           class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">FAX、窓口、郵送</p>
+                    </li>
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/jam_document.svg" alt=""
+                           class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">
+                        リンク先の<a href="<?php
+                        echo sanitize($value['url_of_application_format']); ?>">「<?php
+                          echo sanitize($value['title_of_application_format']); ?>」</a></p>
+                    </li>
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/fluent_calendar-clock-24-regular.svg" alt=""
+                           class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">
+                        <?php
+                        echo sanitize($value['application_deadline']); ?>
+                      </p>
+                    </li>
+                  </ul>
+                  <h4 class="p-facility-stakeholder__sub-title">連絡</h4>
+                  <ul class="p-facility-stakeholder__list">
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/akar-icons_phone.svg" alt="" class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">
+                        <a href="tel:">
+                          <?php
+                          echo sanitize($value['phone_number']); ?>
+                        </a>
+                      </p>
+                    </li>
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/fluent_mail-24-regular.svg" alt=""
+                           class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">info@gmail.com</p>
+                    </li>
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/fluent_form-24-regular.svg" alt=""
+                           class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">
+                        <a href="<?php
+                        echo sanitize($value['url_of_contact_form']); ?>">
+                          問い合わせフォーム
+                        </a>
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+
               <?php
               endforeach;
             else: ?>
