@@ -47,13 +47,7 @@ require "header.php";
           endforeach; ?>
         </ul>
       </div>
-
-      <!--    説明-->
-      <h1 class="p-facility-detail__title">
-        <?php
-        echo sanitize($viewData['facility_name']); ?>
-      </h1>
-
+      <!--      編集ボタン-->
       <?php
       if (!empty($_SESSION['user_id']) && $_SESSION['user_id'] === $viewData['user_id']): ?>
         <button class="c-button --full-width c-button__secondary u-mb-48">
@@ -64,43 +58,46 @@ require "header.php";
         </button>
       <?php
       endif; ?>
-      <hr class="c-hr">
 
-      <div class="p-facility-description__container">
-        <p class="p-facility-description__title">
-          施設に関すること
-        </p>
-        <dl class="p-facility-description__list">
-          <dt>所在地</dt>
-          <dd><a href="<?php
-            //            echo fetchGoogleMapUrl(sanitize($viewData['prefecture_name'] . $viewData['facility_address']));
+      <!--      施設情報-->
+      <div class="p-facility-detail__container">
+        <h1 class="p-facility-detail__title">
+          <?php
+          echo sanitize($viewData['facility_name']); ?>
+        </h1>
+        <ul class="p-facility-detail__list">
+          <li class="p-facility-detail__item">
+            <img src="img/bx_map.svg" alt="" class="p-facility-detail__icon">
+            <a href="<?php
             echo fetchGoogleMapUrl(sanitize($viewData['facility_address']));
-            ?>" target="_blank">
+            ?>" target="_blank" class="p-facility-detail__text">
               <?php
               echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
               ?>
             </a>
-          </dd>
-          <dt>アクセス・駐車場・トイレなど</dt>
-          <dd class="end">
+          </li>
+          <li class="p-facility-detail__item">
+            <img src="img/information-sharp.svg" alt="" class="p-facility-detail__icon">
             <a href="<?php
-            echo sanitize($viewData['url_of_facility_information_page']); ?>">
+            echo sanitize($viewData['url_of_facility_information_page']); ?>" class="p-facility-detail__text">
               <?php
               if (empty($viewData['title_of_facility_information_page']) && !empty($viewData['url_of_facility_information'])) {
                 echo sanitize($viewData['url_of_facility_information_page']);
               }
               echo sanitize($viewData['title_of_facility_information_page']); ?>
-            </a>
-
-          </dd>
-          <dt>撮影料</dt>
-          <dd><?php
-            echo sanitize($viewData['shooting_fee']); ?></dd>
-        </dl>
+              藤沢市観光協会</a>
+          </li>
+          <li class="p-facility-detail__item">
+            <img src="img/majesticons_yen-circle-line.svg" alt="" class="p-facility-detail__icon">
+            <p class="p-facility-detail__text">
+              <?php
+              echo sanitize($viewData['shooting_fee']); ?>
+            </p>
+          </li>
+        </ul>
       </div>
 
-      <hr class="c-hr">
-
+      <!--撮影申請-->
       <div class="p-facility-description__container">
         <p class="p-facility-description__title">
           撮影の事前相談
@@ -162,8 +159,8 @@ require "header.php";
         }
         ?>
       </div>
-      <hr class="c-hr">
 
+      <!--      撮影許可-->
       <div class="p-facility-description__container">
         <p class="p-facility-description__title">
           撮影許可の申請
@@ -245,7 +242,6 @@ require "header.php";
 
 
       </div>
-      <hr class="c-hr">
       <!--    コメント欄-->
 
     </div>
