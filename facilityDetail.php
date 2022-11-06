@@ -98,10 +98,8 @@ require "header.php";
       </div>
 
       <!--撮影申請-->
-      <div class="p-facility-description__container">
-        <p class="p-facility-description__title">
-          撮影の事前相談
-        </p>
+      <div class="p-facility-detail__container">
+        <h2 class="p-facility-detail__sub-title">撮影の事前相談（２件）</h2>
         <?php
         switch ($viewData['is_need_consultation_of_shooting']) {
           case 0:
@@ -116,22 +114,41 @@ require "header.php";
               ?>
               <?php
               foreach ($viewData['prior_consultations'] as $key => $value): ?>
-                <dl class="p-facility-description__list">
-                  <dt>相談先</dt>
-                  <dd>
-                    <a href="<?php
-                    echo sanitize($value['url_of_shooting_application_guide']); ?>">
-                      <?php
-                      echo sanitize($value['organization'] . ' ' . $value['department']); ?>
-                    </a>
-                  </dd>
-                  <dt>電話番号</dt>
-                  <dd><?php
-                    echo sanitize($value['phone_number']); ?></dd>
-                  <dt>メールアドレス</dt>
-                  <dd><?php
-                    echo sanitize($value['email']); ?></dd>
-                </dl>
+                <!--              この部分で相談先情報を表示-->
+                <div class="p-facility-stakeholder__container">
+                  <div class="p-facility-stakeholder__title-container">
+                    <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
+                    <h3 class="p-facility-stakeholder__title">
+                      <a href="<?php
+                      echo sanitize($value['url_of_shooting_application_guide']); ?>">
+                        <?php
+                        echo sanitize($value['organization'] . ' ' . $value['department']); ?>
+                      </a>
+                    </h3>
+                  </div>
+
+                  <ul class="p-facility-stakeholder__list">
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/akar-icons_phone.svg" alt="" class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">
+                        <?php
+                        echo sanitize($value['phone_number']); ?></p>
+                    </li>
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/fluent_mail-24-regular.svg" alt=""
+                           class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">
+                        <?php
+                        echo sanitize($value['email']); ?></p>
+                    </li>
+                    <li class="p-facility-stakeholder__item">
+                      <img src="/img/fluent_form-24-regular.svg" alt=""
+                           class="p-facility-stakeholder__item-icon">
+                      <p class="p-facility-stakeholder__item-text">問い合わせフォーム</p>
+                    </li>
+                  </ul>
+                </div>
+             
               <?php
               endforeach;
             else:
