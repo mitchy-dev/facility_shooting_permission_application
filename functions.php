@@ -512,7 +512,7 @@ function fetchFacility($userId, $facilityId)
     }
 }
 
-function fetchFacilitiesWithPrefectureId($regionId = 0, $prefectureId = 0, $currentPageNumber = 1)
+function fetchFacilitiesWithPrefectureId($regionId = 0, $prefectureId = 0, $currentPageNumber = 1, $displayLimit = 20)
 {
     debug('トップページに表示する海岸のデータを取得します');
     try {
@@ -527,6 +527,7 @@ function fetchFacilitiesWithPrefectureId($regionId = 0, $prefectureId = 0, $curr
             $sql .= ' and p.prefecture_id = :prefecture_id';
             $data[':prefecture_id'] = $prefectureId;
         }
+        $sql .= ' limit ' . $displayLimit;
         $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
             return $sth->fetchAll();
