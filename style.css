@@ -497,11 +497,15 @@ strong {
 
 .c-paging__item {
     float: left;
-    padding: 8px 16px;
     border: var(--border-normal);
     border-radius: var(--border-radius-lg);
     background: var(--color-background-base);
     cursor: pointer;
+}
+
+.c-paging__item a {
+    display: block;
+    padding: 8px 16px;
 }
 
 .c-paging__item + .c-paging__item {
