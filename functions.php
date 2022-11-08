@@ -584,15 +584,19 @@ function paging($currentPageNumber = 1, $totalPageNumber = 5, $numberOfColumns =
 }
 
 //登録した海岸の一覧を取得
-function fetchListOfRegisteredFacilities($userId)
+function fetchListOfRegisteredFacilities($userId, $published = true)
 {
     debug('登録した海岸の情報を取得します');
     try {
         $dbh = dbConnect();
-        $sql = ' select f.facility_id, f.facility_name, f.thumbnail_path, p.name as prefecture from facilities as f left join prefectures as p on f.prefecture_id = p.prefecture_id where f.user_id = :user_id and f.is_deleted = false; ';
+        $sql = 'select f.facility_id, f.facility_name, f.thumbnail_path, p.name as prefecture from facilities as f left join prefectures as p on f.prefecture_id = p.prefecture_id where f.user_id = :user_id and f.is_deleted = false';
         $data = array(
             ':user_id' => $userId,
         );
+        if (!$published) {
+            $sql .= ' AND f.published = :published';
+            $data[':published'] = $published;
+        }
         $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
             return $sth->fetchAll();
