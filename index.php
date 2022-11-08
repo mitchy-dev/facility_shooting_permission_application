@@ -15,8 +15,9 @@ if (!is_numeric($regionId) || !is_numeric($prefectureId) || !is_numeric($page)) 
   redirect('index.php');
 }
 $viewData = fetchFacilitiesWithPrefectureId($regionId, $prefectureId, $page);
-//var_dump($viewData);
-$paging = paging($page, $viewData['total_page_number']);
+if (!empty($viewData['number_of_contents'])) {
+  $paging = paging($page, $viewData['total_page_number']);
+}
 
 //地域データの取得
 //この関数の引数に地域のidを受け取って、県名の表示を絞り込む
@@ -91,10 +92,16 @@ require "header.php";
     </div>
 
     <div class="c-results-count__container">
-      <p class="c-results-count"><?php
-        echo sanitize($viewData['number_of_tops_of_content']); ?>-<?php
-        echo sanitize($viewData['number_of_tails_of_content']); ?>件 / <?php
-        echo sanitize($viewData['number_of_contents']); ?>件中</p>
+      <?php
+      if (!empty($viewData['number_of_contents'])): ?>
+        <p class="c-results-count">
+          <?php
+          echo sanitize($viewData['number_of_tops_of_content']); ?>-<?php
+          echo sanitize($viewData['number_of_tails_of_content']); ?>件 / <?php
+          echo sanitize($viewData['number_of_contents']); ?>件中
+        </p>
+      <?php
+      endif; ?>
     </div>
 
   </div>
@@ -104,8 +111,6 @@ require "header.php";
       <?php
       foreach ($viewData['contents'] as $key => $value): ?>
         <div class="p-card__layout">
-          <p><?php
-            echo $key; ?></p>
           <div class="p-card">
             <a href="facilityDetail.php?facility_id=<?php
             echo sanitize($value['facility_id']); ?>" class="p-card__link">
@@ -132,32 +137,35 @@ require "header.php";
     </div>
 
 
-    <div class="c-paging__layout">
-      <ul class="c-paging__list">
-        <?php
-        if ($page != 1): ?>
-          <li class="c-paging__item"><a href="index.php?page=1">&lt;</a></li>
-        <?php
-        endif; ?>
-        <?php
-        for ($i = $paging['firstPageNumber']; $i <= $paging['lastPageNumber']; $i++): ?>
-          <li class="c-paging__item <?php
-          if ($i == $page) {
-            echo 'is-active';
-          } ?>"><a href="index.php?page=<?php
-            echo $i; ?>"><?php
-              echo sanitize($i); ?></a></li>
-        <?php
-        endfor; ?>
-        <?php
-        if ($page != $paging['lastPageNumber']): ?>
-          <li class="c-paging__item"><a href="index.php?page=<?php
-            echo sanitize($paging['lastPageNumber']); ?>">&gt;</a></li>
-        <?php
-        endif; ?>
-      </ul>
-    </div>
-
+    <?php
+    if (!empty($viewData['number_of_contents'])): ?>
+      <div class="c-paging__layout">
+        <ul class="c-paging__list">
+          <?php
+          if ($page != 1): ?>
+            <li class="c-paging__item"><a href="index.php?page=1">&lt;</a></li>
+          <?php
+          endif; ?>
+          <?php
+          for ($i = $paging['firstPageNumber']; $i <= $paging['lastPageNumber']; ++$i): ?>
+            <li class="c-paging__item <?php
+            if ($i == $page) {
+              echo 'is-active';
+            } ?>"><a href="index.php?page=<?php
+              echo $i; ?>"><?php
+                echo sanitize($i); ?></a></li>
+          <?php
+          endfor; ?>
+          <?php
+          if ($page != $paging['lastPageNumber']): ?>
+            <li class="c-paging__item"><a href="index.php?page=<?php
+              echo sanitize($paging['lastPageNumber']); ?>">&gt;</a></li>
+          <?php
+          endif; ?>
+        </ul>
+      </div>
+    <?php
+    endif; ?>
   <?php
   else: ?>
     <div class="c-alternate-text__container">

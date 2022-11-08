@@ -517,32 +517,37 @@ function fetchFacilitiesWithPrefectureId($regionId = 0, $prefectureId = 0, $curr
     debug('トップページに表示する海岸のデータを取得します');
     try {
         $dbh = dbConnect();
-        $countSql = 'select count(*) from facilities where published = 1 and is_deleted = false';
         $data = array();
+        $countSql = 'select count(*) from facilities where published = 1 and is_deleted = false';
+        $sql = 'select * from facilities as f right join prefectures as p on f.prefecture_id = p.prefecture_id where f.published = 1 and f.is_deleted = false';
+        if (!empty($regionId)) {
+            $countSql .= ' and p.region_id = :region_id';
+            $sql .= ' and p.region_id = :region_id';
+            $data[':region_id'] = $regionId;
+        }
+
+        if (!empty($prefectureId)) {
+            $countSql .= ' and p.prefecture_id = :prefecture_id';
+            $sql .= ' and p.prefecture_id = :prefecture_id';
+            $data[':prefecture_id'] = $prefectureId;
+        }
         $countSth = queryPost($dbh, $countSql, $data);
         if (!empty($countSth)) {
             $numberOfContents = $countSth->fetch();
             $result['number_of_contents'] = array_shift($numberOfContents);
-            $result['total_page_number'] = floor(ceil($result['number_of_contents'] / $displayLimit));
-            $result['number_of_tops_of_content'] = ($currentPageNumber - 1) * 20 + 1;
-            if ($result['number_of_contents'] < $displayLimit) {
-                $result['number_of_tails_of_content'] = $result['number_of_contents'];
-            } elseif ($currentPageNumber == $result['total_page_number'] && $result['number_of_contents'] < $result['total_page_number'] * $displayLimit) {
-                $result['number_of_tails_of_content'] = $result['number_of_contents'];
-            } else {
-                $result['number_of_tails_of_content'] = $currentPageNumber * $displayLimit;
+            if (!empty($result['number_of_contents'])) {
+                $result['total_page_number'] = floor(ceil($result['number_of_contents'] / $displayLimit));
+                $result['number_of_tops_of_content'] = ($currentPageNumber - 1) * 20 + 1;
+                if ($result['number_of_contents'] < $displayLimit) {
+                    $result['number_of_tails_of_content'] = $result['number_of_contents'];
+                } elseif ($currentPageNumber == $result['total_page_number'] && $result['number_of_contents'] < $result['total_page_number'] * $displayLimit) {
+                    $result['number_of_tails_of_content'] = $result['number_of_contents'];
+                } else {
+                    $result['number_of_tails_of_content'] = $currentPageNumber * $displayLimit;
+                }
             }
         }
 
-        $sql = 'select * from facilities as f right join prefectures as p on f.prefecture_id = p.prefecture_id where f.published = 1 and f.is_deleted = false';
-        if (!empty($regionId)) {
-            $sql .= ' and p.region_id = :region_id';
-            $data[':region_id'] = $regionId;
-        }
-        if (!empty($prefectureId)) {
-            $sql .= ' and p.prefecture_id = :prefecture_id';
-            $data[':prefecture_id'] = $prefectureId;
-        }
         $sql .= ' limit ' . $displayLimit . ' offset ' . ($currentPageNumber - 1) * $displayLimit;
         $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
@@ -558,7 +563,7 @@ function fetchFacilitiesWithPrefectureId($regionId = 0, $prefectureId = 0, $curr
 
 function paging($currentPageNumber = 1, $totalPageNumber = 5, $numberOfColumns = 5)
 {
-    if ($totalPageNumber < $numberOfColumns) {
+    if ($totalPageNumber <= $numberOfColumns) {
         $firstPageNumber = 1;
         $lastPageNumber = $totalPageNumber;
     } else {
@@ -779,6 +784,22 @@ function showFacilityImage($path)
     }
 }
 
+//////////////////////////////////////
+//GETパラメータ付与関数
+//////////////////////////////////////////////
+//getパラメータを取得、引数のkeyを除外したパラメータを返す
+function appendGetParameter($removeParameters = array())
+{
+    $parameters = '?';
+    if (!empty($_GET)) {
+        foreach ($_GET as $key => $value) {
+            if (in_array($key, $removeParameters)) {
+                $parameters .= '&' . $key . '=>' . $value;
+            }
+        }
+    }
+    return $parameters;
+}
 
 //////////////////////////////////////
 //外部サイトからの情報取得
