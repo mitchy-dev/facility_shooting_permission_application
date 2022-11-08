@@ -788,17 +788,21 @@ function showFacilityImage($path)
 //GETパラメータ付与関数
 //////////////////////////////////////////////
 //getパラメータを取得、引数のkeyを除外したパラメータを返す
-function appendGetParameter($removeParameters = array())
+function appendGetParameter($removeParameters = array(), $isBehind = true)
 {
-    $parameters = '?';
+    if ($isBehind) {
+        $parameters = '&';
+    } else {
+        $parameters = '?';
+    }
     if (!empty($_GET)) {
         foreach ($_GET as $key => $value) {
-            if (in_array($key, $removeParameters)) {
-                $parameters .= '&' . $key . '=>' . $value;
+            if (!in_array($key, $removeParameters)) {
+                $parameters .= $key . '=' . $value . '&';
             }
         }
     }
-    return $parameters;
+    return mb_substr($parameters, 0, -1);
 }
 
 //////////////////////////////////////

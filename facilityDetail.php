@@ -48,6 +48,8 @@ require "header.php";
         </ul>
       </div>
       <!--      編集ボタン-->
+      <p><a href="index.php<?php
+        echo appendGetParameter(array('facility_id'), false); ?>">&lt戻る</a></p>
       <?php
       if (!empty($_SESSION['user_id']) && $_SESSION['user_id'] === $viewData['user_id']): ?>
         <button class="c-button --full-width c-button__secondary u-mb-48">

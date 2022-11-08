@@ -113,7 +113,7 @@ require "header.php";
         <div class="p-card__layout">
           <div class="p-card">
             <a href="facilityDetail.php?facility_id=<?php
-            echo sanitize($value['facility_id']); ?>" class="p-card__link">
+            echo sanitize($value['facility_id']) . appendGetParameter(array('facility_id')) ?>" class="p-card__link">
               <div class="p-card__head">
                 <img src="<?php
                 echo sanitize($value['thumbnail_path']); ?>" alt="海岸の写真" class="p-card__img">
