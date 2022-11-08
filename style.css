@@ -948,6 +948,9 @@ strong {
     margin-bottom: var(--spacing-xs);
 }
 
+.u-display-block {
+    display: block;
+}
 
 .u-text-center {
     text-align: center;

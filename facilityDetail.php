@@ -52,12 +52,18 @@ require "header.php";
         echo appendGetParameter(array('facility_id'), false); ?>">&lt戻る</a></p>
       <?php
       if (!empty($_SESSION['user_id']) && $_SESSION['user_id'] === $viewData['user_id']): ?>
-        <button class="c-button --full-width c-button__secondary u-mb-48">
-          <a href="registerFacility.php?facility_id=<?php
-          echo sanitize($facilityId); ?>">
-            掲載情報を変更する
-          </a>
-        </button>
+        <!--        <button class="c-button --full-width c-button__secondary u-mb-48">-->
+        <!--          <a href="registerFacility.php?facility_id=--><?php
+//          echo sanitize($facilityId); ?><!--">-->
+        <!--            掲載情報を変更する-->
+        <!--          </a>-->
+        <!--        </button>-->
+
+        <a class="c-button --full-width c-button__secondary u-mb-48 u-display-block"
+           href="registerFacility.php?facility_id=<?php
+           echo sanitize($facilityId) . appendGetParameter(array('facility_id')); ?>">
+          掲載情報を変更する
+        </a>
       <?php
       endif; ?>
 
