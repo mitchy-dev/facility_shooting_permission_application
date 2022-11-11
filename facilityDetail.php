@@ -14,9 +14,14 @@ if (!empty($facilityId) && empty($viewData)) {
   debug('不正なアクセスのためリダイレクトします');
   redirect('index.php');
 }
-var_dump($viewData);
-//$viewData['application_destinations'] = array();
 
+//$viewData['facility_name'] = '';
+//$viewData['facility_name_kana'] = '';
+var_dump($viewData);
+
+var_dump(
+        'https://maps.google.co.jp/maps?ll=' . $viewData['X(facility_location)'] . ',' . $viewData['Y(facility_location)'] . '&z=15'
+);
 endPageDisplay();
 ?>
 <?php
@@ -71,7 +76,12 @@ require "header.php";
       <div class="p-facility-detail__container">
         <h1 class="p-facility-detail__title">
           <?php
-          echo sanitize($viewData['facility_name']); ?>
+          if (!empty($viewData['facility_name']) && !empty($viewData['facility_name_kana'])) {
+            echo sanitize($viewData['facility_name'] . '(' . $viewData['facility_name_kana'] . ')');
+          } elseif (!empty($viewData['facility_name'])) {
+            echo sanitize($viewData['facility_name']);
+          }
+          ?>
         </h1>
         <ul class="p-facility-detail__list">
           <li class="p-facility-detail__item">
