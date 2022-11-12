@@ -17,11 +17,12 @@ if (!empty($facilityId) && empty($viewData)) {
 
 //$viewData['facility_name'] = '';
 //$viewData['facility_name_kana'] = '';
+//$viewData['url_of_facility_information_page'] = 'https://www.fta-shonan.jp/';
+//$viewData['title_of_facility_information_page'] = '観光協会';
+
+
 var_dump($viewData);
 
-var_dump(
-        'https://maps.google.co.jp/maps?ll=' . $viewData['X(facility_location)'] . ',' . $viewData['Y(facility_location)'] . '&z=15'
-);
 endPageDisplay();
 ?>
 <?php
@@ -87,8 +88,10 @@ require "header.php";
           <li class="p-facility-detail__item">
             <img src="img/bx_map.svg" alt="" class="p-facility-detail__icon">
             <a href="<?php
-            echo fetchGoogleMapUrl(sanitize($viewData['facility_address']));
-            ?>" target="_blank" class="p-facility-detail__text">
+            if (!empty($viewData['X(facility_location)']) && !empty($viewData['Y(facility_location)'])) {
+              echo sanitize(fetchGoogleMapUrl($viewData['X(facility_location)'], $viewData['Y(facility_location)']));
+            }
+            ?>" target="_blank" class="p-facility-detail__text --link">
               <?php
               echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
               ?>
@@ -97,19 +100,25 @@ require "header.php";
           <li class="p-facility-detail__item">
             <img src="img/information-sharp.svg" alt="" class="p-facility-detail__icon">
             <a href="<?php
-            echo sanitize($viewData['url_of_facility_information_page']); ?>" class="p-facility-detail__text">
+            if (!empty($viewData['url_of_facility_information_page'])) {
+              echo sanitize($viewData['url_of_facility_information_page']);
+            } ?>" class="p-facility-detail__text --link">
               <?php
-              if (empty($viewData['title_of_facility_information_page']) && !empty($viewData['url_of_facility_information'])) {
+              if (!empty($viewData['title_of_facility_information_page'])) {
+                echo sanitize($viewData['title_of_facility_information_page']);
+              } elseif (!empty($viewData['url_of_facility_information_page'])) {
                 echo sanitize($viewData['url_of_facility_information_page']);
-              }
-              echo sanitize($viewData['title_of_facility_information_page']); ?>
-              藤沢市観光協会</a>
+              } ?>
+            </a>
           </li>
           <li class="p-facility-detail__item">
             <img src="img/majesticons_yen-circle-line.svg" alt="" class="p-facility-detail__icon">
             <p class="p-facility-detail__text">
               <?php
-              echo sanitize($viewData['shooting_fee']); ?>
+              if (!isset($viewData['shooting_fee'])) {
+                echo sanitize($viewData['shooting_fee']);
+              }
+              ?>
             </p>
           </li>
         </ul>
