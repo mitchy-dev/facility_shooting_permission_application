@@ -1200,16 +1200,16 @@ strong {
     /*margin-right: 4px;*/
 }
 
-.p-facility-detail__item a {
-
-}
-
 .p-facility-detail__text {
     float: left;
     color: var(--color-text-main);
     line-height: var(--line-height-normal);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-normal);
+}
+
+.p-facility-detail__text.--link {
+    color: var(--color-text-link);
 }
 
 .p-facility-stakeholder__title-container {
