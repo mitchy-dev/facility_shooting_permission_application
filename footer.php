@@ -83,11 +83,54 @@
 
     //  一覧の絞り込み機能
     $('.js-region').on('change', function () {
-      window.location.href = 'index.php?region_id=' + $(this).val();
+      var params = {};
+
+      // URLからパラメーター解析＆取得
+      var query = window.location.href.split("?")[1];
+      if (query) {
+        var rawParams = query.split('&');
+        rawParams.forEach(function (prm, i) {
+          var kv = prm.split('=');
+          params[kv[0]] = kv[1];
+        });
+      }
+
+      var url = 'index.php?region_id=' + $(this).val();
+      // Getパラメーターのキー名と値を全部表示
+      if (query) {
+        Object.keys(params).forEach(function (name, i) {
+          if (name !== 'page' && name !== 'region_id' && name !== 'prefecture_id') {
+            url += '&' + name + '=' + this[name];
+          }
+        }, params);
+      }
+      window.location.href = url;
     });
 
     $('.js-prefecture').on('change', function () {
-      window.location.href = 'index.php?region_id=' + $('.js-region').val() + '&prefecture_id=' + $(this).val();
+      // window.location.href = 'index.php?region_id=' + $('.js-region').val() + '&prefecture_id=' + $(this).val();
+      var params = {};
+
+      // URLからパラメーター解析＆取得
+      var query = window.location.href.split("?")[1];
+      if (query) {
+        var rawParams = query.split('&');
+        rawParams.forEach(function (prm, i) {
+          var kv = prm.split('=');
+          params[kv[0]] = kv[1];
+        });
+      }
+
+      var url = 'index.php?prefecture_id=' + $(this).val();
+      // Getパラメーターのキー名と値を全部表示
+      if (query) {
+        Object.keys(params).forEach(function (name, i) {
+          if (name !== 'page' && name !== 'prefecture_id') {
+            url += '&' + name + '=' + this[name];
+          }
+        }, params);
+      }
+      window.location.href = url;
     })
 
   });
