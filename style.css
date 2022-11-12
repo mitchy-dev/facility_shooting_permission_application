@@ -1195,9 +1195,13 @@ strong {
 
 .p-facility-detail__icon {
     float: left;
-    width: 27px;
+    width: 24px;
     height: 24px;
     /*margin-right: 4px;*/
+}
+
+.p-facility-detail__item a {
+
 }
 
 .p-facility-detail__text {
