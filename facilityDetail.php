@@ -44,13 +44,27 @@ require "header.php";
       <div class="p-facility-thumbnail__container">
         <ul class="p-facility-thumbnail__list">
           <?php
-          foreach ($viewData['images'] as $key => $value): ?>
-            <li class="p-facility-thumbnail__item">
-              <img src="<?php
-              echo sanitize(showFacilityImage($value['image_path'])); ?>">
-            </li>
+          if (!empty($viewData['images'])) : ?>
+            <?php
+            foreach ($viewData['images'] as $key => $value): ?>
+              <li class="p-facility-thumbnail__item">
+                <img src="<?php
+                echo sanitize(showFacilityImage($value['image_path'])); ?>">
+              </li>
+            <?php
+            endforeach; ?>
           <?php
-          endforeach; ?>
+          else: ?>
+            <?php
+            for ($i = 0; $i < 3; $i++) : ?>
+              <li class="p-facility-thumbnail__item">
+                <img src="img/1920%20887.jpg">
+              </li>
+            <?php
+            endfor; ?>
+            }
+          <?php
+          endif; ?>
         </ul>
       </div>
       <!--      編集ボタン-->
