@@ -813,11 +813,9 @@ function appendGetParameter($removeParameters = array(), $isBehind = true)
 //外部サイトからの情報取得
 //////////////////////////////////////////////
 //GoogleMap
-function fetchGoogleMapUrl($address)
+function fetchGoogleMapUrl($longitude, $latitude, $zoom = 15)
 {
-    $address = urlencode($address);
-    $zoom = 15;
-    return "https://maps.google.co.jp/maps?q={$address}&z={$zoom}";
+    return "https://maps.google.co.jp/maps?ll=$longitude,$latitude&z={$zoom}";
 }
 
 //サイト名取得
