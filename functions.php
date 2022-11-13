@@ -815,7 +815,7 @@ function appendGetParameter($removeParameters = array(), $isBehind = true)
 //GoogleMap
 function fetchGoogleMapUrl($longitude, $latitude, $zoom = 15)
 {
-    return "https://maps.google.co.jp/maps?ll=$longitude,$latitude&z={$zoom}";
+    return "https://maps.google.co.jp/maps?ll=$longitude,$latitude&z={$zoom}&t=h&q=$longitude,$latitude&hl=ja";
 }
 
 //サイト名取得
