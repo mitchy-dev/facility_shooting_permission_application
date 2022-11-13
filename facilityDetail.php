@@ -58,7 +58,8 @@ require "header.php";
             <?php
             for ($i = 0; $i < 3; $i++) : ?>
               <li class="p-facility-thumbnail__item">
-                <img src="img/1920%20887.jpg">
+                <img src="<?php
+                echo sanitize(showFacilityImage()); ?>">
               </li>
             <?php
             endfor; ?>

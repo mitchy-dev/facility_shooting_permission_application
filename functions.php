@@ -779,7 +779,7 @@ function sanitize($string)
 //画像の表示
 //////////////////////////////////////////////
 //海岸画像の表示
-function showFacilityImage($path)
+function showFacilityImage($path = '')
 {
     if (!empty($path)) {
         return $path;

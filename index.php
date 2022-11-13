@@ -115,17 +115,17 @@ require "header.php";
             echo sanitize($value['facility_id']) . appendGetParameter(array('facility_id')) ?>" class="p-card__link">
               <div class="p-card__head">
                 <img src="<?php
-                echo sanitize($value['thumbnail_path']); ?>" alt="海岸の写真" class="p-card__img">
+                echo sanitize(showFacilityImage($value['thumbnail_path'])); ?>" alt="海岸の写真" class="p-card__img">
               </div>
               <div class="p-card__foot">
                 <div class="p-card__title-container">
                   <h2 class="p-card__title"><?php
                     echo sanitize($value['facility_name']); ?></h2>
                 </div>
-                <div class="p-card__sub-title-container">
-                  <p class="p-card__sub-title"><?php
-                    echo sanitize($value['prefecture_id']); ?></p>
-                </div>
+                <!--                <div class="p-card__sub-title-container">-->
+                <!--                  <p class="p-card__sub-title">--><?php
+                //                    echo sanitize($value['prefecture_id']); ?><!--</p>-->
+                <!--                </div>-->
               </div>
             </a>
           </div>
