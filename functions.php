@@ -518,7 +518,7 @@ function fetchFacilitiesWithPrefectureId($regionId = 0, $prefectureId = 0, $curr
     try {
         $dbh = dbConnect();
         $data = array();
-        $countSql = 'select count(*) from facilities where published = 1 and is_deleted = false';
+        $countSql = 'select count(*) from facilities as f right join prefectures as p on f.prefecture_id = p.prefecture_id where f.published = 1 and f.is_deleted = false';
         $sql = 'select * from facilities as f right join prefectures as p on f.prefecture_id = p.prefecture_id where f.published = 1 and f.is_deleted = false';
         if (!empty($regionId)) {
             $countSql .= ' and p.region_id = :region_id';

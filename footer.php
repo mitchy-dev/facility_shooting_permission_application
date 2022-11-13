@@ -95,7 +95,7 @@
         });
       }
 
-      var url = 'index.php?region_id=' + $(this).val();
+      var url = 'index.php?page=1&region_id=' + $(this).val();
       // Getパラメーターのキー名と値を全部表示
       if (query) {
         Object.keys(params).forEach(function (name, i) {
@@ -121,7 +121,7 @@
         });
       }
 
-      var url = 'index.php?prefecture_id=' + $(this).val();
+      var url = 'index.php?page=1&prefecture_id=' + $(this).val();
       // Getパラメーターのキー名と値を全部表示
       if (query) {
         Object.keys(params).forEach(function (name, i) {

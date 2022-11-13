@@ -15,10 +15,9 @@ if (!is_numeric($regionId) || !is_numeric($prefectureId) || !is_numeric($page)) 
   redirect('index.php');
 }
 $viewData = fetchFacilitiesWithPrefectureId($regionId, $prefectureId, $page);
-if (!empty($viewData['number_of_contents'])) {
+if (!empty($viewData['total_page_number'])) {
   $paging = paging($page, $viewData['total_page_number']);
 }
-
 //地域データの取得
 //この関数の引数に地域のidを受け取って、県名の表示を絞り込む
 $regionsAndPreferences = fetchRegionsAndPrefectures($regionId);
@@ -138,12 +137,13 @@ require "header.php";
 
 
     <?php
-    if (!empty($viewData['number_of_contents'])): ?>
+    if (!empty($paging)): ?>
       <div class="c-paging__layout">
         <ul class="c-paging__list">
           <?php
           if ($page != 1): ?>
-            <li class="c-paging__item"><a href="index.php?page=1">&lt;</a></li>
+            <li class="c-paging__item"><a href="index.php?page=1<?php
+              echo sanitize(appendGetParameter(array('page'))); ?>">&lt;</a></li>
           <?php
           endif; ?>
           <?php
@@ -151,21 +151,27 @@ require "header.php";
             <li class="c-paging__item <?php
             if ($i == $page) {
               echo 'is-active';
-            } ?>"><a href="index.php?page=<?php
-              echo $i; ?>"><?php
-                echo sanitize($i); ?></a></li>
+            } ?>">
+              <p>
+                <a href="index.php?page=<?php
+                echo sanitize($i . appendGetParameter(array('page'))) ?>"><?php
+                  echo sanitize($i); ?>
+                </a>
+              </p>
+            </li>
           <?php
           endfor; ?>
           <?php
-          if ($page != $paging['lastPageNumber']): ?>
+          if ($page != $viewData['total_page_number']): ?>
             <li class="c-paging__item"><a href="index.php?page=<?php
-              echo sanitize($paging['lastPageNumber']); ?>">&gt;</a></li>
+              echo sanitize($viewData['total_page_number'] . appendGetParameter(array('page'))); ?>">&gt;</a></li>
           <?php
           endif; ?>
         </ul>
       </div>
     <?php
     endif; ?>
+
   <?php
   else: ?>
     <div class="c-alternate-text__container">
