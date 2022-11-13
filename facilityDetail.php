@@ -20,9 +20,6 @@ if (!empty($facilityId) && empty($viewData)) {
 //$viewData['url_of_facility_information_page'] = 'https://www.fta-shonan.jp/';
 //$viewData['title_of_facility_information_page'] = '観光協会';
 
-
-var_dump($viewData);
-
 endPageDisplay();
 ?>
 <?php
@@ -63,14 +60,11 @@ require "header.php";
               </li>
             <?php
             endfor; ?>
-            }
           <?php
           endif; ?>
         </ul>
       </div>
       <!--      編集ボタン-->
-      <p><a href="index.php<?php
-        echo appendGetParameter(array('facility_id'), false); ?>">&lt戻る</a></p>
       <?php
       if (!empty($_SESSION['user_id']) && $_SESSION['user_id'] === $viewData['user_id']): ?>
         <!--        <button class="c-button --full-width c-button__secondary u-mb-48">-->
@@ -141,7 +135,10 @@ require "header.php";
 
       <!--相談先-->
       <div class="p-facility-detail__container">
-        <h2 class="p-facility-detail__sub-title">撮影の事前相談（２件）</h2>
+        <h2 class="p-facility-detail__sub-title">撮影の事前相談<?php
+          if (!empty($viewData['prior_consultations'])) {
+            echo '（' . count($viewData['prior_consultations']) . '件）';
+          } ?></h2>
         <?php
         switch ($viewData['is_need_consultation_of_shooting']) {
           case 0:
@@ -221,7 +218,10 @@ require "header.php";
 
       <!--      撮影許可-->
       <div class="p-facility-detail__container">
-        <h2 class="p-facility-detail__sub-title">撮影申請先（３件）</h2>
+        <h2 class="p-facility-detail__sub-title">撮影申請先<?php
+          if (!empty($viewData['application_destinations'])) {
+            echo '（' . count($viewData['application_destinations']) . '件）';
+          } ?></h2>
         <?php
         switch ($viewData['is_need_application_of_shooting']) {
           case 0:
