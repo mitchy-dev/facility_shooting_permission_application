@@ -818,9 +818,8 @@ strong {
 .p-card__title {
     color: var(--color-text-main);
     line-height: var(--line-height-relaxed);
-    font-size: var(--font-size-lg);
+    font-size: 18px;
     font-weight: var(--font-weight-normal);
-    margin-bottom: var(--spacing-md);
 }
 
 .p-card__sub-title-container {
@@ -829,7 +828,7 @@ strong {
 .p-card__sub-title {
     color: var(--color-text-sub);
     line-height: var(--line-height-normal);
-    font-size: var(--font-size-md);
+    font-size: 15px;
     font-weight: var(--font-weight-normal);
 }
 

@@ -122,10 +122,10 @@ require "header.php";
                   <h2 class="p-card__title"><?php
                     echo sanitize($value['facility_name']); ?></h2>
                 </div>
-                <!--                <div class="p-card__sub-title-container">-->
-                <!--                  <p class="p-card__sub-title">--><?php
-                //                    echo sanitize($value['prefecture_id']); ?><!--</p>-->
-                <!--                </div>-->
+                <div class="p-card__sub-title-container">
+                  <p class="p-card__sub-title"><?php
+                    echo sanitize($value['name']); ?></p>
+                </div>
               </div>
             </a>
           </div>
