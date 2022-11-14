@@ -29,7 +29,9 @@ if (!empty($_POST)) {
   $department = !empty($_POST['department']) ? $_POST['department'] : '';
   $avatarPath = keepFilePath($_FILES['avatar_path'], 'avatar_path', $dbStakeholderData['avatar_path']);
   $urlOfShootingApplicationGuide = !empty($_POST['url_of_shooting_application_guide']) ? $_POST['url_of_shooting_application_guide'] : '';
-  $titleOfShootingApplicationGuide = !empty($_POST['title_of_shooting_application_guide']) ? $_POST['title_of_shooting_application_guide'] : '';
+  $titleOfShootingApplicationGuide = !empty($_POST['url_of_shooting_application_guide']) ? fetchTitleFromURL(
+          $_POST['url_of_shooting_application_guide']
+  ) : '';
   $applicationDeadline = !empty($_POST['application_deadline']) ? $_POST['application_deadline'] : '';
   $phoneNumber = !empty($_POST['phone_number']) ? $_POST['phone_number'] : '';
   $email = !empty($_POST['email']) ? $_POST['email'] : '';
@@ -265,7 +267,8 @@ require "header.php";
       <div class="c-input__container">
         <!--          <span class="c-status-label">ラベル</span>-->
         <label for="url_of_shooting_application_guide" class="c-input__label">撮影申請の案内ページのURL</label>
-        <!--        <p class="c-input__sub-label"></p>-->
+        <p class="c-input__sub-label"><?php
+          echo sanitize(HELP['ENTER_URL']); ?></p>
         <p class="c-input__help-message">
           (例)https://www.pref.kanagawa.jp/docs/ex5/kaigan/kyoka.html
         </p>
