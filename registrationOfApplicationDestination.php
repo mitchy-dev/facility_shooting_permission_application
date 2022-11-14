@@ -28,7 +28,7 @@ if (!empty($_POST)) {
   $organization = !empty($_POST['organization']) ? $_POST['organization'] : '';
   $department = !empty($_POST['department']) ? $_POST['department'] : '';
   $urlOfDepartmentPage = !empty($_POST['url_of_department_page']) ? $_POST['url_of_department_page'] : '';
-  $avatarPath = keepFilePath($_FILES['avatar_path'], 'avatar_path', $dbStakeholderData['avatar_path']);
+  $avatarPath = keepFilePath($_FILES['avatar_path'], 'avatar_path', $dbStakeholderData);
   $urlOfShootingApplicationGuide = !empty($_POST['url_of_shooting_application_guide']) ? $_POST['url_of_shooting_application_guide'] : '';
   $titleOfShootingApplicationGuide = !empty($_POST['url_of_shooting_application_guide']) ? fetchTitleFromURL(
           $_POST['url_of_shooting_application_guide']
@@ -118,11 +118,11 @@ if (!empty($_POST)) {
         $sql = 'insert into stakeholders (
                     user_id, organization, department, url_of_department_page, avatar_path, url_of_shooting_application_guide,
                     title_of_shooting_application_guide, application_deadline, phone_number, email,
-                    url_of_contact_form, url_of_application_format, title_of_application_format, created_at
+                    url_of_contact_form, url_of_application_format, title_of_application_format, type_of_application_method, created_at
                     ) values (
                     :user_id, :organization, :department, :url_of_department_page, :avatar_path, :url_of_shooting_application_guide,
                     :title_of_shooting_application_guide, :application_deadline, :phone_number, :email,
-                    :url_of_contact_form, :url_of_application_format, :title_of_application_format, :created_at
+                    :url_of_contact_form, :url_of_application_format, :title_of_application_format, :type_of_application_method, :created_at
                     )';
         $data = array(
                 ':user_id' => $_SESSION['user_id'],

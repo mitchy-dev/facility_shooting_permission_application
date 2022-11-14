@@ -157,11 +157,19 @@ require "header.php";
                 <div class="p-facility-stakeholder__container">
                   <div class="p-facility-stakeholder__title-container">
                     <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
-                    <h3 class="p-facility-stakeholder__title">
+                    <h3 class="p-facility-stakeholder__title --link">
                       <a href="<?php
-                      echo sanitize($value['url_of_shooting_application_guide']); ?>">
+                      if (!empty($value['url_of_department_page'])) {
+                        echo sanitize($value['url_of_department_page']);
+                      } ?>" target="_blank">
                         <?php
-                        echo sanitize($value['organization'] . ' ' . $value['department']); ?>
+                        if (!empty($value['organization'])) {
+                          echo sanitize($value['organization']);
+                        }
+                        if (!empty($value['department'])) {
+                          echo sanitize(' ' . $value['department']);
+                        }
+                        ?>
                       </a>
                     </h3>
                   </div>
@@ -169,21 +177,44 @@ require "header.php";
                   <ul class="p-facility-stakeholder__list">
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/akar-icons_phone.svg" alt="" class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">
-                        <?php
-                        echo sanitize($value['phone_number']); ?></p>
+                      <p class="p-facility-stakeholder__item-text --link">
+                        <a href="tel:<?php
+                        if (!empty($value['phone_number'])) {
+                          echo sanitize($value['phone_number']);
+                        } ?>">
+                          <?php
+                          if (!empty($value['phone_number'])) {
+                            echo sanitize($value['phone_number']);
+                          } ?>
+                        </a>
+                      </p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/fluent_mail-24-regular.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">
-                        <?php
-                        echo sanitize($value['email']); ?></p>
+                      <p class="p-facility-stakeholder__item-text --link">
+                        <a href="mailto:<?php
+                        if (!empty($value['email'])) {
+                          echo sanitize($value['email']);
+                        } ?>">
+                          <?php
+                          if (!empty($value['email'])) {
+                            echo sanitize($value['email']);
+                          } ?>
+                        </a>
+                      </p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/fluent_form-24-regular.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">問い合わせフォーム</p>
+                      <p class="p-facility-stakeholder__item-text --link">
+                        <a href="<?php
+                        if (!empty($value['url_of_contact_form'])) {
+                          echo sanitize($value['url_of_contact_form']);
+                        } ?>" target="_blank">
+                          問い合わせフォーム
+                        </a>
+                      </p>
                     </li>
                   </ul>
                 </div>
@@ -237,7 +268,6 @@ require "header.php";
               <?php
               foreach ($viewData['application_destinations'] as $key => $value): ?>
                 <!--              申請先の表示箇所-->
-                <!--             元の記述-->
                 <div class="p-facility-stakeholder__container">
                   <div class="p-facility-stakeholder__title-container">
                     <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
@@ -281,7 +311,7 @@ require "header.php";
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/emojione-monotone_japanese-application-button.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text"><?php
+                      <p class="p-facility-stakeholder__item-text">方法：<?php
                         if (!empty($value['type_of_application_method'])) {
                           echo sanitize($value['type_of_application_method']);
                         } ?></p>
