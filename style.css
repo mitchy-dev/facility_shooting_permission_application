@@ -1261,6 +1261,10 @@ strong {
     font-weight: var(--font-weight-normal);
 }
 
+.p-facility-stakeholder__item-text.--link {
+    color: var(--color-text-link);
+}
+
 .p-facility-stakeholder__container:not(:last-child) {
     border-bottom: var(--border-normal);
 }

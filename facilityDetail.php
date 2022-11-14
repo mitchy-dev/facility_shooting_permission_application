@@ -242,11 +242,14 @@ require "header.php";
                   <div class="p-facility-stakeholder__title-container">
                     <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
                     <h3 class="p-facility-stakeholder__title">
-                      <a href="<?php
-                      $value['url_of_shooting_application_guide']; ?>">
-                        <?php
-                        echo sanitize($value['organization'] . ' ' . $value['department']); ?>
-                      </a>
+                      <?php
+                      if (!empty($value['organization'])) {
+                        echo sanitize($value['organization']);
+                      }
+                      if (!empty($value['department'])) {
+                        echo sanitize(' ' . $value['department']);
+                      }
+                      ?>
                     </h3>
                   </div>
                   <h4 class="p-facility-stakeholder__sub-title">撮影申請</h4>
@@ -254,7 +257,20 @@ require "header.php";
                   <ul class="p-facility-stakeholder__list">
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/information-sharp.svg" alt="" class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">海岸の許認可　ー　神奈川県ホームページ</p>
+                      <p class="p-facility-stakeholder__item-text --link">
+                        <a href="<?php
+                        if (!empty($value['url_of_shooting_application_guide'])) {
+                          echo sanitize($value['url_of_shooting_application_guide']);
+                        } ?>" target="_blank">
+                          <?php
+                          if (!empty($value['title_of_shooting_application_guide'])) {
+                            echo sanitize($value['title_of_shooting_application_guide']);
+                          } elseif (!empty($value['url_of_shooting_application_guide'])) {
+                            echo sanitize($value['url_of_shooting_application_guide']);
+                          }
+                          ?>
+                        </a>
+                      </p>
                     </li>
 
                     <li class="p-facility-stakeholder__item">
@@ -265,17 +281,19 @@ require "header.php";
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/jam_document.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">
-                        リンク先の<a href="<?php
-                        echo sanitize($value['url_of_application_format']); ?>">「<?php
+                      <p class="p-facility-stakeholder__item-text --link">
+                        <a href="<?php
+                        echo sanitize($value['url_of_application_format']); ?>" target="_blank">申請様式はリンク先の「<?php
                           echo sanitize($value['title_of_application_format']); ?>」</a></p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/fluent_calendar-clock-24-regular.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">
+                      <p class="p-facility-stakeholder__item-text">申請期限：
                         <?php
-                        echo sanitize($value['application_deadline']); ?>
+                        if (!empty($value['application_deadline'])) {
+                          echo sanitize($value['application_deadline']);
+                        } ?>
                       </p>
                     </li>
                   </ul>
@@ -283,24 +301,41 @@ require "header.php";
                   <ul class="p-facility-stakeholder__list">
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/akar-icons_phone.svg" alt="" class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">
-                        <a href="tel:">
+                      <p class="p-facility-stakeholder__item-text --link">
+                        <a href="tel:<?php
+                        if (!empty($value['phone_number'])) {
+                          echo sanitize($value['phone_number']);
+                        } ?>">
                           <?php
-                          echo sanitize($value['phone_number']); ?>
+                          if (!empty($value['phone_number'])) {
+                            echo sanitize($value['phone_number']);
+                          } ?>
                         </a>
                       </p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/fluent_mail-24-regular.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">info@gmail.com</p>
+                      <p class="p-facility-stakeholder__item-text --link">
+                        <a href="mailto:<?php
+                        if (!empty($value['email'])) {
+                          echo sanitize($value['email']);
+                        } ?>">
+                          <?php
+                          if (!empty($value['email'])) {
+                            echo sanitize($value['email']);
+                          } ?>
+                        </a>
+                      </p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/fluent_form-24-regular.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">
+                      <p class="p-facility-stakeholder__item-text --link">
                         <a href="<?php
-                        echo sanitize($value['url_of_contact_form']); ?>">
+                        if (!empty($value['url_of_contact_form'])) {
+                          echo sanitize($value['url_of_contact_form']);
+                        } ?>" target="_blank">
                           問い合わせフォーム
                         </a>
                       </p>
