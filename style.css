@@ -1230,6 +1230,10 @@ strong {
     font-weight: var(--font-weight-normal);
 }
 
+.p-facility-stakeholder__title.--link {
+    color: var(--color-text-link);
+}
+
 .p-facility-stakeholder__sub-title {
     color: var(--color-text-main);
     line-height: var(--line-height-normal);

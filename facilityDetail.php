@@ -241,15 +241,20 @@ require "header.php";
                 <div class="p-facility-stakeholder__container">
                   <div class="p-facility-stakeholder__title-container">
                     <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
-                    <h3 class="p-facility-stakeholder__title">
-                      <?php
-                      if (!empty($value['organization'])) {
-                        echo sanitize($value['organization']);
-                      }
-                      if (!empty($value['department'])) {
-                        echo sanitize(' ' . $value['department']);
-                      }
-                      ?>
+                    <h3 class="p-facility-stakeholder__title --link">
+                      <a href="<?php
+                      if (!empty($value['url_of_department_page'])) {
+                        echo sanitize($value['url_of_department_page']);
+                      } ?>" target="_blank">
+                        <?php
+                        if (!empty($value['organization'])) {
+                          echo sanitize($value['organization']);
+                        }
+                        if (!empty($value['department'])) {
+                          echo sanitize(' ' . $value['department']);
+                        }
+                        ?>
+                      </a>
                     </h3>
                   </div>
                   <h4 class="p-facility-stakeholder__sub-title">撮影申請</h4>
@@ -261,7 +266,7 @@ require "header.php";
                         <a href="<?php
                         if (!empty($value['url_of_shooting_application_guide'])) {
                           echo sanitize($value['url_of_shooting_application_guide']);
-                        } ?>" target="_blank">
+                        } ?>" target="_blank">案内：
                           <?php
                           if (!empty($value['title_of_shooting_application_guide'])) {
                             echo sanitize($value['title_of_shooting_application_guide']);
@@ -276,20 +281,23 @@ require "header.php";
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/emojione-monotone_japanese-application-button.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">FAX、窓口、郵送</p>
+                      <p class="p-facility-stakeholder__item-text"><?php
+                        if (!empty($value['type_of_application_method'])) {
+                          echo sanitize($value['type_of_application_method']);
+                        } ?></p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/jam_document.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="<?php
-                        echo sanitize($value['url_of_application_format']); ?>" target="_blank">申請様式はリンク先の「<?php
+                        echo sanitize($value['url_of_application_format']); ?>" target="_blank">様式：リンク先の「<?php
                           echo sanitize($value['title_of_application_format']); ?>」</a></p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/fluent_calendar-clock-24-regular.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
-                      <p class="p-facility-stakeholder__item-text">申請期限：
+                      <p class="p-facility-stakeholder__item-text">期限：
                         <?php
                         if (!empty($value['application_deadline'])) {
                           echo sanitize($value['application_deadline']);

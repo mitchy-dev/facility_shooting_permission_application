@@ -27,6 +27,7 @@ if (!empty($_POST)) {
   $stakeholderCategory = !empty($_POST['stakeholder_category']) ? $_POST['stakeholder_category'] : array();
   $organization = !empty($_POST['organization']) ? $_POST['organization'] : '';
   $department = !empty($_POST['department']) ? $_POST['department'] : '';
+  $urlOfDepartmentPage = !empty($_POST['url_of_department_page']) ? $_POST['url_of_department_page'] : '';
   $avatarPath = keepFilePath($_FILES['avatar_path'], 'avatar_path', $dbStakeholderData['avatar_path']);
   $urlOfShootingApplicationGuide = !empty($_POST['url_of_shooting_application_guide']) ? $_POST['url_of_shooting_application_guide'] : '';
   $titleOfShootingApplicationGuide = !empty($_POST['url_of_shooting_application_guide']) ? fetchTitleFromURL(
@@ -38,6 +39,7 @@ if (!empty($_POST)) {
   $urlOfContactForm = !empty($_POST['url_of_contact_form']) ? $_POST['url_of_contact_form'] : '';
   $urlOfApplicationFormat = !empty($_POST['url_of_application_format']) ? $_POST['url_of_application_format'] : '';
   $titleOfApplicationFormat = !empty($_POST['title_of_application_format']) ? $_POST['title_of_application_format'] : '';
+  $typeOfApplicationMethod = !empty($_POST['type_of_application_method']) ? $_POST['type_of_application_method'] : '';
 
   validEmpty($organization, 'organization');
 
@@ -50,6 +52,7 @@ if (!empty($_POST)) {
         $sql = 'update stakeholders set
                     organization = :organization,
                     department = :department,
+                        url_of_department_page = :url_of_department_page,
                     avatar_path = :avatar_path,
                     url_of_shooting_application_guide = :url_of_shooting_application_guide,
                     title_of_shooting_application_guide = :title_of_shooting_application_guide,
@@ -58,12 +61,14 @@ if (!empty($_POST)) {
                     email = :email,
                     url_of_contact_form = :url_of_contact_form,
                     url_of_application_format = :url_of_application_format,
-                    title_of_application_format = :title_of_application_format
+                    title_of_application_format = :title_of_application_format,
+                    type_of_application_method = :type_of_application_method
                 where 
                     user_id = :user_id and stakeholder_id = :stakeholder_id and is_deleted = false';
         $data = array(
                 ':organization' => $organization,
                 ':department' => $department,
+                ':url_of_department_page' => $urlOfDepartmentPage,
                 ':avatar_path' => $avatarPath,
                 ':url_of_shooting_application_guide' => $urlOfShootingApplicationGuide,
                 ':title_of_shooting_application_guide' => $titleOfShootingApplicationGuide,
@@ -73,6 +78,7 @@ if (!empty($_POST)) {
                 ':url_of_contact_form' => $urlOfContactForm,
                 ':url_of_application_format' => $urlOfApplicationFormat,
                 ':title_of_application_format' => $titleOfApplicationFormat,
+                ':type_of_application_method' => $typeOfApplicationMethod,
                 ':user_id' => $_SESSION['user_id'],
                 ':stakeholder_id' => $stakeholderId,
         );
@@ -110,11 +116,11 @@ if (!empty($_POST)) {
       } else {
         debug('事前相談先・申請先の情報を登録します');
         $sql = 'insert into stakeholders (
-                    user_id, organization, department, avatar_path, url_of_shooting_application_guide,
+                    user_id, organization, department, url_of_department_page, avatar_path, url_of_shooting_application_guide,
                     title_of_shooting_application_guide, application_deadline, phone_number, email,
                     url_of_contact_form, url_of_application_format, title_of_application_format, created_at
                     ) values (
-                    :user_id, :organization, :department, :avatar_path, :url_of_shooting_application_guide,
+                    :user_id, :organization, :department, :url_of_department_page, :avatar_path, :url_of_shooting_application_guide,
                     :title_of_shooting_application_guide, :application_deadline, :phone_number, :email,
                     :url_of_contact_form, :url_of_application_format, :title_of_application_format, :created_at
                     )';
@@ -122,6 +128,7 @@ if (!empty($_POST)) {
                 ':user_id' => $_SESSION['user_id'],
                 ':organization' => $organization,
                 ':department' => $department,
+                ':url_of_department_page' => $urlOfDepartmentPage,
                 ':avatar_path' => $avatarPath,
                 ':url_of_shooting_application_guide' => $urlOfShootingApplicationGuide,
                 ':title_of_shooting_application_guide' => $titleOfShootingApplicationGuide,
@@ -131,6 +138,7 @@ if (!empty($_POST)) {
                 ':url_of_contact_form' => $urlOfContactForm,
                 ':url_of_application_format' => $urlOfApplicationFormat,
                 ':title_of_application_format' => $titleOfApplicationFormat,
+                ':type_of_application_method' => $typeOfApplicationMethod,
                 ':created_at' => date("Y-m-d H:i:s"),
         );
         if (empty(queryPost($dbh, $sql, $data))) {
@@ -212,7 +220,7 @@ require "header.php";
         <!--          <span class="c-status-label">ラベル</span>-->
         <label for="organization" class="c-input__label">組織名</label>
         <!--          <p class="c-input__sub-label">sub-label</p>-->
-        <p class="c-input__help-message">（例）神奈川県藤沢土木事務所</p>
+        <p class="c-input__help-message">（例）茨城県高萩工事事務所</p>
         <p class="c-input__error-message">
           <?php
           echo getErrorMessage('organization'); ?>
@@ -224,12 +232,12 @@ require "header.php";
         ?>">
         <!--          <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
-
+      <!--部署名-->
       <div class="c-input__container">
         <!--                <span class="c-status-label">ラベル</span>-->
         <label for="department" class="c-input__label">担当部署名</label>
         <!--                <p class="c-input__sub-label">sub-label</p>-->
-        <p class="c-input__help-message">（例）許認可指導課</p>
+        <p class="c-input__help-message">（例）河川整備課</p>
         <p class="c-input__error-message">
           <?php
           echo getErrorMessage('department'); ?>
@@ -240,7 +248,24 @@ require "header.php";
         echo keepInputAndDatabase('department', $dbStakeholderData); ?>">
         <!--                <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
       </div>
-
+      <!--      部署のHPのURL-->
+      <div class="c-input__container">
+        <!--                <span class="c-status-label">ラベル</span>-->
+        <label for="url_of_department_page" class="c-input__label">担当部署のHPのURL</label>
+        <!--                <p class="c-input__sub-label">sub-label</p>-->
+        <p class="c-input__help-message">（例）<a href="https://www.pref.ibaraki.jp/doboku/takado/kanri/ka/kasen.html"
+                                               target="_blank">https://www.pref.ibaraki.jp/doboku/takado/kanri/ka/kasen.html</a>
+        </p>
+        <p class="c-input__error-message">
+          <?php
+          echo getErrorMessage('url_of_department_page'); ?>
+        </p>
+        <input type="text" name="url_of_department_page" id="url_of_department_page"
+               class="c-input__body js-count <?php
+               addErrorClass('url_of_department_page'); ?>" value="<?php
+        echo keepInputAndDatabase('url_of_department_page', $dbStakeholderData); ?>">
+        <!--                <p class="c-input__counter"><span class="js-counter">0</span>/10</p>-->
+      </div>
       <div class="c-input__container">
         <p class="c-input__label">画像</p>
         <!--        <p class="c-input__sub-label">コメント時に表示されます</p>-->
@@ -267,10 +292,10 @@ require "header.php";
       <div class="c-input__container">
         <!--          <span class="c-status-label">ラベル</span>-->
         <label for="url_of_shooting_application_guide" class="c-input__label">撮影申請の案内ページのURL</label>
-        <p class="c-input__sub-label"><?php
-          echo sanitize(HELP['ENTER_URL']); ?></p>
+        <p class="c-input__sub-label">例示にあるような具体的な案内が掲載されているページのURLをご入力ください</p>
         <p class="c-input__help-message">
-          (例)https://www.pref.kanagawa.jp/docs/ex5/kaigan/kyoka.html
+          （例）<a href="https://www.pref.ibaraki.jp/doboku/takado/kanri/01class/class19/documents/kaigansenyo.pdf"
+                target="_blank">https://www.pref.ibaraki.jp/doboku/takado/kanri/01class/class19/documents/kaigansenyo.pdf</a>
         </p>
         <p class="c-input__error-message"><?php
           echo getErrorMessage('url_of_shooting_application_guide'); ?></p>
@@ -340,7 +365,10 @@ require "header.php";
         <label for="url_of_contact_form" class="c-input__label">連絡用フォームのURL</label>
         <!--        <p class="c-input__sub-label"></p>-->
         <p class="c-input__help-message">
-          (例)https://dshinsei.e-kanagawa.lg.jp/140007-u/profile/userLogin_initDisplay.action?nextURL=CqTLFdO4voYnxt4ulafS2O3BB%2BFN7Gi4KMXGdBKterQfdrrJ0c3uG49wiM9ZpSVrEPgn8SiNxXCv%0D%0A1FXxyDAFxYzNnOoECHreFqLsJJO%2B9FMTfO4V8%2B8fadqRrdu72h8T8%2B%2Fv33%2FT%2B4o%3D%0D%0A
+          (例)<a href="https://dshinsei.e-kanagawa.lg.jp/140007-u/profile/userLogin_initDisplay.action?nextURL=CqTLFdO4voYnxt4ulafS2O3BB%2BFN7Gi4KMXGdBKterQfdrrJ0c3uG49wiM9ZpSVrEPgn8SiNxXCv%0D%0A1FXxyDAFxYzNnOoECHreFqLsJJO%2B9FMTfO4V8%2B8fadqRrdu72h8T8%2B%2Fv33%2FT%2B4o%3D%0D%0A"
+                target="_blank">
+            https://dshinsei.e-kanagawa.lg.jp/140007-u/profile/userLogin_initDisplay.action?nextURL=CqTLFdO4voYnxt4ulafS2O3BB%2BFN7Gi4KMXGdBKterQfdrrJ0c3uG49wiM9ZpSVrEPgn8SiNxXCv%0D%0A1FXxyDAFxYzNnOoECHreFqLsJJO%2B9FMTfO4V8%2B8fadqRrdu72h8T8%2B%2Fv33%2FT%2B4o%3D%0D%0A
+          </a>
         </p>
         <p class="c-input__error-message"><?php
           echo getErrorMessage('url_of_facility_information_page'); ?></p>
@@ -352,30 +380,14 @@ require "header.php";
         <!--          <p class="c-input__counter">0/10</p>-->
       </div>
 
-      <div class="c-input__container">
-        <!--          <span class="c-status-label">ラベル</span>-->
-        <label for="shooting_application_acceptance_type_tag_id" class="c-input__label">撮影申請の受付方法</label>
-        <!--        <p class="c-input__sub-label"></p>-->
-        <p class="c-input__help-message">
-          （例）申請フォーム、メール、FAX、郵送
-        </p>
-        <p class="c-input__error-message"><?php
-          echo getErrorMessage('shooting_application_acceptance_type_tag_id'); ?></p>
-        <input type="text" name="shooting_application_acceptance_type_tag_id"
-               id="shooting_application_acceptance_type_tag_id"
-               class="c-input__body <?php
-               addErrorClass('shooting_application_acceptance_type_tag_id'); ?>" value="<?php
-        echo keepInputAndDatabase('shooting_application_acceptance_type_tag_id', $dbStakeholderData);
-        ?>">
-        <!--          <p class="c-input__counter">0/10</p>-->
-      </div>
 
       <div class="c-input__container">
         <!--          <span class="c-status-label">ラベル</span>-->
         <label for="url_of_application_format" class="c-input__label">申請様式のURL</label>
-        <p class="c-input__sub-label">様式のファイルが掲載されているページのURLを記載してください</p>
+        <p class="c-input__sub-label">様式や記入例のファイルが掲載されているページのURLを記載してください</p>
         <p class="c-input__help-message">
-          (例)https://www.pref.kanagawa.jp/docs/ex5/kaigan/kyoka.html
+          （例） <a href="https://www.pref.ibaraki.jp/doboku/takado/kanri/01class/class19/kasenshinsei.html"
+                 target="_blank">https://www.pref.ibaraki.jp/doboku/takado/kanri/01class/class19/kasenshinsei.html</a>
         </p>
         <p class="c-input__error-message"><?php
           echo getErrorMessage('url_of_application_format'); ?></p>
@@ -392,7 +404,7 @@ require "header.php";
         <label for="title_of_application_format" class="c-input__label">申請様式名</label>
         <!--        <p class="c-input__sub-label"></p>-->
         <p class="c-input__help-message">
-          (例)海岸一時使用届
+          (例) 海岸一時使用届
         </p>
         <p class="c-input__error-message"><?php
           echo getErrorMessage('title_of_application_format'); ?></p>
@@ -404,6 +416,23 @@ require "header.php";
         <!--          <p class="c-input__counter">0/10</p>-->
       </div>
 
+      <div class="c-input__container">
+        <!--          <span class="c-status-label">ラベル</span>-->
+        <label for="type_of_application_method" class="c-input__label">撮影申請の受付方法</label>
+        <!--        <p class="c-input__sub-label"></p>-->
+        <p class="c-input__help-message">
+          （例）申請フォーム、メール、FAX、郵送
+        </p>
+        <p class="c-input__error-message"><?php
+          echo getErrorMessage('type_of_application_method'); ?></p>
+        <input type="text" name="type_of_application_method"
+               id="type_of_application_method"
+               class="c-input__body <?php
+               addErrorClass('type_of_application_method'); ?>" value="<?php
+        echo keepInputAndDatabase('type_of_application_method', $dbStakeholderData);
+        ?>">
+        <!--          <p class="c-input__counter">0/10</p>-->
+      </div>
 
       <button class="c-button --full-width c-button__primary" type="submit">
         <?php

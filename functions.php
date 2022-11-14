@@ -405,7 +405,7 @@ function fetchStakeholder($userId, $stakeholderId)
     debug('相談・申請先の情報を取得します');
     try {
         $dbh = dbConnect();
-        $sql = 'select organization, department, avatar_path, url_of_shooting_application_guide, title_of_shooting_application_guide, application_deadline, phone_number, email, url_of_contact_form, url_of_application_format, title_of_application_format
+        $sql = 'select organization, department, url_of_department_page, avatar_path, url_of_shooting_application_guide, title_of_shooting_application_guide, application_deadline, phone_number, email, url_of_contact_form, url_of_application_format, title_of_application_format, type_of_application_method
 from stakeholders where user_id = :user_id and stakeholder_id = :stakeholder_id and is_deleted = false';
         $data = array(
             ':user_id' => $userId,
@@ -667,7 +667,7 @@ function fetchFacilityAndStakeholdersAndImagePaths($facilityId)
         }
 
 //        関係者データの取得
-        $sql2 = 'select fs.stakeholder_category_id,fs.stakeholder_id, s.organization, s.department, s.avatar_path, s.url_of_shooting_application_guide, s.title_of_shooting_application_guide, s.application_deadline, s.phone_number, s.email, s.url_of_contact_form, s.url_of_application_format, s.title_of_application_format from facilities_stakeholders as fs left  join stakeholders as s on fs.stakeholder_id = s.stakeholder_id where fs.facility_id = :facility_id and s.is_deleted = false';
+        $sql2 = 'select fs.stakeholder_category_id,fs.stakeholder_id, s.organization, s.url_of_department_page, s.department, s.avatar_path, s.url_of_shooting_application_guide, s.title_of_shooting_application_guide, s.application_deadline, s.phone_number, s.email, s.url_of_contact_form, s.url_of_application_format, s.title_of_application_format, s.type_of_application_method from facilities_stakeholders as fs left  join stakeholders as s on fs.stakeholder_id = s.stakeholder_id where fs.facility_id = :facility_id and s.is_deleted = false';
         $data2 = array(
             ':facility_id' => $facilityId
         );
@@ -830,7 +830,11 @@ function fetchTitleFromURL($url)
             'verify_peer_name' => false
         )
     ));
-    $source = @file_get_contents($url, false, $options);
+    if (pathinfo($url, PATHINFO_EXTENSION) === 'html') {
+        $source = @file_get_contents($url, false, $options);
+    } else {
+        return '';
+    }
     $html = mb_convert_encoding($source, 'UTF-8', 'auto');
     var_dump($source);
     var_dump($html);
