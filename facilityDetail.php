@@ -32,7 +32,15 @@ require "header.php";
   <!--    メイン画像-->
   <div class="p-facility-image__container">
     <img src="<?php
-    echo sanitize(showFacilityImage($viewData['thumbnail_path'])); ?>" alt="" class="p-facility-image__main">
+    if (!empty($viewData['images'][0]['image_path'])) {
+      echo sanitize($viewData['images'][0]['image_path']);
+    } else {
+      echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityThumbnails')));
+    }
+
+    ?>" alt=""
+         class="p-facility-image__main js-image-main">
+    <!--    echo sanitize(showFacilityImage($viewData['thumbnail_path'])); ?>" alt="" class="p-facility-image__main">-->
   </div>
   <main class="l-main">
 
@@ -46,7 +54,7 @@ require "header.php";
             foreach ($viewData['images'] as $key => $value): ?>
               <li class="p-facility-thumbnail__item">
                 <img src="<?php
-                echo sanitize(showFacilityImage($value['image_path'])); ?>">
+                echo sanitize(showFacilityImage($value['image_path'])); ?>" class="js-image-thumbnail">
               </li>
             <?php
             endforeach; ?>
@@ -56,7 +64,8 @@ require "header.php";
             for ($i = 0; $i < 3; $i++) : ?>
               <li class="p-facility-thumbnail__item">
                 <img src="<?php
-                echo sanitize(showFacilityImage()); ?>">
+                echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityThumbnails'))); ?>"
+                     class="js-image-thumbnail">
               </li>
             <?php
             endfor; ?>

@@ -781,13 +781,21 @@ function sanitize($string)
 //////////////////////////////////////
 //画像の表示
 //////////////////////////////////////////////
+//代替画像をランダムに返す
+function getAlternateImagePath($directoryPath)
+{
+    $thumbnails = glob($directoryPath . '/*');
+    $number = rand(0, count($thumbnails) - 1);
+    return $thumbnails[$number];
+}
+
 //海岸画像の表示
-function showFacilityImage($path = '')
+function showFacilityImage($path = '', $alternateImagePath)
 {
     if (!empty($path)) {
         return $path;
     } else {
-        return 'img/1920 887.jpg';
+        return $alternateImagePath;
     }
 }
 

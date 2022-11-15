@@ -116,7 +116,13 @@ require "header.php";
                target="_blank">
               <div class="p-card__head">
                 <img src="<?php
-                echo sanitize(showFacilityImage($value['thumbnail_path'])); ?>" alt="海岸の写真" class="p-card__img">
+                echo sanitize(
+                        showFacilityImage(
+                                $value['thumbnail_path'],
+                                getAlternateImagePath('./alternateFacilityThumbnails')
+                        )
+                ); ?>"
+                     alt="海岸の写真" class="p-card__img">
               </div>
               <div class="p-card__foot">
                 <div class="p-card__title-container">
