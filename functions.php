@@ -356,10 +356,6 @@ function fetchRegionsAndPrefectures($regionId = 0)
 
         $sql = 'select region_id, name from regions';
         $data = array();
-//        if (!empty($regionId)) {
-//            $sql .= ' where region_id = :region_id';
-//            $data['region_id'] = $regionId;
-//        }
         $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
             $result['regions'] = $sth->fetchAll();
@@ -844,10 +840,7 @@ function fetchTitleFromURL($url)
         return '';
     }
     $html = mb_convert_encoding($source, 'UTF-8', 'auto');
-    var_dump($source);
-    var_dump($html);
     if (preg_match('/<title>(.*?)<\/title>/', $html, $result) !== false) {
-        var_dump($result);
         return $result[1];
     }
 }
