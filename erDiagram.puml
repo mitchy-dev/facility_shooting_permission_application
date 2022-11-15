@@ -34,6 +34,7 @@ entity "facilities" as facilities {
   thumbnail_path:varchar(255)
   prefecture_id<<FK>>:int not null
   facility_address:varchar(255)
+  url_of_facility_location_map:varchar(255)
   facility_location: GEOMETRY
   shooting fee:varchar(255)
   url_of_facility_information_page:varchar(255)

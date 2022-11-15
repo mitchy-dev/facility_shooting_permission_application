@@ -97,7 +97,10 @@ require "header.php";
           <li class="p-facility-detail__item">
             <img src="img/bx_map.svg" alt="" class="p-facility-detail__icon">
             <a href="<?php
-            if (!empty($viewData['X(facility_location)']) && !empty($viewData['Y(facility_location)'])) {
+            if (!empty($viewData['url_of_facility_location_map'])) {
+              echo sanitize($viewData['url_of_facility_location_map']);
+//              データがあるのでこちらの処理も走っている
+            } elseif (!empty($viewData['X(facility_location)']) && !empty($viewData['Y(facility_location)'])) {
               echo sanitize(fetchGoogleMapUrl($viewData['X(facility_location)'], $viewData['Y(facility_location)']));
             }
             ?>" target="_blank" class="p-facility-detail__text --link">

@@ -95,7 +95,8 @@ if (!empty($_POST)) {
   }
   $thumbnailPath = !empty($facilityImagePaths) ? $facilityImagePaths[0] : '';
   $prefectureId = $_POST['prefecture_id'];
-  $facilityAddress = $_POST['facility_address'];
+  $facilityAddress = !empty($_POST['facility_address']) ? $_POST['facility_address'] : '';
+  $urlOfFacilityLocationMap = !empty($_POST['url_of_facility_location_map']) ? $_POST['url_of_facility_location_map'] : '';
   $shootingFee = $_POST['shooting_fee'];
   $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
   $titleOfFacilityInformationPage = !empty($_POST['url_of_facility_information_page']) ? fetchTitleFromURL(
@@ -120,6 +121,7 @@ if (!empty($_POST)) {
                       thumbnail_path = :thumbnail_path, 
                       prefecture_id = :prefecture_id, 
                       facility_address = :facility_address, 
+                      url_of_facility_location_map = :url_of_facility_location_map,
                       shooting_fee = :shooting_fee, 
                       url_of_facility_information_page = :url_of_facility_information_page, 
                       title_of_facility_information_page = :title_of_facility_information_page, 
@@ -134,6 +136,7 @@ if (!empty($_POST)) {
                 ':thumbnail_path' => $thumbnailPath,
                 ':prefecture_id' => $prefectureId,
                 ':facility_address' => $facilityAddress,
+                ':url_of_facility_location_map' => $urlOfFacilityLocationMap,
                 ':shooting_fee' => $shootingFee,
                 ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
                 ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
@@ -232,13 +235,14 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
         redirect('facilityDetail.php?facility_id=' . $facilityId);
       } else {
         debug('海岸の情報を登録します');
-        $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :published, :created_at)';
+        $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, url_of_facility_location_map, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :url_of_facility_location_map, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :published, :created_at)';
         $data = array(
                 ':user_id' => $_SESSION['user_id'],
                 ':facility_name' => $facilityName,
                 ':thumbnail_path' => $thumbnailPath,
                 ':prefecture_id' => $prefectureId,
                 ':facility_address' => $facilityAddress,
+                ':url_of_facility_location_map' => $urlOfFacilityLocationMap,
                 ':shooting_fee' => $shootingFee,
                 ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
                 ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
@@ -411,6 +415,28 @@ require "header.php";
           <input type="text" name="facility_address" id="facility_address" class="c-input__body <?php
           addErrorClass('facility_address'); ?>" value="<?php
           echo keepInputAndDatabase('facility_address', $dbFacilityData);
+          ?>">
+          <!--          <p class="c-input__counter">0/10<j/p>-->
+        </div>
+
+        <div class="c-input__container">
+          <!--          <span class="c-status-label --orange">必須</span>-->
+          <label for="url_of_facility_location_map" class="c-input__label">海岸の地図へのリンク</label>
+          <p class="c-input__sub-label">GoogleMapやYahoo!地図のURLを入力してください</p>
+          <p class="c-input__help-message">（例）
+            <a href="https://www.google.co.jp/maps/place/%E5%A4%A7%E6%B4%97%E6%B5%B7%E5%B2%B8/@36.3108804,140.5450083,13z/data=!4m9!1m2!2m1!1z5aSn5rSX5rW35bK4!3m5!1s0x60223159743ed687:0x2bff399cd419c6eb!8m2!3d36.3191068!4d140.5922725!15sCgzlpKfmtJfmtbflsriSAQViZWFjaOABAA"
+               target="_blank">
+              https://www.google.co.jp/maps/place/%E5%A4%A7%E6%B4%97%E6%B5%B7%E5%B2%B8/@36.3108804,140.5450083,13z/data=!4m9!1m2!2m1!1z5aSn5rSX5rW35bK4!3m5!1s0x60223159743ed687:0x2bff399cd419c6eb!8m2!3d36.3191068!4d140.5922725!15sCgzlpKfmtJfmtbflsriSAQViZWFjaOABAA
+            </a>
+          </p>
+          <p class="c-input__error-message">
+            <?php
+            echo getErrorMessage('url_of_facility_location_map'); ?>
+          </p>
+          <input type="text" name="url_of_facility_location_map" id="url_of_facility_location_map"
+                 class="c-input__body <?php
+                 addErrorClass('facility_address'); ?>" value="<?php
+          echo keepInputAndDatabase('url_of_facility_location_map', $dbFacilityData);
           ?>">
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
