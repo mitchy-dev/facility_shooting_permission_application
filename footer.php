@@ -132,6 +132,12 @@
       }
       window.location.href = url;
     })
+    //  画像切り替え
+    var $imageMain = $('.js-image-main');
+    $('.js-image-thumbnail').on('click', function () {
+      $imageMain.attr('src', $(this).attr('src'));
+    })
+
 
   });
 </script>
