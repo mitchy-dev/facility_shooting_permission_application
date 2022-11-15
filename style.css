@@ -893,7 +893,6 @@ strong {
     width: 270px;
     height: 192px;
     position: relative;
-    cursor: pointer;
 }
 
 .p-facility-thumbnail__alternate-image-text {
@@ -916,6 +915,7 @@ strong {
 .p-facility-thumbnail__item img {
     width: 100%;
     height: auto;
+    cursor: pointer;
 }
 
 /* 海岸詳細画面のコンポーネント
