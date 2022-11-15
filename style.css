@@ -801,6 +801,20 @@ strong {
 .p-card__head {
     width: 100%;
     height: 219px;
+    position: relative;
+}
+
+.p-card__alternate-image-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.4);
+    width: 100%;
+    height: 100%;
+    color: var(--color-text-white);
+    text-align: center;
+    line-height: 219px;
+    font-size: var(--font-size-lg);
 }
 
 .p-card__img {

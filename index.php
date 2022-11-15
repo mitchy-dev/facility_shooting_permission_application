@@ -115,6 +115,11 @@ require "header.php";
             echo sanitize($value['facility_id']) . appendGetParameter(array('facility_id')) ?>" class="p-card__link"
                target="_blank">
               <div class="p-card__head">
+                <?php
+                if (empty($value['thumbnail_path'])): ?>
+                  <div class="p-card__alternate-image-text">NO IMAGE</div>
+                <?php
+                endif; ?>
                 <img src="<?php
                 echo sanitize(
                         showFacilityImage(
