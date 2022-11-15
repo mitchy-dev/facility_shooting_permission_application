@@ -135,7 +135,7 @@
     //  画像切り替え
     var $imageMain = $('.js-image-main');
     $('.js-image-thumbnail').on('click', function () {
-      $imageMain.attr('src', $(this).attr('src'));
+      $imageMain.attr('src', $(this).children('img').attr('src'));
     })
 
 

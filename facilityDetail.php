@@ -31,6 +31,11 @@ require "header.php";
 
   <!--    メイン画像-->
   <div class="p-facility-image__container">
+    <?php
+    if (empty($viewData['images'][0]['image_path'])): ?>
+      <div class="p-facility-image__alternate-image-text">NO IMAGE</div>
+    <?php
+    endif; ?>
     <img src="<?php
     if (!empty($viewData['images'][0]['image_path'])) {
       echo sanitize($viewData['images'][0]['image_path']);
@@ -52,11 +57,16 @@ require "header.php";
           if (!empty($viewData['images'])) : ?>
             <?php
             foreach ($viewData['images'] as $key => $value): ?>
-              <li class="p-facility-thumbnail__item">
+              <li class="p-facility-thumbnail__item js-image-thumbnail">
+                <?php
+                if (empty($value['image_path'])): ?>
+                  <div class="p-facility-thumbnail__alternate-image-text">NO IMAGE</div>
+                <?php
+                endif; ?>
                 <img src="<?php
                 echo sanitize(
                         showFacilityImage($value['image_path'], getAlternateImagePath('./alternateFacilityThumbnails'))
-                ); ?>" class="js-image-thumbnail">
+                ); ?>">
               </li>
             <?php
             endforeach; ?>
@@ -64,10 +74,11 @@ require "header.php";
           else: ?>
             <?php
             for ($i = 0; $i < 3; $i++) : ?>
-              <li class="p-facility-thumbnail__item">
+              <li class="p-facility-thumbnail__item js-image-thumbnail">
+                <div class="p-facility-thumbnail__alternate-image-text">NO IMAGE</div>
                 <img src="<?php
                 echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityThumbnails'))); ?>"
-                     class="js-image-thumbnail">
+                >
               </li>
             <?php
             endfor; ?>
