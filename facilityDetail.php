@@ -54,7 +54,9 @@ require "header.php";
             foreach ($viewData['images'] as $key => $value): ?>
               <li class="p-facility-thumbnail__item">
                 <img src="<?php
-                echo sanitize(showFacilityImage($value['image_path'])); ?>" class="js-image-thumbnail">
+                echo sanitize(
+                        showFacilityImage($value['image_path'], getAlternateImagePath('./alternateFacilityThumbnails'))
+                ); ?>" class="js-image-thumbnail">
               </li>
             <?php
             endforeach; ?>
