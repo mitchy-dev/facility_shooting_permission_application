@@ -93,7 +93,14 @@ if (!empty($_POST)) {
     }
     unset($key, $value);
   }
-  $thumbnailPath = !empty($facilityImagePaths) ? $facilityImagePaths[0] : '';
+  $thumbnail = !empty($facilityImages) ? array_values($facilityImages)[0] : '';
+  $thumbnailPath = keepFilePath(
+          $thumbnail,
+          'common',
+          $dbFacilityData['thumbnail_path'],
+          308,
+          219
+  );
   $prefectureId = $_POST['prefecture_id'];
   $facilityAddress = !empty($_POST['facility_address']) ? $_POST['facility_address'] : '';
   $urlOfFacilityLocationMap = !empty($_POST['url_of_facility_location_map']) ? $_POST['url_of_facility_location_map'] : '';

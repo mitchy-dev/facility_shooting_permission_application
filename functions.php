@@ -286,10 +286,16 @@ function keepInputAndDatabase($key, $dataFetchedFromDatabase = array(), $useGetM
     }
 }
 
-function keepFilePath($file, $errorMessageKey = 'common', $dbData = array())
-{
+function keepFilePath(
+    $file,
+    $errorMessageKey = 'common',
+    $dbData = '',
+    $newWidth = 1440,
+    $newHeight = 1028,
+    $imageQuality = 90
+) {
     if (!empty($file['name'])) {
-        return uploadImage($file, $errorMessageKey);
+        return uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuality);
     } elseif (!empty($dbData)) {
         return $dbData;
     } else {
@@ -711,7 +717,7 @@ function fetchFacilityAndStakeholdersAndImagePaths($facilityId)
 const KIRO_BYTES = 1024;
 const MEGA_BYTES = KIRO_BYTES * 1024;
 //アップロード関数
-function uploadImage($file, $errorMessageKey)
+function uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuality)
 {
     if (isset($file['error']) && is_int($file['error'])) {
         debug('画像のアップロードを開始します');
@@ -734,11 +740,98 @@ function uploadImage($file, $errorMessageKey)
                 throw new RuntimeException('画像形式が未対応です');
             }
 
-            // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し、ファイルを保存する
-            $path = sprintf('uploads/%s%s', sha1_file($file['tmp_name']), image_type_to_extension($type));
-            if (!move_uploaded_file($file['tmp_name'], $path)) {
-                throw new RuntimeException('ファイル保存時にエラーが発生しました');
+            // ファイルの保存先のパスの生成。一意になるようにファイルデータからSHA-1ハッシュを取ってファイル名を決定し、ファイルを保存する
+            $path = sprintf(
+                'uploads/%s%s%s',
+                sha1_file($file['tmp_name']),
+                microtime(),
+                image_type_to_extension($type)
+            );
+            debug('$pathの値' . print_r($path, true));
+
+            // サイズの指定
+            list($originalWidth, $originalHeight) = getimagesize($file['tmp_name']);
+            $newWidth = !empty($newWidth) ? $newWidth : $originalWidth;
+            $newHeight = !empty($newHeight) ? $newHeight : $originalHeight;
+            $newImage = imagecreatetruecolor($newWidth, $newHeight);
+            if (!$newImage) {
+                throw new RuntimeException('エラーが発生しました');
             }
+
+            // 透過処理
+            list($originalWidth, $originalHeight) = getimagesize($file['tmp_name']);
+            if ($type === IMAGETYPE_GIF || $type === IMAGETYPE_PNG) {
+                imagealphablending($newImage, false);
+                imagesavealpha($newImage, true);
+                $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
+                imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
+            }
+
+            //  圧縮前の準備処理
+            switch ($type) {
+                case IMAGETYPE_GIF:
+                    $image = @imagecreatefromgif($file['tmp_name']);
+                    break;
+                case IMAGETYPE_JPEG:
+                    $image = @imagecreatefromjpeg($file['tmp_name']);
+                    break;
+                case IMAGETYPE_PNG:
+                    $image = @imagecreatefrompng($file['tmp_name']);
+                    break;
+                default:
+                    throw new RuntimeException('画像形式が未対応です');
+            }
+            if (!$image) {
+                imagedestroy($newImage);
+                throw new RuntimeException('imagecreatefromjpegに失敗しました');
+            }
+            if (!imagecopyresampled(
+                $newImage,
+                $image,
+                0,
+                0,
+                0,
+                0,
+                $newWidth,
+                $newHeight,
+                $originalWidth,
+                $originalHeight
+            )) {
+                imagedestroy($image);
+                imagedestroy($newImage);
+                throw new RuntimeException('エラーが発生しました');
+            }
+            //  画像の圧縮と保存
+            switch ($type) {
+                case IMAGETYPE_GIF:
+                    if (!imagegif($newImage, $path)) {
+                        imagedestroy($image);
+                        imagedestroy($newImage);
+                        throw new RuntimeException('画像形式が未対応です');
+                    }
+                    break;
+                case IMAGETYPE_JPEG:
+                    if (!imagejpeg($newImage, $path, $imageQuality)) {
+                        imagedestroy($image);
+                        imagedestroy($newImage);
+                        throw new RuntimeException('画像形式が未対応です');
+                    }
+                    break;
+                case IMAGETYPE_PNG:
+                    if (!imagepng($newImage, $path, floor($imageQuality / 10))) {
+                        imagedestroy($image);
+                        imagedestroy($newImage);
+                        throw new RuntimeException('画像形式が未対応です');
+                    }
+                    break;
+                default:
+                    imagedestroy($image);
+                    imagedestroy($newImage);
+                    throw new RuntimeException('画像形式が未対応です');
+            }
+            imagedestroy($image);
+            imagedestroy($newImage);
+
             chmod($path, 0644);
             return $path;
         } catch (RuntimeException $e) {
