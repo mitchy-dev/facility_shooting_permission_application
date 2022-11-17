@@ -292,10 +292,11 @@ function keepFilePath(
     $dbData = '',
     $newWidth = 1440,
     $newHeight = 1028,
-    $imageQuality = 90
+    $imageQuality = 90,
+    $directoryName = 'uploads'
 ) {
     if (!empty($file['name'])) {
-        return uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuality);
+        return uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuality, $directoryName);
     } elseif (!empty($dbData)) {
         return $dbData;
     } else {
@@ -717,7 +718,7 @@ function fetchFacilityAndStakeholdersAndImagePaths($facilityId)
 const KIRO_BYTES = 1024;
 const MEGA_BYTES = KIRO_BYTES * 1024;
 //アップロード関数
-function uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuality)
+function uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuality, $directoryName)
 {
     if (isset($file['error']) && is_int($file['error'])) {
         debug('画像のアップロードを開始します');
@@ -741,10 +742,11 @@ function uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuali
             }
 
             // ファイルの保存先のパスの生成。一意になるようにファイルデータからSHA-1ハッシュを取ってファイル名を決定し、ファイルを保存する
+            $currentTime = rand();
             $path = sprintf(
-                'uploads/%s%s%s',
+                $directoryName . '/%s%s%s',
                 sha1_file($file['tmp_name']),
-                microtime(),
+                $currentTime,
                 image_type_to_extension($type)
             );
             debug('$pathの値' . print_r($path, true));
