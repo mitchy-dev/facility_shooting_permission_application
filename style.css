@@ -865,7 +865,7 @@ strong {
     height: 100%;
     color: var(--color-text-white);
     text-align: center;
-    line-height: 600px;
+    line-height: 800px;
     font-size: 112px;
 }
 
@@ -906,7 +906,7 @@ strong {
     height: 100%;
     color: var(--color-text-white);
     text-align: center;
-    line-height: 100px;
+    line-height: 170px;
     font-size: var(--font-size-md);
 }
 

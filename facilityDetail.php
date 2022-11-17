@@ -39,7 +39,7 @@ require "header.php";
     if (!empty($viewData['images'][0]['image_path'])) {
       echo sanitize($viewData['images'][0]['image_path']);
     } else {
-      echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityThumbnails')));
+      echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityImages')));
     }
     ?>" alt=""
          class="p-facility-image__main js-image-main">
