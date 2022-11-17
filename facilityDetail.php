@@ -28,7 +28,6 @@ require "head.php";
 require "header.php";
 ?>
 
-
   <!--    メイン画像-->
   <div class="p-facility-image__container">
     <?php
@@ -42,13 +41,11 @@ require "header.php";
     } else {
       echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityThumbnails')));
     }
-
     ?>" alt=""
          class="p-facility-image__main js-image-main">
-    <!--    echo sanitize(showFacilityImage($viewData['thumbnail_path'])); ?>" alt="" class="p-facility-image__main">-->
   </div>
-  <main class="l-main">
 
+  <main class="l-main">
     <!--    サムネイル画像-->
     <div class="p-facility-detail__wrapper">
       <div class="p-facility-thumbnail__container">

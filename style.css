@@ -850,7 +850,9 @@ strong {
 /* 海岸詳細のメイン画像
    ----------------------------------------------------------------- */
 .p-facility-image__container {
-    margin: var(--spacing-xs) calc(50% - 50vw);
+    width: 1440px;
+    height: auto;
+    margin-bottom: 16px;
     position: relative;
 }
 
