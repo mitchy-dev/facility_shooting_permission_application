@@ -372,7 +372,7 @@ require "header.php";
                      echo sanitize($i); ?>"
                      accept=".jpg, .peg, .png">
               <input type="hidden" name="max_file_size" value="<?php
-              echo 2 * MEGA_BYTES; ?>">
+              echo 3 * MEGA_BYTES; ?>">
               <img class="c-image-upload__img js-image-preview" src="<?php
               if (!empty($dbFacilityImagePaths[$i])) {
                 echo $dbFacilityImagePaths[$i];
