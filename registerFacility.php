@@ -51,19 +51,23 @@ debug('$dbPriorConsultationsWithCategory:' . print_r($dbPriorConsultationsWithCa
 debug('$dbApplicationDestinationsWithCategory:' . print_r($dbApplicationDestinationsWithCategory, true));
 
 $dbStakeholdersAssociatedWithCategory = fetchStakeholdersAssociatedWithTheFacility($facilityId);
+$dbApplicationDestinations = array();
+$dbPriorConsultations = array();
+
 $dbStakeholdersAssociatedWithCategoryIds = array();
 
 if (!empty($dbStakeholdersAssociatedWithCategory)) {
   foreach ($dbStakeholdersAssociatedWithCategory as $key => $value) {
     if ($value['stakeholder_category_id'] == 1) {
-      $dbPriorConsultaitions[] = $value;
+      $dbPriorConsultations[] = $value;
     } elseif ($value['stakeholder_category_id'] == 2) {
       $dbApplicationDestinations[] = $value;
     }
 
-    if (!empty($dbPriorConsultaitions)) {
+//    入力値保持用に相談先と申請先のidの配列を生成
+    if (!empty($dbPriorConsultations)) {
       $dbStakeholdersAssociatedWithCategoryIds['prior_consultation'] = array_column(
-              $dbPriorConsultaitions,
+              $dbPriorConsultations,
               'stakeholder_id'
       );
     }
@@ -181,10 +185,9 @@ if (!empty($_POST)) {
         }
 
 //        相談先の更新
-//        postがあって、DBと異なる場合　もしくは　postがなくて、DBと異なる場合
-//        両方とも値があって、かつ異なるとき
-        if (empty($priorConsultation) || $priorConsultation != $dbPriorConsultaitions) {
+        if ($priorConsultation != $dbPriorConsultations) {
           debug('相談先の更新をします');
+//          DBが空の場合は削除を実行する必要がない、また、DBのデータがpostと一緒なら実行する必要ない
           $sql = 'delete from facilities_stakeholders where facility_id = :facility_id and stakeholder_category_id = :stakeholder_category_id';
           $data = array(
                   ':facility_id' => $facilityId,
