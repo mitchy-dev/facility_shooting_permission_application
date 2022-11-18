@@ -108,6 +108,9 @@ if (!empty($_POST)) {
   $prefectureId = $_POST['prefecture_id'];
   $facilityAddress = !empty($_POST['facility_address']) ? $_POST['facility_address'] : '';
   $urlOfFacilityLocationMap = !empty($_POST['url_of_facility_location_map']) ? $_POST['url_of_facility_location_map'] : '';
+  $facilityLocation = !empty($_POST['url_of_facility_location_map']) ? extractCoordinatesFromUrl(
+          $_POST['url_of_facility_location_map']
+  ) : '';
   $shootingFee = $_POST['shooting_fee'];
   $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
   $titleOfFacilityInformationPage = !empty($_POST['url_of_facility_information_page']) ? fetchTitleFromURL(
@@ -127,12 +130,13 @@ if (!empty($_POST)) {
       $dbh->beginTransaction();
       if (!empty($dbFacilityData)) {
         debug('海岸の情報を更新します');
-        $sql = 'update facilities set 
+        $sql = "update facilities set 
                       facility_name = :facility_name, 
                       thumbnail_path = :thumbnail_path, 
                       prefecture_id = :prefecture_id, 
                       facility_address = :facility_address, 
                       url_of_facility_location_map = :url_of_facility_location_map,
+                      facility_location = ST_GeomFromText(CONCAT('POINT(',:lat,' ',:lon,')')),
                       shooting_fee = :shooting_fee, 
                       url_of_facility_information_page = :url_of_facility_information_page, 
                       title_of_facility_information_page = :title_of_facility_information_page, 
@@ -141,13 +145,15 @@ if (!empty($_POST)) {
                       published = :published
                     where user_id = :user_id and 
                       facility_id = :facility_id and 
-                      is_deleted = false';
+                      is_deleted = false";
         $data = array(
                 ':facility_name' => $facilityName,
                 ':thumbnail_path' => $thumbnailPath,
                 ':prefecture_id' => $prefectureId,
                 ':facility_address' => $facilityAddress,
                 ':url_of_facility_location_map' => $urlOfFacilityLocationMap,
+                ':lat' => $facilityLocation['lat'],
+                ':lon' => $facilityLocation['lon'],
                 ':shooting_fee' => $shootingFee,
                 ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
                 ':title_of_facility_information_page' => $titleOfFacilityInformationPage,

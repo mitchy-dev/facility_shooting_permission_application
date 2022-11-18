@@ -940,6 +940,18 @@ function fetchTitleFromURL($url)
     }
 }
 
+//URLから座標値を取得
+function extractCoordinatesFromUrl($mapUrl)
+{
+//    https://www.google.co.jp/maps/@35.5856564,139.7164431,16z
+    if (preg_match('/.*google.co.jp\/maps\/.*@(\d{2}.\d+),(\d{3}.\d+),.*/', $mapUrl, $matches) === 1) {
+        $result['lat'] = $matches[1];
+        $result['lon'] = $matches[2];
+        if (!empty($result)) {
+            return $result;
+        }
+    }
+}
 
 
 
