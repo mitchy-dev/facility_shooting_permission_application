@@ -65,7 +65,7 @@ require "header.php";
       <?php
       else: ?>
         <div class="c-alternate-text__container">
-          <p class="c-alternate-text">登録されている海岸はありません</p>
+          <p class="c-alternate-text">下書き中の海岸はありません</p>
         </div>
       <?php
       endif; ?>
