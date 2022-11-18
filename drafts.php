@@ -26,7 +26,7 @@ require "header.php";
       if (!empty($viewData)): ?>
         <?php
         foreach ($viewData as $key => $value): ?>
-          <div class="p-card__layout">
+          <div class="p-card__layout--two-column">
             <div class="p-card">
               <a href="facilityDetail.php?facility_id=<?php
               echo sanitize($value['facility_id']) . appendGetParameter(array('facility_id')) ?>" class="p-card__link"

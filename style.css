@@ -769,7 +769,19 @@ strong {
     min-width: 272px;
 }
 
+.p-card__layout--two-column {
+    float: left;
+    margin-right: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+    width: calc((100% - 16px) / 2);
+    min-width: 272px;
+}
+
 .p-card__layout:nth-child(4n) {
+    margin-right: var(--spacing-none);
+}
+
+.p-card__layout--two-column:nth-child(2n+1) {
     margin-right: var(--spacing-none);
 }
 
