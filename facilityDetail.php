@@ -10,7 +10,7 @@ if (empty($_GET['facility_id']) || !is_numeric($_GET['facility_id'])) {
 }
 $facilityId = !empty($_GET['facility_id']) ? $_GET['facility_id'] : '';
 $viewData = !empty($facilityId) ? fetchFacilityAndStakeholdersAndImagePaths($facilityId) : array();
-if (!empty($facilityId) && empty($viewData)) {
+if ((!empty($facilityId) && empty($viewData)) || ($viewData['published'] === 0 && $viewData['user_id'] != $_SESSION['user_id'])) {
   debug('不正なアクセスのためリダイレクトします');
   redirect('index.php');
 }

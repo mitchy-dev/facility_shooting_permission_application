@@ -101,7 +101,8 @@ if (!empty($_POST)) {
   $thumbnailPath = keepFilePath(
           $thumbnail,
           'common',
-          $dbFacilityData['thumbnail_path'],
+          !empty($dbFacilityData['thumbnail_path']) ?
+                  $dbFacilityData['thumbnail_path'] : '',
           308,
           219
   );
@@ -110,7 +111,7 @@ if (!empty($_POST)) {
   $urlOfFacilityLocationMap = !empty($_POST['url_of_facility_location_map']) ? $_POST['url_of_facility_location_map'] : '';
   $facilityLocation = !empty($_POST['url_of_facility_location_map']) ? extractCoordinatesFromUrl(
           $_POST['url_of_facility_location_map']
-  ) : '';
+  ) : array('lat' => null, 'lng' => null);
   $shootingFee = $_POST['shooting_fee'];
   $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
   $titleOfFacilityInformationPage = !empty($_POST['url_of_facility_information_page']) ? fetchTitleFromURL(
@@ -251,7 +252,7 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
         redirect('facilityDetail.php?facility_id=' . $facilityId);
       } else {
         debug('海岸の情報を登録します');
-        $sql = ' insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, url_of_facility_location_map, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :url_of_facility_location_map, :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :published, :created_at)';
+        $sql = "insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, url_of_facility_location_map, facility_location, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :url_of_facility_location_map, ST_GeomFromText(CONCAT('POINT(',:lat,' ',:lon,')')), :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :published, :created_at)";
         $data = array(
                 ':user_id' => $_SESSION['user_id'],
                 ':facility_name' => $facilityName,
@@ -259,6 +260,8 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
                 ':prefecture_id' => $prefectureId,
                 ':facility_address' => $facilityAddress,
                 ':url_of_facility_location_map' => $urlOfFacilityLocationMap,
+                ':lat' => $facilityLocation['lat'],
+                ':lon' => $facilityLocation['lon'],
                 ':shooting_fee' => $shootingFee,
                 ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
                 ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
@@ -659,9 +662,9 @@ require "header.php";
                 type="submit">
           <?php
           if (!empty($dbFacilityData)) {
-            echo '変更する';
+            echo '変更して公開する';
           } else {
-            echo '登録する';
+            echo '登録して公開する';
           }
           ?>
         </button>
