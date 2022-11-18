@@ -15,6 +15,14 @@ if ((!empty($facilityId) && empty($viewData)) || ($viewData['published'] === 0 &
   redirect('index.php');
 }
 
+if (!empty($viewData['url_of_facility_location_map'])) {
+  $mapUrl = $viewData['url_of_facility_location_map'];
+} elseif (!empty($viewData['X(facility_location)']) && !empty($viewData['Y(facility_location)'])) {
+  $mapUrl = fetchGoogleMapUrl($viewData['X(facility_location)'], $viewData['Y(facility_location)']);
+} else {
+  $mapUrl = '';
+}
+
 //$viewData['facility_name'] = '';
 //$viewData['facility_name_kana'] = '';
 //$viewData['url_of_facility_information_page'] = 'https://www.fta-shonan.jp/';
@@ -83,16 +91,10 @@ require "header.php";
           endif; ?>
         </ul>
       </div>
+
       <!--      編集ボタン-->
       <?php
       if (!empty($_SESSION['user_id']) && $_SESSION['user_id'] === $viewData['user_id']): ?>
-        <!--        <button class="c-button --full-width c-button__secondary u-mb-48">-->
-        <!--          <a href="registerFacility.php?facility_id=--><?php
-//          echo sanitize($facilityId); ?><!--">-->
-        <!--            掲載情報を変更する-->
-        <!--          </a>-->
-        <!--        </button>-->
-
         <a class="c-button --full-width c-button__secondary u-mb-48 u-display-block"
            href="registerFacility.php?facility_id=<?php
            echo sanitize($facilityId) . appendGetParameter(array('facility_id')); ?>">
@@ -115,18 +117,24 @@ require "header.php";
         <ul class="p-facility-detail__list">
           <li class="p-facility-detail__item">
             <img src="img/bx_map.svg" alt="" class="p-facility-detail__icon">
-            <a href="<?php
-            if (!empty($viewData['url_of_facility_location_map'])) {
-              echo sanitize($viewData['url_of_facility_location_map']);
-//              データがあるのでこちらの処理も走っている
-            } elseif (!empty($viewData['X(facility_location)']) && !empty($viewData['Y(facility_location)'])) {
-              echo sanitize(fetchGoogleMapUrl($viewData['X(facility_location)'], $viewData['Y(facility_location)']));
-            }
-            ?>" target="_blank" class="p-facility-detail__text --link">
-              <?php
-              echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
-              ?>
-            </a>
+            <?php
+            if (!empty($mapUrl)): ?>
+              <a href="<?php
+              echo sanitize($mapUrl); ?>" target="_blank" class="p-facility-detail__text --link">
+                <?php
+                echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
+                ?>
+              </a>
+            <?php
+            else: ?>
+              <p class="p-facility-detail__text">
+                <?php
+                echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
+                ?>
+              </p>
+            <?php
+            endif; ?>
+
           </li>
           <li class="p-facility-detail__item">
             <img src="img/information-sharp.svg" alt="" class="p-facility-detail__icon">
