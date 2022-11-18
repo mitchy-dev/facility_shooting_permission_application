@@ -111,7 +111,13 @@ if (!empty($_POST)) {
   $urlOfFacilityLocationMap = !empty($_POST['url_of_facility_location_map']) ? $_POST['url_of_facility_location_map'] : '';
   $facilityLocation = !empty($_POST['url_of_facility_location_map']) ? extractCoordinatesFromUrl(
           $_POST['url_of_facility_location_map']
-  ) : array('lat' => null, 'lng' => null);
+  ) : array();
+  if (empty($facilityLocation) && !empty($dbFacilityData['X(facility_location)'])) {
+    $facilityLocation = array(
+            'lat' => $dbFacilityData['X(facility_location)'],
+            'lon' => $dbFacilityData['Y(facility_location)']
+    );
+  }
   $shootingFee = $_POST['shooting_fee'];
   $urlOfFacilityInformationPage = $_POST['url_of_facility_information_page'];
   $titleOfFacilityInformationPage = !empty($_POST['url_of_facility_information_page']) ? fetchTitleFromURL(

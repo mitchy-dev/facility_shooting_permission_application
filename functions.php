@@ -504,7 +504,7 @@ function fetchFacility($userId, $facilityId)
     debug('海岸の情報を取得します');
     try {
         $dbh = dbConnect();
-        $sql = ' select * from facilities where user_id = :user_id and facility_id = :facility_id and is_deleted = false; ';
+        $sql = 'select facility_id, user_id, facility_name, facility_name_kana, thumbnail_path, prefecture_id, facility_address, url_of_facility_location_map, X(facility_location), Y(facility_location), shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, is_deleted, created_at, updated_at from facilities where user_id = :user_id and facility_id = :facility_id and is_deleted = false';
         $data = array(
             ':user_id' => $userId,
             ':facility_id' => $facilityId
