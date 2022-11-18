@@ -5,7 +5,6 @@ startPageDisplay();
 require "auth.php";
 
 $viewData = fetchListOfRegisteredFacilities($_SESSION['user_id'], false);
-//var_dump($viewData);
 
 endPageDisplay();
 ?>
@@ -27,13 +26,25 @@ require "header.php";
       if (!empty($viewData)): ?>
         <?php
         foreach ($viewData as $key => $value): ?>
-          <div class="p-card__layout --my-page">
+          <div class="p-card__layout">
             <div class="p-card">
               <a href="facilityDetail.php?facility_id=<?php
-              echo sanitize($value['facility_id']); ?>" class="p-card__link">
+              echo sanitize($value['facility_id']) . appendGetParameter(array('facility_id')) ?>" class="p-card__link"
+                 target="_blank">
                 <div class="p-card__head">
+                  <?php
+                  if (empty($value['thumbnail_path'])): ?>
+                    <div class="p-card__alternate-image-text">NO IMAGE</div>
+                  <?php
+                  endif; ?>
                   <img src="<?php
-                  echo showFacilityImage($value['thumbnail_path']); ?>" alt="海岸の写真" class="p-card__img">
+                  echo sanitize(
+                          showFacilityImage(
+                                  $value['thumbnail_path'],
+                                  getAlternateImagePath('./alternateFacilityThumbnails')
+                          )
+                  ); ?>"
+                       alt="海岸の写真" class="p-card__img">
                 </div>
                 <div class="p-card__foot">
                   <div class="p-card__title-container">
@@ -50,6 +61,7 @@ require "header.php";
           </div>
         <?php
         endforeach; ?>
+
       <?php
       else: ?>
         <div class="c-alternate-text__container">
