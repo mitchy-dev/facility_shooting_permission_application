@@ -261,7 +261,7 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
         redirect('facilityDetail.php?facility_id=' . $facilityId);
       } else {
         debug('海岸の情報を登録します');
-        $sql = "insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, url_of_facility_location_map, facility_location, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :url_of_facility_location_map, ST_GeomFromText(CONCAT('POINT(',:lat,' ',:lon,')')), :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :published, :created_at)";
+        $sql = "insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, url_of_facility_location_map, facility_location, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :url_of_facility_location_map, ST_GeomFromText(CONCAT('POINT(',:lat,' ',:lon,')')), :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :published, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :created_at)";
         $data = array(
                 ':user_id' => $_SESSION['user_id'],
                 ':facility_name' => $facilityName,
@@ -274,9 +274,9 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
                 ':shooting_fee' => $shootingFee,
                 ':url_of_facility_information_page' => $urlOfFacilityInformationPage,
                 ':title_of_facility_information_page' => $titleOfFacilityInformationPage,
+                ':published' => $published,
                 ':is_need_consultation_of_shooting' => $isNeedConsultationOfShooting,
                 ':is_need_application_of_shooting' => $isNeedApplicationOfShooting,
-                ':published' => $published,
                 ':created_at' => date('Y-m-d H:i:s'),
         );
         if (empty(queryPost($dbh, $sql, $data))) {
