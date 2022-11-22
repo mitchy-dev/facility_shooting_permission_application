@@ -1,6 +1,13 @@
 <?php
 
 //////////////////////////////////////////////
+//環境変数の読み込み
+//////////////////////////////////////////////
+require 'vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+//////////////////////////////////////////////
 //エラー設定
 //////////////////////////////////////////////
 ini_set('error_reporting', E_ALL);
@@ -229,9 +236,11 @@ function validPassword($value, $key)
 //DB接続
 function dbConnect()
 {
-    $dsn = 'mysql:dbname=facility_shooting_permission_application;host=localhost;charset=utf8mb4';
-    $user = 'root';
-    $password = 'root';
+    $dbName = $_ENV['DB_NAME'];
+    $host = $_ENV['DB_HOST'];
+    $dsn = 'mysql:dbname=' . $dbName . ';host=' . $host . ';charset=utf8mb4';
+    $user = $_ENV['DB_USER'];
+    $password = $_ENV['DB_PASS'];
     $options = array(
         PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
