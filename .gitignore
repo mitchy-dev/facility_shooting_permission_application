@@ -1,6 +1,6 @@
 *.csv
-.env
-php.log
+config/.env
+logs/php.log
 alternateFacilityImages
 alternateFacilityThumbnails
 /img

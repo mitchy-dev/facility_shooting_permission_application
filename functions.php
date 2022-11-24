@@ -4,8 +4,21 @@
 //環境変数の読み込み
 //////////////////////////////////////////////
 require 'vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/config');
 $dotenv->load();
+$appEnv = getenv('APP_ENV');
+
+if ($appEnv === 'production') {
+    $dbName = getenv('DB_NAME');
+    $dbHost = getenv('DB_HOST');
+    $dbUser = getenv('DB_USER');
+    $dbPassword = getenv('DB_PASS');
+} else {
+    $dbName = $_ENV['DB_NAME'];
+    $dbHost = $_ENV['DB_HOST'];
+    $dbUser = $_ENV['DB_USER'];
+    $dbPassword = $_ENV['DB_PASS'];
+}
 
 //////////////////////////////////////////////
 //エラー設定
@@ -13,7 +26,7 @@ $dotenv->load();
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 'On');
 ini_set('log_errors', 'On');
-ini_set('error_log', 'php.log');
+ini_set('error_log', 'logs/php.log');
 
 //////////////////////////////////////////////
 //ログの出力設定
@@ -236,18 +249,22 @@ function validPassword($value, $key)
 //DB接続
 function dbConnect()
 {
-    $dbName = $_ENV['DB_NAME'];
-    $host = $_ENV['DB_HOST'];
-    $dsn = 'mysql:dbname=' . $dbName . ';host=' . $host . ';charset=utf8mb4';
-    $user = $_ENV['DB_USER'];
-    $password = $_ENV['DB_PASS'];
+    global $dbName;
+    global $dbHost;
+    global $dbUser;
+    global $dbPassword;
+//    $dbName = $_ENV['DB_NAME'];
+//    $dbHost = $_ENV['DB_HOST'];
+    $dsn = 'mysql:dbname=' . $dbName . ';host=' . $dbHost . ';charset=utf8mb4';
+//    $dbUser = $_ENV['DB_USER'];
+//    $dbPassword = $_ENV['DB_PASS'];
     $options = array(
         PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     );
 
-    return new PDO($dsn, $user, $password, $options);
+    return new PDO($dsn, $dbUser, $dbPassword, $options);
 }
 
 //クエリ実行
