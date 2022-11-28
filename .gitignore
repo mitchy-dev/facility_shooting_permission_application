@@ -126,3 +126,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+!/vendor/.htaccess
+!/composer.json
+!/composer.lock
