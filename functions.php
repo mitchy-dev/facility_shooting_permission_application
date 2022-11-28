@@ -524,6 +524,24 @@ function fetchStakeholdersWithCategories($userId)
     }
 }
 
+//相談・申請先の件数の取得
+function fetchRegisteredStakeholdersCount($userId)
+{
+    debug('登録した関係者の数を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select count(*) from stakeholders where user_id = :user_id and is_deleted = 0';
+        $data = array(':user_id' => $userId);
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            $result = $sth->fetch();
+            return array_shift($result);
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
 //海岸のデータの取得
 function fetchFacility($userId, $facilityId)
 {
@@ -538,6 +556,25 @@ function fetchFacility($userId, $facilityId)
         $sth = queryPost($dbh, $sql, $data);
         if (!empty($sth)) {
             return $sth->fetch();
+        }
+    } catch (Exception $e) {
+        exceptionHandler($e);
+    }
+}
+
+function fetchRegisteredFacilitiesCount($userId)
+{
+    debug('登録した海岸の数を取得します');
+    try {
+        $dbh = dbConnect();
+        $sql = 'select count(*) from facilities where user_id = :user_id and is_deleted = false';
+        $data = array(
+            ':user_id' => $userId,
+        );
+        $sth = queryPost($dbh, $sql, $data);
+        if (!empty($sth)) {
+            $result = $sth->fetch();
+            return array_shift($result);
         }
     } catch (Exception $e) {
         exceptionHandler($e);

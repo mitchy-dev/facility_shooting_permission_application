@@ -1135,11 +1135,14 @@ strong {
 }
 
 .p-my-page__avatar__container {
-    width: 160px;
-    height: 160px;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+.p-my-page__avatar__container img {
+    width: 120px;
+    height: 120px;
 }
 
 .p-my-page__user-name {

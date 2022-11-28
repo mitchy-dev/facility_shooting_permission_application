@@ -4,7 +4,13 @@ require('functions.php');
 startPageDisplay();
 require "auth.php";
 
+$dbUserData = fetchUserData($_SESSION['user_id']);
+$organization = !empty($dbUserData['organization']) ? $dbUserData['organization'] : '';
+$representativeTitle = !empty($dbUserData['representative_title']) ? $dbUserData['representative_title'] : '';
+$department = !empty($dbUserData['department']) ? $dbUserData['department'] : '';
 
+$registeredFacilitiesCount = fetchRegisteredFacilitiesCount($_SESSION['user_id']);
+$registeredStakeholdersCount = fetchRegisteredStakeholdersCount($_SESSION['user_id']);
 endPageDisplay();
 ?>
 <?php
@@ -22,21 +28,21 @@ require "header.php";
       <h1 class="c-main__title u-text-center"><?php
         echo $pageTitle; ?></h1>
       <div class="p-my-page__avatar__container">
-        <img src="img/member_photo_noimage_thumb.png" alt="">
+        <img src="<?php
+        echo sanitize(showImage($dbUserData['avatar_path'], '/img/user-avatar.png')); ?>" alt="">
       </div>
-      <p class="p-my-page__user-name">茨城県土木事務所</p>
+      <p class="p-my-page__user-name"><?php
+        echo sanitize($organization . $department); ?></p>
       <table class="p-my-mage__number-of-registrations">
         <tr>
           <td>登録した海岸</td>
-          <td>10</td>
+          <td><?php
+            echo sanitize($registeredFacilitiesCount); ?></td>
         </tr>
         <tr>
-          <td>申請先</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td>事前相談先</td>
-          <td>1</td>
+          <td>登録した事前相談・撮影申請先</td>
+          <td><?php
+            echo sanitize($registeredStakeholdersCount); ?></td>
         </tr>
       </table>
 
