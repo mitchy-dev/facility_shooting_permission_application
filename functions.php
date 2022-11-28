@@ -907,7 +907,7 @@ function getAlternateImagePath($directoryPath)
 }
 
 //海岸画像の表示
-function showFacilityImage($path = '', $alternateImagePath)
+function showImage($path = '', $alternateImagePath)
 {
     if (!empty($path)) {
         return $path;

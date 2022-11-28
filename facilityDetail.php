@@ -47,7 +47,7 @@ require "header.php";
     if (!empty($viewData['images'][0]['image_path'])) {
       echo sanitize($viewData['images'][0]['image_path']);
     } else {
-      echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityImages')));
+      echo sanitize(showImage('', getAlternateImagePath('./alternateFacilityImages')));
     }
     ?>" alt=""
          class="p-facility-image__main js-image-main">
@@ -70,7 +70,7 @@ require "header.php";
                 endif; ?>
                 <img src="<?php
                 echo sanitize(
-                        showFacilityImage($value['image_path'], getAlternateImagePath('./alternateFacilityThumbnails'))
+                        showImage($value['image_path'], getAlternateImagePath('./alternateFacilityThumbnails'))
                 ); ?>" class="js-image-thumbnail">
               </li>
             <?php
@@ -82,7 +82,7 @@ require "header.php";
               <li class="p-facility-thumbnail__item">
                 <div class="p-facility-thumbnail__alternate-image-text">NO IMAGE</div>
                 <img src="<?php
-                echo sanitize(showFacilityImage('', getAlternateImagePath('./alternateFacilityThumbnails'))); ?>"
+                echo sanitize(showImage('', getAlternateImagePath('./alternateFacilityThumbnails'))); ?>"
                      class="js-image-thumbnail">
               </li>
             <?php

@@ -122,7 +122,7 @@ require "header.php";
                 endif; ?>
                 <img src="<?php
                 echo sanitize(
-                        showFacilityImage(
+                        showImage(
                                 $value['thumbnail_path'],
                                 getAlternateImagePath('./alternateFacilityThumbnails')
                         )
