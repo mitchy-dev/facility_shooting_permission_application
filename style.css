@@ -1337,3 +1337,45 @@ strong {
     margin-bottom: 8px;
     padding-bottom: 8px;
 }
+
+.about__title-middle {
+    margin-top: 50px;
+    font-size: 24px;
+    /*font-weight: 700;*/
+}
+
+.about__inner {
+}
+
+.about__title-small {
+    margin-top: 25px;
+    font-size: 18px;
+    /*font-weight: 700;*/
+}
+
+.about__lead {
+    margin-top: 10px;
+}
+
+.about__list {
+    margin-top: 5px;
+}
+
+.about__list-item {
+}
+
+.about__list-indent {
+    padding-left: 38px;
+    text-indent: -38px;
+}
+
+.about__list-decimal {
+    margin-top: 10px;
+    margin-left: 18px;
+    list-style-type: decimal;
+}
+
+.about__list-indent-nest {
+    padding-left: 30px;
+    text-indent: -38px;
+}

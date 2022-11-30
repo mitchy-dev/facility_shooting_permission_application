@@ -110,9 +110,9 @@ require "header.php";
 
       <div class="u-mb-24">
         <p class="c-text">
-          <span class="c-text__link --underline">利用規約</span>
+          <span class="c-text__link --underline"><a href="terms.php">利用規約</a></span>
           ・
-          <span class="c-text__link --underline">プライバシーポリシー</span>
+          <span class="c-text__link --underline"><a href="policy.php">プライバシーポリシー</a></span>
           について
         </p></div>
 

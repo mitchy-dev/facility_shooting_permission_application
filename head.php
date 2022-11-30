@@ -12,6 +12,6 @@
   <link rel="stylesheet" href="style.css">
   <title>
     <?php
-    echo $pageTitle; ?>
+    echo $pageTitle . ' | 海岸ロケ'; ?>
   </title>
 </head>
