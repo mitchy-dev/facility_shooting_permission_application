@@ -12,7 +12,7 @@ require "head.php";
 require "header.php";
 ?>
 
-<main class="l-main --home">
+<main class="l-main --home js-lower-header">
   <section class="c-first-view__wrapper">
     <div class="u-block-center">
       <div class="c-first-view__column">
@@ -99,8 +99,8 @@ require "header.php";
   <section class="c-home__block">
     <h2 class="c-home__title">よくあるご質問</h2>
     <div class="c-faq">
-      <p class="c-faq__body">Q：利用料はかかりますか？</p>
-      <p class="c-faq__body">A：無料でご利用いただけます</p>
+      <div class="c-faq__body">Q：利用料はかかりますか？</div>
+      <div class="c-faq__body">A：無料でご利用いただけます</div>
     </div>
     <div class="c-faq">
       <p class="c-faq__body">Q：スマートフォンで見れますか？</p>

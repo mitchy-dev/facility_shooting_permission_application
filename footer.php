@@ -14,6 +14,11 @@
         crossorigin="anonymous"></script>
 <script>
   $(function () {
+    //ヘッダーの高さ分コンテンツを下げる（固定ヘッダー）
+    var height = $('.js-header').outerHeight();
+    $('.js-lower-header').css('margin-top', height);
+
+
     //フッターの固定
     var $footer = $('#footer');
     console.log($footer);
