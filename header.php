@@ -28,7 +28,7 @@
           </a>
         </li>
         <li class="c-header-nav__item c-button c-button__text">
-          <a href="https://www.twitter.com/messages/compose?recipient_id=1513111003638398979">
+          <a href="https://www.twitter.com/messages/compose?recipient_id=1513111003638398979" target="_blank">
             お問い合わせ
           </a>
         </li>
