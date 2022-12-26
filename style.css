@@ -197,6 +197,7 @@ strong {
     padding: 16px calc(80px + 50% - 50vw);
     width: 100%;
     box-shadow: 0px 0px 6px 0px rgb(0 0 0 / 15%);
+    z-index: 1;
 }
 
 .l-main {
@@ -347,7 +348,6 @@ strong {
     cursor: pointer;
     line-height: var(--line-height-normal);
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
     text-align: center;
 }
 
