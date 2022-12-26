@@ -18,7 +18,11 @@ require "header.php";
       <div class="c-first-view__column">
         <h2 class="c-first-view__heading">ロケに合う海岸が<br>すぐに見つかる！</h2>
         <p class="c-first-view__body">写真で一覧 / ロケの申込先がわかる</p>
-        <button class="c-button c-button__ctr">海岸を探す</button>
+        <button class="c-button c-button__ctr">
+          <a href="index.php">
+            海岸を探す
+          </a>
+        </button>
       </div>
       <div class="c-first-view__main-visual">
         <img src="img/MacBook%20Pro%2016%203.png"></img>
@@ -77,7 +81,11 @@ require "header.php";
   </section>
   <section class="c-home__block --bgcolor-blue">
     <h2 class="c-home__title">ぜひご利用ください！</h2>
-    <button class="c-button c-button__ctr">海岸を探す</button>
+    <button class="c-button c-button__ctr">
+      <a href="index.php">
+        海岸を探す
+      </a>
+    </button>
   </section>
   <section class="c-home__block">
     <h2 class="c-home__title">ご利用の流れ</h2>
