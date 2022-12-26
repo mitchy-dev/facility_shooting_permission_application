@@ -187,12 +187,12 @@ strong {
     margin-bottom: 16px;
     background: #ffffff;
     position: relative;
-    position: fixed;
-    top: 0;
-    left: 0;
 }
 
 .l-header.--home {
+    position: fixed;
+    top: 0;
+    left: 0;
     margin: 0 calc(50% - 50vw);
     padding: 16px calc(80px + 50% - 50vw);
     width: 100%;
