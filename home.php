@@ -107,7 +107,7 @@ require "header.php";
       <p class="c-faq__body">A：現在PCのみ対応しております。スマートフォンへの対応は今後行う予定です。</p>
     </div>
   </section>
-  <section class="c-home__block">
+  <section class="c-home__block" id="notification">
     <h2 class="c-home__title">お知らせ</h2>
     <div class="c-notification">
       <span class="c-notification__date">2022.12.27</span>

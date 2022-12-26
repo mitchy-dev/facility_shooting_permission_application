@@ -12,6 +12,26 @@
         </a>
       </div>
       <ul class="c-header-nav">
+        <li class="c-header-nav__item c-button c-button__text">
+          <a href="home.php">
+            ホーム
+          </a>
+        </li>
+        <li class="c-header-nav__item c-button c-button__text">
+          <a href="index.php">
+            サービストップ
+          </a>
+        </li>
+        <li class="c-header-nav__item c-button c-button__text">
+          <a href="home.php#notification">
+            お知らせ
+          </a>
+        </li>
+        <li class="c-header-nav__item c-button c-button__text">
+          <a href="https://www.twitter.com/messages/compose?recipient_id=1513111003638398979">
+            お問い合わせ
+          </a>
+        </li>
         <?php
         if ( empty( $_SESSION['login_limit'] ) ) : ?>
           <li class="c-header-nav__item c-button c-button__text">
