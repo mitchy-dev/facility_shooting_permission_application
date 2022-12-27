@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="ja">
 <head prefix="og:http://ogp.me/ns#">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S17EQER4BX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-S17EQER4BX');
+  </script>
   <!--  OGP設定  -->
   /* 共通 */
   <meta property="og:title" content="ロケに合う海岸が見つかる"/>
