@@ -253,7 +253,7 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
         }
         $dbh->commit();
         $_SESSION['message'] = SUCCESS['UPDATE'];
-        redirect( 'facilityDetail.php?facility_id=' . $facilityId );
+        redirect( 'facilityDetail.php?facility_id=' . sanitize( $facilityId ) );
       } else {
         debug( '海岸の情報を登録します' );
         $sql  = "insert into facilities(user_id, facility_name, thumbnail_path, prefecture_id, facility_address, url_of_facility_location_map, facility_location, shooting_fee, url_of_facility_information_page, title_of_facility_information_page, published, is_need_consultation_of_shooting, is_need_application_of_shooting, created_at) values (:user_id, :facility_name, :thumbnail_path, :prefecture_id, :facility_address, :url_of_facility_location_map, ST_GeomFromText(CONCAT('POINT(',:lat,' ',:lon,')')), :shooting_fee, :url_of_facility_information_page, :title_of_facility_information_page, :published, :is_need_consultation_of_shooting, :is_need_application_of_shooting, :created_at)";
