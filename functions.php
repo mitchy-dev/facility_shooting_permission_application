@@ -313,13 +313,13 @@ function keepInputAndDatabase($key, $dataFetchedFromDatabase = array(), $useGetM
 }
 
 function keepFilePath(
-    $file,
-    $errorMessageKey = 'common',
-    $dbData = '',
-    $newWidth = 1440,
-    $newHeight = 1028,
-    $imageQuality = 90,
-    $directoryName = 'uploads'
+	$file,
+	$errorMessageKey = 'common',
+	$dbData = '',
+	$newWidth = 1440,
+	$newHeight = 1028,
+	$imageQuality = 90,
+	$directoryName = 'uploads'
 ) {
     if (!empty($file['name'])) {
         return uploadImage($file, $errorMessageKey, $newWidth, $newHeight, $imageQuality, $directoryName);
