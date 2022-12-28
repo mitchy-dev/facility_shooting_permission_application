@@ -368,7 +368,7 @@ require "header.php";
           </p>
           <input type="text" name="facility_name" id="facility_name" class="c-input__body <?php
           addErrorClass( 'facility_name' ); ?>" value="<?php
-          echo keepInputAndDatabase( 'facility_name', $dbFacilityData );
+          echo sanitize( keepInputAndDatabase( 'facility_name', $dbFacilityData ) );
           ?>">
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
@@ -392,7 +392,7 @@ require "header.php";
               echo 3 * MEGA_BYTES; ?>">
               <img class="c-image-upload__img js-image-preview" src="<?php
               if ( ! empty( $dbFacilityImagePaths[ $i ] ) ) {
-                echo $dbFacilityImagePaths[ $i ];
+                echo sanitize( $dbFacilityImagePaths[ $i ] );
               } ?>" style="<?php
               if ( ! empty( $dbFacilityImagePaths[ $i ] ) ) {
                 echo 'display:block;';
@@ -443,7 +443,7 @@ require "header.php";
           </p>
           <input type="text" name="facility_address" id="facility_address" class="c-input__body <?php
           addErrorClass( 'facility_address' ); ?>" value="<?php
-          echo keepInputAndDatabase( 'facility_address', $dbFacilityData );
+          echo sanitize( keepInputAndDatabase( 'facility_address', $dbFacilityData ) );
           ?>">
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
@@ -465,7 +465,7 @@ require "header.php";
           <input type="text" name="url_of_facility_location_map" id="url_of_facility_location_map"
                  class="c-input__body <?php
                  addErrorClass( 'facility_address' ); ?>" value="<?php
-          echo keepInputAndDatabase( 'url_of_facility_location_map', $dbFacilityData );
+          echo sanitize( keepInputAndDatabase( 'url_of_facility_location_map', $dbFacilityData ) );
           ?>">
           <!--          <p class="c-input__counter">0/10<j/p>-->
         </div>
@@ -481,7 +481,7 @@ require "header.php";
           </p>
           <input type="text" name="shooting_fee" id="shooting_fee" class="c-input__body <?php
           addErrorClass( 'shooting_fee' ); ?>" value="<?php
-          echo keepInputAndDatabase( 'shooting_fee', $dbFacilityData );
+          echo sanitize( keepInputAndDatabase( 'shooting_fee', $dbFacilityData ) );
           ?>">
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
@@ -501,7 +501,7 @@ require "header.php";
           <input type="text" name="url_of_facility_information_page" id="url_of_facility_information_page"
                  class="c-input__body <?php
                  addErrorClass( 'url_of_facility_information_page' ); ?>" value="<?php
-          echo keepInputAndDatabase( 'url_of_facility_information_page', $dbFacilityData );
+          echo sanitize( keepInputAndDatabase( 'url_of_facility_information_page', $dbFacilityData ) );
           ?>">
           <!--          <p class="c-input__counter">0/10</p>-->
         </div>
