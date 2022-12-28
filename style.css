@@ -156,6 +156,9 @@ body {
     color: var(--color-text-main);
 }
 
+body.--home {
+    font-size: 0;
+}
 
 em {
     font-style: normal;
@@ -1627,7 +1630,7 @@ strong {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
     margin-right: 16px;
-    vertical-align: text-top;
+    vertical-align: text-bottom;
 }
 
 .c-notification__body {

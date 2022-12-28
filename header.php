@@ -1,4 +1,7 @@
-<body>
+<body class="<?php
+if ( basename( $_SERVER['PHP_SELF'] ) === 'home.php' ) {
+  echo '--home';
+} ?>">
 <div class="l-wrapper">
   <header class="l-header <?php
   if ( basename( $_SERVER['PHP_SELF'] ) === 'home.php' ) {
