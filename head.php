@@ -15,7 +15,6 @@
     gtag('config', 'G-S17EQER4BX');
   </script>
   <!--  OGP設定  -->
-  /* 共通 */
   <meta property="og:title" content="ロケに合う海岸が見つかる"/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://kaigan-loca.com"/>
