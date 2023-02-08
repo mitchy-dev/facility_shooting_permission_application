@@ -24,7 +24,7 @@
   <!--  <meta property="og:image:height" content="630"/>-->
   <meta property="og:site_name" content="海岸ロケ"/>
   <meta property="og:description" content="ロケ地探しの面倒を減らす。ロケの申請先が分かる。"/>
-  <meta name="thumbnail" content="https://kaigan-loca.com/img/ogp.png"/>
+  <meta name="thumbnail" content="https://kaigan-loca.com/img/ogp_summary.png"/>
 
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:site" content="@mitchy_dev"/>
@@ -36,6 +36,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="canonical" href="https://kaigan-loca.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;700&display=swap" rel="stylesheet">
