@@ -50,6 +50,32 @@
       }
     })
 
+    //海岸名の重複チェック
+    $('.js-valid-registered').keyup(function () {
+      var $errorMassage = $(this).siblings('.c-input__error-message');
+      var that = $(this);
+
+      $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: 'validRegistered.php',
+        data: {
+          facility_name: $(this).val()
+        }
+      }).then(function (data) {
+        console.log(data);
+        if (data) {
+          if (data.isRegistered) {
+            that.addClass('error');
+            $errorMassage.text(data.msg);
+          } else {
+            that.removeClass('error');
+            $errorMassage.text(data.msg);
+          }
+        }
+      })
+    })
+
     //  フラッシュメッセージ
     var $flashMessage = $('.js-flash-message');
     if ($flashMessage.text().trim() !== '') {

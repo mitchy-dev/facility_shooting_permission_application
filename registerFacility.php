@@ -366,7 +366,7 @@ require "header.php";
             <?php
             echo getErrorMessage( 'facility_name' ); ?>
           </p>
-          <input type="text" name="facility_name" id="facility_name" class="c-input__body <?php
+          <input type="text" name="facility_name" id="facility_name" class="c-input__body js-valid-registered <?php
           addErrorClass( 'facility_name' ); ?>" value="<?php
           echo sanitize( keepInputAndDatabase( 'facility_name', $dbFacilityData ) );
           ?>">
