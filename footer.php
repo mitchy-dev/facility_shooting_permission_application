@@ -49,31 +49,45 @@
 
       }
     })
+    $('.js-valid-required').keyup(function () {
+      var $errorMassage = $(this).siblings('.c-input__error-message');
+
+      if ($(this).val()) {
+        $(this).removeClass('error');
+        $errorMassage.text('');
+        $('.js-disabled-submit').removeAttr('disabled');
+      } else {
+        $(this).addClass('error');
+        $errorMassage.text('入力必須です。');
+        $('.js-disabled-submit').attr('disabled', 'disabled');
+      }
+    })
 
     //海岸名の重複チェック
     $('.js-valid-registered').keyup(function () {
-      var $errorMassage = $(this).siblings('.c-input__error-message');
-      var that = $(this);
+      if ($(this).val().length > 0) {
+        var $errorMassage = $(this).siblings('.c-input__error-message');
+        var that = $(this);
 
-      $.ajax({
-        type: 'post',
-        dataType: 'json',
-        url: 'validRegistered.php',
-        data: {
-          facility_name: $(this).val()
-        }
-      }).then(function (data) {
-        console.log(data);
-        if (data) {
-          if (data.isRegistered) {
-            that.addClass('error');
-            $errorMassage.text(data.msg);
-          } else {
-            that.removeClass('error');
+        $.ajax({
+          type: 'post',
+          dataType: 'json',
+          url: 'validRegistered.php',
+          data: {
+            facility_name: $(this).val()
+          }
+        }).then(function (data) {
+          console.log(data);
+          if (data) {
+            if (data.isRegistered) {
+              that.addClass('error');
+            } else {
+              that.removeClass('error');
+            }
             $errorMassage.text(data.msg);
           }
-        }
-      })
+        })
+      }
     })
 
     //  フラッシュメッセージ

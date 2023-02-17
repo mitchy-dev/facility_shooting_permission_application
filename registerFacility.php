@@ -366,8 +366,9 @@ require "header.php";
             <?php
             echo getErrorMessage( 'facility_name' ); ?>
           </p>
-          <input type="text" name="facility_name" id="facility_name" class="c-input__body js-valid-registered <?php
-          addErrorClass( 'facility_name' ); ?>" value="<?php
+          <input type="text" name="facility_name" id="facility_name"
+                 class="c-input__body js-valid-registered js-valid-required <?php
+                 addErrorClass( 'facility_name' ); ?>" value="<?php
           echo sanitize( keepInputAndDatabase( 'facility_name', $dbFacilityData ) );
           ?>">
           <!--          <p class="c-input__counter">0/10<j/p>-->
@@ -668,7 +669,8 @@ require "header.php";
         </div>
         <!--申請先ここまで-->
 
-        <button class="c-button --full-width c-button__primary u-mb-24" name="published" value="published"
+        <button class="c-button --full-width c-button__primary u-mb-24 js-disabled-submit" name="published"
+                value="published"
                 type="submit">
           <?php
           if ( ! empty( $dbFacilityData ) ) {
@@ -678,10 +680,11 @@ require "header.php";
           }
           ?>
         </button>
-        <button class="c-button --full-width c-button__secondary u-mb-24" name="published" value="" type="submit">
+        <button class="c-button --full-width c-button__secondary u-mb-24 js-disabled-submit" name="published" value=""
+                type="submit">
           下書きに保存する
         </button>
-        <button class="c-button --full-width c-button__text" type="submit">
+        <button class="c-button --full-width c-button__text js-disabled-submit" type="submit">
           削除する
         </button>
       </form>

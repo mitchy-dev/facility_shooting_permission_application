@@ -352,6 +352,11 @@ strong {
     text-align: center;
 }
 
+.c-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .c-button.--full-width {
     width: 100%;
 }
