@@ -184,6 +184,29 @@
       $imageMain.attr('src', $(this).attr('src'));
     })
 
+    //  モーダル
+    $('.js-show-modal').on('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      var modalTarget = $('.js-modal-target');
+      var modalWidth = modalTarget.width();
+      var windowWidth = $(window).width();
+
+      modalTarget.attr('style', 'margin-left:' + (windowWidth / 2 - modalWidth / 2) + 'px');
+
+      $('.js-modal-cover').show();
+      $('.js-modal-target').show();
+
+    })
+
+    $('.js-hide-modal').on('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $('.js-modal-cover').hide();
+      $('.js-modal-target').hide();
+    })
+
 
   });
 </script>

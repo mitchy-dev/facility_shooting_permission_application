@@ -684,12 +684,18 @@ require "header.php";
                 type="submit">
           下書きに保存する
         </button>
-        <button class="c-button --full-width c-button__text js-disabled-submit" type="submit">
+        <button class="c-button --full-width c-button__text js-disabled-submit js-show-modal" type="submit">
           削除する
         </button>
       </form>
     </div>
   </main>
-
+  <div class="c-modal__wrapper js-modal-target">
+    <h2 class="c-modal__title">この海岸を削除しますか？</h2>
+    <p class="c-modal__body">削除すると復活させることはできません。</p>
+    <button class="c-button c-button__warning js-hide-modal">キャンセル</button>
+    <button class="c-button c-button__text --warning u-ml-24">削除する</button>
+  </div>
+  <div class="c-modal__cover js-modal-cover"></div>
 <?php
 require "footer.php"; ?>
