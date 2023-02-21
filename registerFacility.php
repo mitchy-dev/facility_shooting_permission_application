@@ -81,7 +81,7 @@ if ( ! empty( $dbStakeholdersAssociatedWithCategory ) ) {
   }
 }
 //
-if ( ! empty( $_POST ) ) {
+if ( ! empty( $_POST['published'] ) ) {
   debug( 'POST:' . print_r( $_POST, true ) );
 //  debug('FILES:' . print_r($_FILES, true));
   $facilityName   = $_POST['facility_name'];
@@ -121,7 +121,7 @@ if ( ! empty( $_POST ) ) {
   $titleOfFacilityInformationPage = ! empty( $_POST['url_of_facility_information_page'] ) ? fetchTitleFromURL(
           $_POST['url_of_facility_information_page']
   ) : '';
-  $published                      = ! empty( $_POST['published'] ) ? 1 : 0;
+  $published                      = $_POST['published'] === 'published' ? 1 : 0;
   $isNeedConsultationOfShooting   = $_POST['is_need_consultation_of_shooting'];
   $isNeedApplicationOfShooting    = $_POST['is_need_application_of_shooting'];
 
@@ -680,16 +680,19 @@ require "header.php";
           }
           ?>
         </button>
-        <button class="c-button --full-width c-button__secondary u-mb-24 js-disabled-submit" name="published" value=""
+        <button class="c-button --full-width c-button__secondary u-mb-24 js-disabled-submit" name="published"
+                value="unpublished"
                 type="submit">
           下書きに保存する
         </button>
-        <button class="c-button --full-width c-button__text js-disabled-submit js-show-modal" type="submit">
+        <button class="c-button --full-width c-button__text js-disabled-submit js-show-modal" name="delete"
+                value="delete" type="submit">
           削除する
         </button>
       </form>
     </div>
   </main>
+  <!--モーダル-->
   <div class="c-modal__wrapper js-modal-target">
     <h2 class="c-modal__title">この海岸を削除しますか？</h2>
     <p class="c-modal__body">削除すると復活させることはできません。</p>
