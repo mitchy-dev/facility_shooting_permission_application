@@ -114,7 +114,7 @@ const SUCCESS = array(
 	'REGISTERED'             => '登録しました',
 	'UPDATE_STAKEHOLDER'     => '更新しました',
 	'UPDATE'                 => '更新しました',
-	''                       => '',
+	'DELETED'                => '削除しました',
 	''                       => '',
 );
 //エラーメッセージ表示関数

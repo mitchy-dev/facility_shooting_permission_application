@@ -338,6 +338,36 @@ values (:facility_id, :stakeholder_id, :stakeholder_category_id, :created_at)';
   }
 }
 
+if ( ! empty( $_POST['delete'] ) ) {
+  if ( empty( $errorMessages ) || ! empty( $dbFacilityData ) ) {
+    debug( '海岸のデータを削除します' );
+    try {
+      $dbh = dbConnect();
+      $dbh->beginTransaction();
+      $sql              = 'delete from facility_images where facility_id = :facility_id';
+      $data             = array(
+              ':facility_id' => $facilityId,
+      );
+      $sth              = queryPost( $dbh, $sql, $data );
+      $sql              = 'delete from facilities_stakeholders where facility_id = :facility_id';
+      $sth2             = queryPost( $dbh, $sql, $data );
+      $sql              = 'delete from facilities where facility_id = :facility_id and user_id = :user_id and is_deleted = false';
+      $data[':user_id'] = $dbFacilityData['user_id'];
+      $sth3             = queryPost( $dbh, $sql, $data );
+      if ( ! empty( $sth ) && ! empty( $sth2 ) && ! empty( $sth3 ) ) {
+        $dbh->commit();
+        $_SESSION['message'] = SUCCESS['DELETED'];
+        redirect( 'mypage.php' );
+      }
+    } catch ( Exception $e ) {
+      exceptionHandler( $e );
+
+      if ( ! empty( $dbh ) ) {
+        $dbh->rollback();
+      }
+    }
+  }
+}
 
 endPageDisplay();
 ?>
@@ -696,8 +726,10 @@ require "header.php";
   <div class="c-modal__wrapper js-modal-target">
     <h2 class="c-modal__title">この海岸を削除しますか？</h2>
     <p class="c-modal__body">削除すると復活させることはできません。</p>
-    <button class="c-button c-button__warning js-hide-modal">キャンセル</button>
-    <button class="c-button c-button__text --warning u-ml-24">削除する</button>
+    <form method="post">
+      <button class="c-button c-button__warning js-hide-modal">キャンセル</button>
+      <button name="delete" value="delete" type="submit" class="c-button c-button__text --warning u-ml-24">削除する</button>
+    </form>
   </div>
   <div class="c-modal__cover js-modal-cover"></div>
 <?php
