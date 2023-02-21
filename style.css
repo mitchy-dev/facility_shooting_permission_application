@@ -1670,9 +1670,7 @@ strong {
     border-radius: 4px;
     position: fixed;
     top: 40%;
-    /*left: 50%;*/
     z-index: 4;
-    display: none;
 }
 
 .c-modal__title {

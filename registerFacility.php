@@ -723,14 +723,16 @@ require "header.php";
     </div>
   </main>
   <!--モーダル-->
-  <div class="c-modal__wrapper js-modal-target">
-    <h2 class="c-modal__title">この海岸を削除しますか？</h2>
-    <p class="c-modal__body">削除すると復活させることはできません。</p>
-    <form method="post">
-      <button class="c-button c-button__warning js-hide-modal">キャンセル</button>
-      <button name="delete" value="delete" type="submit" class="c-button c-button__text --warning u-ml-24">削除する</button>
-    </form>
+  <div class="c-modal__cover js-modal-cover">
+    <div class="c-modal__wrapper js-modal-target">
+      <h2 class="c-modal__title">この海岸を削除しますか？</h2>
+      <p class="c-modal__body">削除すると復活させることはできません。</p>
+      <form method="post">
+        <button class="c-button c-button__warning js-hide-modal">キャンセル</button>
+        <button name="delete" value="delete" type="submit" class="c-button c-button__text --warning u-ml-24">削除する
+        </button>
+      </form>
+    </div>
   </div>
-  <div class="c-modal__cover js-modal-cover"></div>
 <?php
 require "footer.php"; ?>
