@@ -3,7 +3,7 @@
 ## 概要
 
 海岸に特化したロケ地の検索サービス<br >
-開発は基本を抑えるためにPHPでフルスクラッチ開発<br >
+Web開発の基本を抑えるためにスクラッチで開発(PHP）<br >
 
 現状、レスポンシブ対応していないためPC以外ではレイアウトが崩れます。
 
@@ -45,7 +45,7 @@
 
 <p>
 <a href="https://kaigan-loca.com">
-<img src="https://user-images.githubusercontent.com/103357793/222037744-f0a4d1bc-d968-4f61-9d60-8d1dd53a3c37.png" alt="ER図" />
+<img src="https://user-images.githubusercontent.com/103357793/222044832-e4069eab-a8e0-4039-b242-79029dca28e5.png" alt="ER図" />
 </a>
 </p> 
 
@@ -86,7 +86,7 @@ PHP（スクラッチ）とjQueryで実装<br>
     - DBデータの削除をトランザクションで実行
 - コンテンツ詳細表示
     - 画像スライダー（jQuery）
-        - クロージャを利用し、保守性を向上
+        - クロージャを利用し、保守性を担保
 - コンテンツ一覧機能
     - ページング
     - 表示中の件数表示
