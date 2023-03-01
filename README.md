@@ -18,7 +18,7 @@ Web開発の基本を抑えるためにスクラッチで開発(PHP）<br >
 ### サービストップ
 
 <p>
-<a href="https://kaigan-loca.com">
+<a href="https://kaigan-loca.com/index">
 <img src="https://user-images.githubusercontent.com/103357793/222030523-4aa6f6ae-202b-4c55-89f0-92462fb295c4.png" alt="サービストップ画像" />
 </a>
 </p> 
@@ -44,9 +44,7 @@ Web開発の基本を抑えるためにスクラッチで開発(PHP）<br >
 ## ER図
 
 <p>
-<a href="https://kaigan-loca.com">
 <img src="https://user-images.githubusercontent.com/103357793/222044832-e4069eab-a8e0-4039-b242-79029dca28e5.png" alt="ER図" />
-</a>
 </p> 
 
 ## テーブル
