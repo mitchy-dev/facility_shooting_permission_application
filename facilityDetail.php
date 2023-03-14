@@ -1,24 +1,24 @@
 <?php
 
-require('functions.php');
+require( 'functions.php' );
 startPageDisplay();
 
 //$_GET['facility_id'] = 89;
-if (empty($_GET['facility_id']) || !is_numeric($_GET['facility_id'])) {
-  debug('GETパラメータが有効でないためリダイレクトします');
-  redirect('index.php');
+if ( empty( $_GET['facility_id'] ) || ! is_numeric( $_GET['facility_id'] ) ) {
+  debug( 'GETパラメータが有効でないためリダイレクトします' );
+  redirect( 'index.php' );
 }
-$facilityId = !empty($_GET['facility_id']) ? $_GET['facility_id'] : '';
-$viewData = !empty($facilityId) ? fetchFacilityAndStakeholdersAndImagePaths($facilityId) : array();
-if ((!empty($facilityId) && empty($viewData)) || ($viewData['published'] === 0 && $viewData['user_id'] != $_SESSION['user_id'])) {
-  debug('不正なアクセスのためリダイレクトします');
-  redirect('index.php');
+$facilityId = ! empty( $_GET['facility_id'] ) ? $_GET['facility_id'] : '';
+$viewData   = ! empty( $facilityId ) ? fetchFacilityAndStakeholdersAndImagePaths( $facilityId ) : array();
+if ( ( ! empty( $facilityId ) && empty( $viewData ) ) || ( $viewData['published'] === 0 && $viewData['user_id'] != $_SESSION['user_id'] ) ) {
+  debug( '不正なアクセスのためリダイレクトします' );
+  redirect( 'index.php' );
 }
 
-if (!empty($viewData['url_of_facility_location_map'])) {
+if ( ! empty( $viewData['url_of_facility_location_map'] ) ) {
   $mapUrl = $viewData['url_of_facility_location_map'];
-} elseif (!empty($viewData['X(facility_location)']) && !empty($viewData['Y(facility_location)'])) {
-  $mapUrl = fetchGoogleMapUrl($viewData['X(facility_location)'], $viewData['Y(facility_location)']);
+} elseif ( ! empty( $viewData['X(facility_location)'] ) && ! empty( $viewData['Y(facility_location)'] ) ) {
+  $mapUrl = fetchGoogleMapUrl( $viewData['X(facility_location)'], $viewData['Y(facility_location)'] );
 } else {
   $mapUrl = '';
 }
@@ -38,19 +38,22 @@ require "header.php";
 
   <!--    メイン画像-->
   <div class="p-facility-image__container">
-    <?php
-    if (empty($viewData['images'][0]['image_path'])): ?>
-      <div class="p-facility-image__alternate-image-text">NO IMAGE</div>
-    <?php
-    endif; ?>
-    <img src="<?php
-    if (!empty($viewData['images'][0]['image_path'])) {
-      echo sanitize($viewData['images'][0]['image_path']);
-    } else {
-      echo sanitize(showImage('', getAlternateImagePath('./alternateFacilityImages')));
-    }
-    ?>" alt=""
-         class="p-facility-image__main js-image-main">
+    <ul class="p-facility-image__list">
+      <?php
+      if ( ! empty( $viewData['images'] ) ): ?>
+        <?php
+        foreach ( $viewData['images'] as $key => $value ) : ?>
+          <li class="p-facility-image__item">
+            <img src="<?php
+            echo sanitize( showImage( $value['image_path'],
+                    getAlternateImagePath( './alternateFacilityImages' ) ) ); ?>"
+                 class="p-facility-image__main js-image-main" alt="">
+          </li>
+        <?php
+        endforeach; ?>
+      <?php
+      endif; ?>
+    </ul>
   </div>
 
   <main class="l-main">
@@ -59,18 +62,18 @@ require "header.php";
       <div class="p-facility-thumbnail__container">
         <ul class="p-facility-thumbnail__list">
           <?php
-          if (!empty($viewData['images'])) : ?>
+          if ( ! empty( $viewData['images'] ) ) : ?>
             <?php
-            foreach ($viewData['images'] as $key => $value): ?>
+            foreach ( $viewData['images'] as $key => $value ): ?>
               <li class="p-facility-thumbnail__item">
                 <?php
-                if (empty($value['image_path'])): ?>
+                if ( empty( $value['image_path'] ) ): ?>
                   <div class="p-facility-thumbnail__alternate-image-text">NO IMAGE</div>
                 <?php
                 endif; ?>
                 <img src="<?php
                 echo sanitize(
-                        showImage($value['image_path'], getAlternateImagePath('./alternateFacilityThumbnails'))
+                        showImage( $value['image_path'], getAlternateImagePath( './alternateFacilityThumbnails' ) )
                 ); ?>" class="js-image-thumbnail">
               </li>
             <?php
@@ -78,11 +81,11 @@ require "header.php";
           <?php
           else: ?>
             <?php
-            for ($i = 0; $i < 3; $i++) : ?>
+            for ( $i = 0; $i < 3; $i ++ ) : ?>
               <li class="p-facility-thumbnail__item">
                 <div class="p-facility-thumbnail__alternate-image-text">NO IMAGE</div>
                 <img src="<?php
-                echo sanitize(showImage('', getAlternateImagePath('./alternateFacilityThumbnails'))); ?>"
+                echo sanitize( showImage( '', getAlternateImagePath( './alternateFacilityThumbnails' ) ) ); ?>"
                      class="js-image-thumbnail">
               </li>
             <?php
@@ -94,10 +97,10 @@ require "header.php";
 
       <!--      編集ボタン-->
       <?php
-      if (!empty($_SESSION['user_id']) && $_SESSION['user_id'] === $viewData['user_id']): ?>
+      if ( ! empty( $_SESSION['user_id'] ) && $_SESSION['user_id'] === $viewData['user_id'] ): ?>
         <a class="c-button --full-width c-button__secondary u-mb-48 u-display-block"
            href="registerFacility.php?facility_id=<?php
-           echo sanitize($facilityId) . appendGetParameter(array('facility_id')); ?>">
+           echo sanitize( $facilityId ) . appendGetParameter( array( 'facility_id' ) ); ?>">
           掲載情報を変更する
         </a>
       <?php
@@ -107,10 +110,10 @@ require "header.php";
       <div class="p-facility-detail__container">
         <h1 class="p-facility-detail__title">
           <?php
-          if (!empty($viewData['facility_name']) && !empty($viewData['facility_name_kana'])) {
-            echo sanitize($viewData['facility_name'] . '(' . $viewData['facility_name_kana'] . ')');
-          } elseif (!empty($viewData['facility_name'])) {
-            echo sanitize($viewData['facility_name']);
+          if ( ! empty( $viewData['facility_name'] ) && ! empty( $viewData['facility_name_kana'] ) ) {
+            echo sanitize( $viewData['facility_name'] . '(' . $viewData['facility_name_kana'] . ')' );
+          } elseif ( ! empty( $viewData['facility_name'] ) ) {
+            echo sanitize( $viewData['facility_name'] );
           }
           ?>
         </h1>
@@ -118,18 +121,18 @@ require "header.php";
           <li class="p-facility-detail__item">
             <img src="img/bx_map.svg" alt="" class="p-facility-detail__icon">
             <?php
-            if (!empty($mapUrl)): ?>
+            if ( ! empty( $mapUrl ) ): ?>
               <a href="<?php
-              echo sanitize($mapUrl); ?>" target="_blank" class="p-facility-detail__text --link">
+              echo sanitize( $mapUrl ); ?>" target="_blank" class="p-facility-detail__text --link">
                 <?php
-                echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
+                echo sanitize( $viewData['prefecture_name'] . $viewData['facility_address'] );
                 ?>
               </a>
             <?php
             else: ?>
               <p class="p-facility-detail__text">
                 <?php
-                echo sanitize($viewData['prefecture_name'] . $viewData['facility_address']);
+                echo sanitize( $viewData['prefecture_name'] . $viewData['facility_address'] );
                 ?>
               </p>
             <?php
@@ -139,14 +142,14 @@ require "header.php";
           <li class="p-facility-detail__item">
             <img src="img/information-sharp.svg" alt="" class="p-facility-detail__icon">
             <a href="<?php
-            if (!empty($viewData['url_of_facility_information_page'])) {
-              echo sanitize($viewData['url_of_facility_information_page']);
+            if ( ! empty( $viewData['url_of_facility_information_page'] ) ) {
+              echo sanitize( $viewData['url_of_facility_information_page'] );
             } ?>" class="p-facility-detail__text --link">
               <?php
-              if (!empty($viewData['title_of_facility_information_page'])) {
-                echo sanitize($viewData['title_of_facility_information_page']);
-              } elseif (!empty($viewData['url_of_facility_information_page'])) {
-                echo sanitize($viewData['url_of_facility_information_page']);
+              if ( ! empty( $viewData['title_of_facility_information_page'] ) ) {
+                echo sanitize( $viewData['title_of_facility_information_page'] );
+              } elseif ( ! empty( $viewData['url_of_facility_information_page'] ) ) {
+                echo sanitize( $viewData['url_of_facility_information_page'] );
               } ?>
             </a>
           </li>
@@ -154,8 +157,8 @@ require "header.php";
             <img src="img/majesticons_yen-circle-line.svg" alt="" class="p-facility-detail__icon">
             <p class="p-facility-detail__text">
               <?php
-              if (!isset($viewData['shooting_fee'])) {
-                echo sanitize($viewData['shooting_fee']);
+              if ( ! isset( $viewData['shooting_fee'] ) ) {
+                echo sanitize( $viewData['shooting_fee'] );
               }
               ?>
             </p>
@@ -166,11 +169,11 @@ require "header.php";
       <!--相談先-->
       <div class="p-facility-detail__container">
         <h2 class="p-facility-detail__sub-title">撮影の事前相談<?php
-          if (!empty($viewData['prior_consultations'])) {
-            echo '（' . count($viewData['prior_consultations']) . '件）';
+          if ( ! empty( $viewData['prior_consultations'] ) ) {
+            echo '（' . count( $viewData['prior_consultations'] ) . '件）';
           } ?></h2>
         <?php
-        switch ($viewData['is_need_consultation_of_shooting']) {
+        switch ( $viewData['is_need_consultation_of_shooting'] ) {
           case 0:
             ?>
             <div class="c-alternate-text__container">
@@ -179,25 +182,25 @@ require "header.php";
             <?php
             break;
           case 1:
-            if (!empty($viewData['prior_consultations'])) :
+            if ( ! empty( $viewData['prior_consultations'] ) ) :
               ?>
               <?php
-              foreach ($viewData['prior_consultations'] as $key => $value): ?>
+              foreach ( $viewData['prior_consultations'] as $key => $value ): ?>
                 <!--              この部分で相談先情報を表示-->
                 <div class="p-facility-stakeholder__container">
                   <div class="p-facility-stakeholder__title-container">
                     <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
                     <h3 class="p-facility-stakeholder__title --link">
                       <a href="<?php
-                      if (!empty($value['url_of_department_page'])) {
-                        echo sanitize($value['url_of_department_page']);
+                      if ( ! empty( $value['url_of_department_page'] ) ) {
+                        echo sanitize( $value['url_of_department_page'] );
                       } ?>" target="_blank">
                         <?php
-                        if (!empty($value['organization'])) {
-                          echo sanitize($value['organization']);
+                        if ( ! empty( $value['organization'] ) ) {
+                          echo sanitize( $value['organization'] );
                         }
-                        if (!empty($value['department'])) {
-                          echo sanitize(' ' . $value['department']);
+                        if ( ! empty( $value['department'] ) ) {
+                          echo sanitize( ' ' . $value['department'] );
                         }
                         ?>
                       </a>
@@ -209,12 +212,12 @@ require "header.php";
                       <img src="/img/akar-icons_phone.svg" alt="" class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="tel:<?php
-                        if (!empty($value['phone_number'])) {
-                          echo sanitize($value['phone_number']);
+                        if ( ! empty( $value['phone_number'] ) ) {
+                          echo sanitize( $value['phone_number'] );
                         } ?>">
                           <?php
-                          if (!empty($value['phone_number'])) {
-                            echo sanitize($value['phone_number']);
+                          if ( ! empty( $value['phone_number'] ) ) {
+                            echo sanitize( $value['phone_number'] );
                           } ?>
                         </a>
                       </p>
@@ -224,12 +227,12 @@ require "header.php";
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="mailto:<?php
-                        if (!empty($value['email'])) {
-                          echo sanitize($value['email']);
+                        if ( ! empty( $value['email'] ) ) {
+                          echo sanitize( $value['email'] );
                         } ?>">
                           <?php
-                          if (!empty($value['email'])) {
-                            echo sanitize($value['email']);
+                          if ( ! empty( $value['email'] ) ) {
+                            echo sanitize( $value['email'] );
                           } ?>
                         </a>
                       </p>
@@ -239,8 +242,8 @@ require "header.php";
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="<?php
-                        if (!empty($value['url_of_contact_form'])) {
-                          echo sanitize($value['url_of_contact_form']);
+                        if ( ! empty( $value['url_of_contact_form'] ) ) {
+                          echo sanitize( $value['url_of_contact_form'] );
                         } ?>" target="_blank">
                           問い合わせフォーム
                         </a>
@@ -280,11 +283,11 @@ require "header.php";
       <!--      撮影許可-->
       <div class="p-facility-detail__container">
         <h2 class="p-facility-detail__sub-title">撮影申請先<?php
-          if (!empty($viewData['application_destinations'])) {
-            echo '（' . count($viewData['application_destinations']) . '件）';
+          if ( ! empty( $viewData['application_destinations'] ) ) {
+            echo '（' . count( $viewData['application_destinations'] ) . '件）';
           } ?></h2>
         <?php
-        switch ($viewData['is_need_application_of_shooting']) {
+        switch ( $viewData['is_need_application_of_shooting'] ) {
           case 0:
             ?>
             <div class="c-alternate-text__container">
@@ -293,25 +296,25 @@ require "header.php";
             <?php
             break;
           case 1:
-            if (!empty($viewData['application_destinations'])):
+            if ( ! empty( $viewData['application_destinations'] ) ):
               ?>
               <?php
-              foreach ($viewData['application_destinations'] as $key => $value): ?>
+              foreach ( $viewData['application_destinations'] as $key => $value ): ?>
                 <!--              申請先の表示箇所-->
                 <div class="p-facility-stakeholder__container">
                   <div class="p-facility-stakeholder__title-container">
                     <img src="img/ooui_user-avatar.svg" alt="" class="p-facility-stakeholder__title-icon">
                     <h3 class="p-facility-stakeholder__title --link">
                       <a href="<?php
-                      if (!empty($value['url_of_department_page'])) {
-                        echo sanitize($value['url_of_department_page']);
+                      if ( ! empty( $value['url_of_department_page'] ) ) {
+                        echo sanitize( $value['url_of_department_page'] );
                       } ?>" target="_blank">
                         <?php
-                        if (!empty($value['organization'])) {
-                          echo sanitize($value['organization']);
+                        if ( ! empty( $value['organization'] ) ) {
+                          echo sanitize( $value['organization'] );
                         }
-                        if (!empty($value['department'])) {
-                          echo sanitize(' ' . $value['department']);
+                        if ( ! empty( $value['department'] ) ) {
+                          echo sanitize( ' ' . $value['department'] );
                         }
                         ?>
                       </a>
@@ -324,14 +327,14 @@ require "header.php";
                       <img src="/img/information-sharp.svg" alt="" class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="<?php
-                        if (!empty($value['url_of_shooting_application_guide'])) {
-                          echo sanitize($value['url_of_shooting_application_guide']);
+                        if ( ! empty( $value['url_of_shooting_application_guide'] ) ) {
+                          echo sanitize( $value['url_of_shooting_application_guide'] );
                         } ?>" target="_blank">案内：
                           <?php
-                          if (!empty($value['title_of_shooting_application_guide'])) {
-                            echo sanitize($value['title_of_shooting_application_guide']);
-                          } elseif (!empty($value['url_of_shooting_application_guide'])) {
-                            echo sanitize($value['url_of_shooting_application_guide']);
+                          if ( ! empty( $value['title_of_shooting_application_guide'] ) ) {
+                            echo sanitize( $value['title_of_shooting_application_guide'] );
+                          } elseif ( ! empty( $value['url_of_shooting_application_guide'] ) ) {
+                            echo sanitize( $value['url_of_shooting_application_guide'] );
                           }
                           ?>
                         </a>
@@ -342,8 +345,8 @@ require "header.php";
                       <img src="/img/emojione-monotone_japanese-application-button.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text">方法：<?php
-                        if (!empty($value['type_of_application_method'])) {
-                          echo sanitize($value['type_of_application_method']);
+                        if ( ! empty( $value['type_of_application_method'] ) ) {
+                          echo sanitize( $value['type_of_application_method'] );
                         } ?></p>
                     </li>
                     <li class="p-facility-stakeholder__item">
@@ -351,16 +354,16 @@ require "header.php";
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="<?php
-                        echo sanitize($value['url_of_application_format']); ?>" target="_blank">様式：リンク先の「<?php
-                          echo sanitize($value['title_of_application_format']); ?>」</a></p>
+                        echo sanitize( $value['url_of_application_format'] ); ?>" target="_blank">様式：リンク先の「<?php
+                          echo sanitize( $value['title_of_application_format'] ); ?>」</a></p>
                     </li>
                     <li class="p-facility-stakeholder__item">
                       <img src="/img/fluent_calendar-clock-24-regular.svg" alt=""
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text">期限：
                         <?php
-                        if (!empty($value['application_deadline'])) {
-                          echo sanitize($value['application_deadline']);
+                        if ( ! empty( $value['application_deadline'] ) ) {
+                          echo sanitize( $value['application_deadline'] );
                         } ?>
                       </p>
                     </li>
@@ -371,12 +374,12 @@ require "header.php";
                       <img src="/img/akar-icons_phone.svg" alt="" class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="tel:<?php
-                        if (!empty($value['phone_number'])) {
-                          echo sanitize($value['phone_number']);
+                        if ( ! empty( $value['phone_number'] ) ) {
+                          echo sanitize( $value['phone_number'] );
                         } ?>">
                           <?php
-                          if (!empty($value['phone_number'])) {
-                            echo sanitize($value['phone_number']);
+                          if ( ! empty( $value['phone_number'] ) ) {
+                            echo sanitize( $value['phone_number'] );
                           } ?>
                         </a>
                       </p>
@@ -386,12 +389,12 @@ require "header.php";
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="mailto:<?php
-                        if (!empty($value['email'])) {
-                          echo sanitize($value['email']);
+                        if ( ! empty( $value['email'] ) ) {
+                          echo sanitize( $value['email'] );
                         } ?>">
                           <?php
-                          if (!empty($value['email'])) {
-                            echo sanitize($value['email']);
+                          if ( ! empty( $value['email'] ) ) {
+                            echo sanitize( $value['email'] );
                           } ?>
                         </a>
                       </p>
@@ -401,8 +404,8 @@ require "header.php";
                            class="p-facility-stakeholder__item-icon">
                       <p class="p-facility-stakeholder__item-text --link">
                         <a href="<?php
-                        if (!empty($value['url_of_contact_form'])) {
-                          echo sanitize($value['url_of_contact_form']);
+                        if ( ! empty( $value['url_of_contact_form'] ) ) {
+                          echo sanitize( $value['url_of_contact_form'] );
                         } ?>" target="_blank">
                           問い合わせフォーム
                         </a>

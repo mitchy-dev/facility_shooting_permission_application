@@ -903,6 +903,17 @@ strong {
     height: auto;
     margin-bottom: 16px;
     position: relative;
+    overflow: hidden;
+}
+
+.p-facility-image__list {
+    /*jQueryで動的に指定する*/
+    width: 4320px;
+}
+
+.p-facility-image__item {
+    width: 1440px;
+    float: left;
 }
 
 .p-facility-image__alternate-image-text {
@@ -920,7 +931,7 @@ strong {
 
 .p-facility-image__main {
     width: 100%;
-    /*margin: var(--spacing-xs) calc(50% - 50vw);*/
+    /*画面の幅の変更に対応できないので、jQueryで幅を指定する*/
     height: auto;
 }
 
@@ -1699,3 +1710,4 @@ strong {
     display: none;
     z-index: 3;
 }
+
