@@ -1711,3 +1711,72 @@ strong {
     z-index: 3;
 }
 
+/*スライダー*/
+.slider__arrow {
+    position: relative;
+    display: inline-block;
+    padding: 0 0 0 16px;
+    color: #000;
+    vertical-align: middle;
+    text-decoration: none;
+    font-size: 15px;
+    top: 50%;
+}
+
+.slider__arrow::before,
+.slider__arrow::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    content: "";
+    vertical-align: middle;
+}
+
+.slider__arrow-body::before {
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 20%);
+}
+
+.slider__arrow-body::after {
+    left: 15px;
+    width: 8px;
+    height: 8px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.slider__arrow-body--right::after {
+    border-top: 2px solid #fff;
+    border-right: 2px solid #fff;
+}
+
+.slider__arrow-body--left::after {
+    border-bottom: 2px solid #fff;
+    border-left: 2px solid #fff;
+    /*left: 16px;*/
+}
+
+.slider__control {
+    position: relative;
+    height: 1028px;
+}
+
+.slider__control-item {
+    position: absolute;
+    display: block;
+    top: 50%;
+    right: 10%;
+}
+
+.slider__control-item.--right {
+    right: 10%;
+}
+
+.slider__control-item.--left {
+    left: 10%;
+}

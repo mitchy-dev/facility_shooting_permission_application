@@ -54,6 +54,14 @@ require "header.php";
       <?php
       endif; ?>
     </ul>
+    <ul class="slider__control">
+      <li class="slider__control-item --right">
+        <button type="button" class="slider__arrow slider__arrow-body slider__arrow-body--right"></button>
+      </li>
+      <li class="slider__control-item --left">
+        <button type="button" class="slider__arrow slider__arrow-body slider__arrow-body--left"></button>
+      </li>
+    </ul>
   </div>
 
   <main class="l-main">
