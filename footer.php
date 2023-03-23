@@ -204,6 +204,59 @@
       // $('.js-modal-target').hide();
     })
 
+    //  画像スライダー
+    // 必要な変数
+    // カウンター
+    var counter = 1;
+    if (counter === 1) {
+      $('.js-slider-prev').hide();
+    }
+
+    // スライド一枚の幅
+    var slideWidth = $('.js-slider-item').width();
+    // スライドの枚数
+    var totalNumberOfSlides = $('.js-slider-item').length;
+    // コンテナ幅
+    var sliderContainerWidth = slideWidth * totalNumberOfSlides;
+    // コンテナのDOM
+    var $sliderContainer = $('.js-slider-container');
+    var duration = 300;
+
+    $sliderContainer.width(slideWidth * totalNumberOfSlides);
+
+    $('.js-slider-next').on('click', function () {
+      if (counter < totalNumberOfSlides) {
+        //  スライダーの帯を移動させる
+        $sliderContainer.animate({
+          left: '-=' + slideWidth + 'px'
+        }, duration);
+        counter++;
+        console.log(counter);
+      }
+      if (counter >= totalNumberOfSlides) {
+        $(this).hide();
+      }
+      if (counter > 1) {
+        $('.js-slider-prev').show();
+
+      }
+    });
+
+    $('.js-slider-prev').on('click', function () {
+      if (counter > 1) {
+        $sliderContainer.animate({
+          left: '+=' + slideWidth + 'px'
+        }, duration);
+        counter--;
+        console.log(counter);
+      }
+      if (counter < totalNumberOfSlides) {
+        $('.js-slider-next').show();
+      }
+      if (counter === 1) {
+        $(this).hide();
+      }
+    });
 
   });
 </script>

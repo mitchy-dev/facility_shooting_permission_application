@@ -907,8 +907,7 @@ strong {
 }
 
 .p-facility-image__list {
-    /*jQueryで動的に指定する*/
-    width: 4320px;
+    position: relative;
 }
 
 .p-facility-image__item {
@@ -1740,6 +1739,7 @@ strong {
     -webkit-border-radius: 50%;
     border-radius: 50%;
     background: rgba(0, 0, 0, 20%);
+    z-index: 5;
 }
 
 .slider__arrow-body::after {

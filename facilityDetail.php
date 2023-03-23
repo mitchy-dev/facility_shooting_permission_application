@@ -38,12 +38,12 @@ require "header.php";
 
   <!--    メイン画像-->
   <div class="p-facility-image__container">
-    <ul class="p-facility-image__list">
+    <ul class="p-facility-image__list js-slider-container">
       <?php
       if ( ! empty( $viewData['images'] ) ): ?>
         <?php
         foreach ( $viewData['images'] as $key => $value ) : ?>
-          <li class="p-facility-image__item">
+          <li class="p-facility-image__item js-slider-item">
             <img src="<?php
             echo sanitize( showImage( $value['image_path'],
                     getAlternateImagePath( './alternateFacilityImages' ) ) ); ?>"
@@ -56,10 +56,11 @@ require "header.php";
     </ul>
     <ul class="slider__control">
       <li class="slider__control-item --right">
-        <button type="button" class="slider__arrow slider__arrow-body slider__arrow-body--right"></button>
+        <button type="button"
+                class="slider__arrow slider__arrow-body slider__arrow-body--right js-slider-next"></button>
       </li>
       <li class="slider__control-item --left">
-        <button type="button" class="slider__arrow slider__arrow-body slider__arrow-body--left"></button>
+        <button type="button" class="slider__arrow slider__arrow-body slider__arrow-body--left js-slider-prev"></button>
       </li>
     </ul>
   </div>
