@@ -210,6 +210,11 @@
       無名関数で囲むため、slider()を実行しないと、変数定義を含め中の処理が実行されない
       即時関数は関数定義、関数実行を記述するのを(function(){})()と記述することで簡略化している
 
+      スライダーの例では実感しづらいが、即時実行以外の場面で使いたい関数は
+      returnで返すことで、色々な場面で使えるようになる。
+      例えば、ユーザーの状態を取得する処理を関数として返しておけば、
+      いつでも使えるので便利
+
      */
     var slider = (function () {
       var counter = 1;
@@ -222,42 +227,51 @@
       var $sliderContainer = $('.js-slider-container');
       var duration = 300;
 
-      $sliderContainer.width(sliderContainerWidth);
-      $('.js-slider-next').on('click', function () {
-        if (counter < totalNumberOfSlides) {
-          //  スライダーの帯を移動させる
-          $sliderContainer.animate({
-            left: '-=' + slideWidth + 'px'
-          }, duration);
-          counter++;
-          console.log(counter);
-        }
-        if (counter >= totalNumberOfSlides) {
-          $(this).hide();
-        }
-        if (counter > 1) {
-          $('.js-slider-prev').show();
+      return {
+        slideNext: function () {
+          if (counter < totalNumberOfSlides) {
+            //  スライダーの帯を移動させる
+            $sliderContainer.animate({
+              left: '-=' + slideWidth + 'px'
+            }, duration);
+            counter++;
+          }
+          if (counter >= totalNumberOfSlides) {
+            $('.js-slider-next').hide();
+          }
+          if (counter > 1) {
+            $('.js-slider-prev').show();
+          }
+        },
+        slidePrev: function () {
+          if (counter > 1) {
+            $sliderContainer.animate({
+              left: '+=' + slideWidth + 'px'
+            }, duration);
+            counter--;
+          }
+          if (counter < totalNumberOfSlides) {
+            $('.js-slider-next').show();
+          }
+          if (counter === 1) {
+            $('.js-slider-prev').hide();
+          }
+        },
+        init: function () {
+          $sliderContainer.width(sliderContainerWidth);
+          var that = this;
 
+          $('.js-slider-next').on('click', function () {
+            that.slideNext();
+          });
+          $('.js-slider-prev').on('click', function () {
+            that.slidePrev();
+          });
         }
-      });
+      }
 
-      $('.js-slider-prev').on('click', function () {
-        if (counter > 1) {
-          $sliderContainer.animate({
-            left: '+=' + slideWidth + 'px'
-          }, duration);
-          counter--;
-          console.log(counter);
-        }
-        if (counter < totalNumberOfSlides) {
-          $('.js-slider-next').show();
-        }
-        if (counter === 1) {
-          $(this).hide();
-        }
-      });
-    })();
-
+    }());
+    slider.init();
   });
 </script>
 
