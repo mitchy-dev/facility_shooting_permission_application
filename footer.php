@@ -217,61 +217,70 @@
 
      */
     var slider = (function () {
-      var counter = 1;
-      if (counter === 1) {
-        $('.js-slider-prev').hide();
-      }
-      var slideWidth = $('.js-slider-item').width();
-      var totalNumberOfSlides = $('.js-slider-item').length;
-      var sliderContainerWidth = slideWidth * totalNumberOfSlides;
-      var $sliderContainer = $('.js-slider-container');
-      var duration = 300;
+      //コンテナ幅をスライド幅＊スライド数にする
+      var $container = $('.js-slider-container');
+      var $slide = $('.js-slider-item');
+      var slideWidth = $slide.width();
+      var slideLength = $slide.length;
+      var DURATION = 300;
 
+      var counter = 1;
+      var $prev = $('.js-slider-prev');
+      var $next = $('.js-slider-next');
+
+      //初期化
       return {
-        slideNext: function () {
-          if (counter < totalNumberOfSlides) {
-            //  スライダーの帯を移動させる
-            $sliderContainer.animate({
+        next: function () {
+          if (counter < slideLength) {
+            $container.animate({
               left: '-=' + slideWidth + 'px'
-            }, duration);
+            }, DURATION)
             counter++;
-          }
-          if (counter >= totalNumberOfSlides) {
-            $('.js-slider-next').hide();
-          }
-          if (counter > 1) {
-            $('.js-slider-prev').show();
+            console.log(counter);
           }
         },
-        slidePrev: function () {
+        prev: function () {
           if (counter > 1) {
-            $sliderContainer.animate({
+            $container.animate({
               left: '+=' + slideWidth + 'px'
-            }, duration);
-            counter--;
+            }, DURATION)
+            console.log('prev' + counter);
+            --counter;
+            console.log(counter);
           }
-          if (counter < totalNumberOfSlides) {
-            $('.js-slider-next').show();
-          }
+        },
+        toggleControlButtonDisplay: function () {
           if (counter === 1) {
-            $('.js-slider-prev').hide();
+            $prev.hide();
+          }
+          if (1 < counter < slideLength) {
+            $prev.show();
+            $next.show();
+          }
+          if (counter === slideLength) {
+            $next.hide();
           }
         },
         init: function () {
-          $sliderContainer.width(sliderContainerWidth);
+          $prev.hide();
+          $container.width(slideWidth * slideLength);
           var that = this;
 
-          $('.js-slider-next').on('click', function () {
-            that.slideNext();
+          $next.on('click', function () {
+            that.next();
+            that.toggleControlButtonDisplay();
           });
-          $('.js-slider-prev').on('click', function () {
-            that.slidePrev();
+
+          $prev.on('click', function () {
+            that.toggleControlButtonDisplay();
+            that.prev();
           });
         }
       }
-
     }());
     slider.init();
+
+
   });
 </script>
 
