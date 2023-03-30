@@ -17,7 +17,7 @@ if ( ! empty( $_POST ) ) {
 				'isRegistered' => false,
 				'msg'          => '',
 			), JSON_UNESCAPED_UNICODE );
-		} else {
+		} else { //ここにセッションに保存した元の海岸名を除外する条件を入れる
 			echo json_encode( array(
 				'isRegistered' => true,
 				'msg'          => '既に登録されています',
