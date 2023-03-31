@@ -2,27 +2,25 @@ const gulp = require('gulp');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
-const uglify = require('gulp-uglify');
 const sourcemaps = require('gulp-sourcemaps');
-const babelify = require('babelify');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
 
-gulp.task('js', function () {
-    return browserify({
-        entries: './src/js/app.js',
-        debug: true,
-    })
-        // .transform(babelify, {presets: ['@babel/preset-env']})
+function browserifyTask() {
+    return browserify({entries: 'src/js/app.js', debug: true})
+        // .transform('babelify', {presets: ['@babel/preset-env']})
         .bundle()
-        .pipe(source('bundle.js'))
+        .pipe(source('app.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(rename({suffix: '.min'}))
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./dist/js/'));
-});
+        .pipe(gulp.dest('public/js'));
+}
 
-gulp.task('watch', function () {
-    gulp.watch('./src/js/**/*.js', gulp.series('js'));
-});
+function watch() {
+    gulp.watch('src/js/**/*.js', browserifyTask);
+}
 
-gulp.task('default', gulp.series('js', 'watch'));
+exports.default = gulp.series(browserifyTask, watch);
