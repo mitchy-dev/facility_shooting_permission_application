@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 $(function () {
     //ヘッダーの高さ分コンテンツを下げる（固定ヘッダー）
     var height = $('.js-header').outerHeight();
