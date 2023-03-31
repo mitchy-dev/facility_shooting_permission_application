@@ -40,8 +40,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="destyle.css">
-  <!--  <link rel="stylesheet" href="style.css">-->
+  <link rel="stylesheet" href="/dist/css/destyle.css">
   <link rel="stylesheet" href="/dist/css/style.css">
   <title>
     <?php
