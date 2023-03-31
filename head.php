@@ -42,7 +42,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="destyle.css">
   <!--  <link rel="stylesheet" href="style.css">-->
-  <link rel="stylesheet" href="/dist/css/bundle.css">
+  <link rel="stylesheet" href="/dist/css/style.css">
   <title>
     <?php
     echo $pageTitle . ' | 海岸ロケ'; ?>

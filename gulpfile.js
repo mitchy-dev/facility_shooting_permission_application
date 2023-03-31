@@ -8,7 +8,13 @@ const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 
 //CSSのビルドに必要なパッケージ
+const cleanCSS = require('gulp-clean-css');
 
+function minifyCSS() {
+    return gulp.src('src/css/**/*.css')
+        .pipe(cleanCSS())
+        .pipe(gulp.dest('dist/css'));
+}
 
 function browserifyTask() { //タスクの関数を定義
     return browserify({entries: 'src/js/app.js', debug: true})
@@ -20,11 +26,13 @@ function browserifyTask() { //タスクの関数を定義
         .pipe(rename({suffix: '.min'})) //ファイル名に.minを追加
         .pipe(uglify()) //JavaScriptを圧縮
         .pipe(sourcemaps.write('.')) //sourceマップを書き出し
-        .pipe(gulp.dest('public/js')); //ファイルに出力
+        .pipe(gulp.dest('dist/js')); //ファイルに出力
 }
 
 function watch() {
     gulp.watch('src/js/**/*.js', browserifyTask); //監視対象のパスを指定、変更あれば指定のタスクを実行
+    gulp.watch('src/css/**/*.css', minifyCSS);
 }
 
-exports.default = gulp.series(browserifyTask, watch); //デフォルトタスクを定義
+exports.default = gulp.series(browserifyTask, minifyCSS, watch); //デフォルトタスクを定義
+
