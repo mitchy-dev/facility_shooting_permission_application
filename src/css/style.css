@@ -350,6 +350,12 @@ strong {
     line-height: var(--line-height-normal);
     font-size: var(--font-size-md);
     text-align: center;
+    transition: all .2s ease;
+}
+
+.c-button:hover {
+    box-shadow: 0 5px 8px 2px rgba(0, 0, 0, .14);
+    transform: translateY(-1px);
 }
 
 .c-button:disabled {
@@ -393,8 +399,8 @@ strong {
     font-size: 20px;
     padding-right: 80px;
     padding-left: 80px;
-
 }
+
 
 /* フォーム
    ----------------------------------------------------------------- */
