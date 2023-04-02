@@ -1126,6 +1126,10 @@ strong {
     border-bottom: var(--border-normal);
 }
 
+.c-sidebar__item:hover {
+    background: #efefef;
+}
+
 .c-sidebar__item.--active {
     background: var(--color-background-base_current);
 }
