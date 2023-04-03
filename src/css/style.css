@@ -960,6 +960,7 @@ strong {
     width: 270px;
     height: 192px;
     position: relative;
+    overflow: hidden;
 }
 
 .p-facility-thumbnail__alternate-image-text {
@@ -983,6 +984,11 @@ strong {
     width: 100%;
     height: auto;
     cursor: pointer;
+    transition: all .2s ease;
+}
+
+.p-facility-thumbnail__item img:hover {
+    transform: scale(1.2);
 }
 
 /* 海岸詳細画面のコンポーネント
