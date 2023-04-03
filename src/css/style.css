@@ -950,8 +950,13 @@ strong {
 
 .p-facility-thumbnail__list {
     display: inline-block;
-    overflow: hidden;
     width: 100%;
+}
+
+.p-facility-thumbnail__list::after {
+    content: "";
+    display: block;
+    clear: both;
 }
 
 .p-facility-thumbnail__item {
