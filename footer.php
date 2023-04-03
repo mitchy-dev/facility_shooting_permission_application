@@ -10,7 +10,7 @@
   </div>
 </footer>
 </div>
-<script src="dist/js/bundle.js"></script>
-
+<script src="dist/js/app.min.js"></script>
+<script src="dist/js/app.min.js.map"></script>
 </body>
 </html>
