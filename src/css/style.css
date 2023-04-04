@@ -800,14 +800,14 @@ strong {
 /* 一覧画面のカード
    ----------------------------------------------------------------- */
 .p-card__container {
-    overflow: hidden;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+    row-gap: 24px;
 }
 
 /*海岸一覧ページのカードのレイアウト*/
 .p-card__layout {
-    float: left;
-    margin-right: var(--spacing-xs);
-    margin-bottom: var(--spacing-sm);
     width: calc((100% - 16px * 3) / 4);
     min-width: 272px;
 }
