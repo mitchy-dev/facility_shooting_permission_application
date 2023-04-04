@@ -257,12 +257,12 @@ strong {
 }
 
 .c-header-nav {
-    float: right;
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 8px;
 }
 
 .c-header-nav__item {
-    float: left;
-    margin-left: 16px;
 }
 
 /*フッターコンポーネント*/
