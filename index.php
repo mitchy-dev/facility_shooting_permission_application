@@ -1,6 +1,6 @@
 <?php
 
-require('functions.php');
+require( 'functions.php' );
 startPageDisplay();
 
 //$_GET['region_id'] = 1;
@@ -8,19 +8,19 @@ startPageDisplay();
 //$_GET['page'] = 1;
 
 //DBからデータを取得する
-$regionId = !empty($_GET['region_id']) ? $_GET['region_id'] : 0;
-$prefectureId = !empty($_GET['prefecture_id']) ? $_GET['prefecture_id'] : 0;
-$page = !empty($_GET['page']) ? $_GET['page'] : 1;
-if (!is_numeric($regionId) || !is_numeric($prefectureId) || !is_numeric($page)) {
-  redirect('index.php');
+$regionId     = ! empty( $_GET['region_id'] ) ? $_GET['region_id'] : 0;
+$prefectureId = ! empty( $_GET['prefecture_id'] ) ? $_GET['prefecture_id'] : 0;
+$page         = ! empty( $_GET['page'] ) ? $_GET['page'] : 1;
+if ( ! is_numeric( $regionId ) || ! is_numeric( $prefectureId ) || ! is_numeric( $page ) ) {
+  redirect( 'index.php' );
 }
-$viewData = fetchFacilitiesWithPrefectureId($regionId, $prefectureId, $page);
-if (!empty($viewData['total_page_number'])) {
-  $paging = paging($page, $viewData['total_page_number']);
+$viewData = fetchFacilitiesWithPrefectureId( $regionId, $prefectureId, $page );
+if ( ! empty( $viewData['total_page_number'] ) ) {
+  $paging = paging( $page, $viewData['total_page_number'] );
 }
 //地域データの取得
 //この関数の引数に地域のidを受け取って、県名の表示を絞り込む
-$regionsAndPreferences = fetchRegionsAndPrefectures($regionId);
+$regionsAndPreferences = fetchRegionsAndPrefectures( $regionId );
 //var_dump($regionsAndPreferences);
 endPageDisplay();
 ?>
@@ -32,28 +32,25 @@ require "header.php";
 
 <main class="l-main">
   <div class="c-tools-container">
-
     <div class="c-filters-container">
-
-
       <div class="c-filters-column">
         <div class="c-select__wrap">
           <select name="region" class="c-select__box js-select js-region">
             <option value="0" class="c-select__option" <?php
-            if ($regionId == 0) {
+            if ( $regionId == 0 ) {
               echo 'selected';
             } ?>>全国
             </option>
             <?php
-            if (!empty($regionsAndPreferences['regions'])): ?>
+            if ( ! empty( $regionsAndPreferences['regions'] ) ): ?>
               <?php
-              foreach ($regionsAndPreferences['regions'] as $key => $value): ?>
+              foreach ( $regionsAndPreferences['regions'] as $key => $value ): ?>
                 <option value="<?php
-                echo sanitize($value['region_id']); ?>" class="c-select__option" <?php
-                if ($regionId == $value['region_id']) {
+                echo sanitize( $value['region_id'] ); ?>" class="c-select__option" <?php
+                if ( $regionId == $value['region_id'] ) {
                   echo 'selected';
                 } ?>><?php
-                  echo sanitize($value['name']); ?></option>
+                  echo sanitize( $value['name'] ); ?></option>
               <?php
               endforeach; ?>
             <?php
@@ -66,20 +63,20 @@ require "header.php";
         <div class="c-select__wrap">
           <select name="prefecture" class="c-select__box js-select js-prefecture">
             <option value="0" class="c-select__option" <?php
-            if ($prefectureId == 0) {
+            if ( $prefectureId == 0 ) {
               echo 'selected';
             } ?>>全域
             </option>
             <?php
-            if (!empty($regionsAndPreferences['prefectures'])): ?>
+            if ( ! empty( $regionsAndPreferences['prefectures'] ) ): ?>
               <?php
-              foreach ($regionsAndPreferences['prefectures'] as $key => $value): ?>
+              foreach ( $regionsAndPreferences['prefectures'] as $key => $value ): ?>
                 <option value="<?php
-                echo sanitize($value['prefecture_id']); ?>" class="c-select__option" <?php
-                if ($prefectureId == $value['prefecture_id']) {
+                echo sanitize( $value['prefecture_id'] ); ?>" class="c-select__option" <?php
+                if ( $prefectureId == $value['prefecture_id'] ) {
                   echo 'selected';
                 } ?>><?php
-                  echo sanitize($value['name']); ?></option>
+                  echo sanitize( $value['name'] ); ?></option>
               <?php
               endforeach; ?>
             <?php
@@ -92,12 +89,12 @@ require "header.php";
 
     <div class="c-results-count__container">
       <?php
-      if (!empty($viewData['number_of_contents'])): ?>
+      if ( ! empty( $viewData['number_of_contents'] ) ): ?>
         <p class="c-results-count">
           <?php
-          echo sanitize($viewData['number_of_tops_of_content']); ?>-<?php
-          echo sanitize($viewData['number_of_tails_of_content']); ?>件 / <?php
-          echo sanitize($viewData['number_of_contents']); ?>件中
+          echo sanitize( $viewData['number_of_tops_of_content'] ); ?>-<?php
+          echo sanitize( $viewData['number_of_tails_of_content'] ); ?>件 / <?php
+          echo sanitize( $viewData['number_of_contents'] ); ?>件中
         </p>
       <?php
       endif; ?>
@@ -105,18 +102,21 @@ require "header.php";
 
   </div>
   <?php
-  if (!empty($viewData['contents'])): ?>
+  if ( ! empty( $viewData['contents'] ) ): ?>
     <div class="p-card__container">
       <?php
-      foreach ($viewData['contents'] as $key => $value): ?>
+      foreach ( $viewData['contents'] as $key => $value ): ?>
         <div class="p-card__layout">
           <div class="p-card">
             <a href="facilityDetail.php?facility_id=<?php
-            echo sanitize($value['facility_id']) . appendGetParameter(array('facility_id')) ?>" class="p-card__link"
+            echo sanitize( $value['facility_id'] ) . appendGetParameter( array( 'facility_id' ) ) ?>"
+               class="p-card__link"
                target="_blank">
+              <i class="far fa-heart favorite-button js-toggle-favorite"></i>
+              <!--              <i class="fas fa-heart favorite-button --solid js-toggle-favorite"></i>-->
               <div class="p-card__head">
                 <?php
-                if (empty($value['thumbnail_path'])): ?>
+                if ( empty( $value['thumbnail_path'] ) ): ?>
                   <div class="p-card__alternate-image-text">NO IMAGE</div>
                 <?php
                 endif; ?>
@@ -124,7 +124,7 @@ require "header.php";
                 echo sanitize(
                         showImage(
                                 $value['thumbnail_path'],
-                                getAlternateImagePath('./alternateFacilityThumbnails')
+                                getAlternateImagePath( './alternateFacilityThumbnails' )
                         )
                 ); ?>"
                      alt="海岸の写真" class="p-card__img">
@@ -132,11 +132,11 @@ require "header.php";
               <div class="p-card__foot">
                 <div class="p-card__title-container">
                   <h2 class="p-card__title"><?php
-                    echo sanitize($value['facility_name']); ?></h2>
+                    echo sanitize( $value['facility_name'] ); ?></h2>
                 </div>
                 <div class="p-card__sub-title-container">
                   <p class="p-card__sub-title"><?php
-                    echo sanitize($value['name']); ?></p>
+                    echo sanitize( $value['name'] ); ?></p>
                 </div>
               </div>
             </a>
@@ -149,34 +149,34 @@ require "header.php";
 
 
     <?php
-    if (!empty($paging)): ?>
+    if ( ! empty( $paging ) ): ?>
       <div class="c-paging__layout">
         <ul class="c-paging__list">
           <?php
-          if ($page != 1): ?>
+          if ( $page != 1 ): ?>
             <li class="c-paging__item"><a href="index.php?page=1<?php
-              echo sanitize(appendGetParameter(array('page'))); ?>">&lt;</a></li>
+              echo sanitize( appendGetParameter( array( 'page' ) ) ); ?>">&lt;</a></li>
           <?php
           endif; ?>
           <?php
-          for ($i = $paging['firstPageNumber']; $i <= $paging['lastPageNumber']; ++$i): ?>
+          for ( $i = $paging['firstPageNumber']; $i <= $paging['lastPageNumber']; ++ $i ): ?>
             <li class="c-paging__item <?php
-            if ($i == $page) {
+            if ( $i == $page ) {
               echo 'is-active';
             } ?>">
               <p>
                 <a href="index.php?page=<?php
-                echo sanitize($i . appendGetParameter(array('page'))) ?>"><?php
-                  echo sanitize($i); ?>
+                echo sanitize( $i . appendGetParameter( array( 'page' ) ) ) ?>"><?php
+                  echo sanitize( $i ); ?>
                 </a>
               </p>
             </li>
           <?php
           endfor; ?>
           <?php
-          if ($page != $viewData['total_page_number']): ?>
+          if ( $page != $viewData['total_page_number'] ): ?>
             <li class="c-paging__item"><a href="index.php?page=<?php
-              echo sanitize($viewData['total_page_number'] . appendGetParameter(array('page'))); ?>">&gt;</a></li>
+              echo sanitize( $viewData['total_page_number'] . appendGetParameter( array( 'page' ) ) ); ?>">&gt;</a></li>
           <?php
           endif; ?>
         </ul>

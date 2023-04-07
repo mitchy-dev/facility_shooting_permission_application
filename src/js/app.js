@@ -267,5 +267,13 @@ $(function () {
     }());
     slider.init();
 
+    $('.js-toggle-favorite').on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        $this.toggleClass('far');
+        $this.toggleClass('fas');
+        $this.toggleClass('is-active');
+    });
+
 
 });
