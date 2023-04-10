@@ -267,8 +267,11 @@ $(function () {
     }());
     slider.init();
 
+    var processing = false;
     $('.js-toggle-favorite').on('click', function (e) {
         e.preventDefault();
+        if (processing) return;
+        processing = true;
         var $this = $(this);
         var facilityId = $this.data('facility-id');
         $.ajax({
@@ -291,6 +294,7 @@ $(function () {
                 $this.removeClass('fas');
                 $this.removeClass('is-active');
             }
+            processing = false;
         })
     });
 
