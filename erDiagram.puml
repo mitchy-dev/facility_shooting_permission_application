@@ -174,10 +174,19 @@ entity "shooting_application_acceptance_type_tagging" as shooting_application_ac
   created_at:datetime not null
   updated_at:timestamp not null default current_timestamp on update current_timestamp
 }
+
+entity "favorite_facilities" as favorite_facilities {
+  favorite_id<<FK>>:int not null primary key
+  user_id<<FK>>:int not null
+  facility_id<<FK>>:int not null
+  --
+  updated_at:timestamp not null default current_timestamp on update current_timestamp
+}
 'user
 users ||--o{ facilities
 users ||--o{ stakeholders
 users ||--o{ favorite_facilities
+favorite_facilities }o--|| facilities
 'facilities
 facilities ||--|| prefectures
 prefectures }|--|| regions

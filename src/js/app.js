@@ -270,9 +270,28 @@ $(function () {
     $('.js-toggle-favorite').on('click', function (e) {
         e.preventDefault();
         var $this = $(this);
-        $this.toggleClass('far');
-        $this.toggleClass('fas');
-        $this.toggleClass('is-active');
+        var facilityId = $this.data('facility-id');
+        $.ajax({
+            url: '/../../ajax_favorite.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'facility_id': facilityId
+            },
+            dataType: 'json'
+        }).then(function (data) {
+            console.log(data);
+            if (data.favorite) {
+                $this.addClass('fas');
+                $this.removeClass('far');
+                $this.addClass('is-active');
+
+            } else {
+                $this.addClass('far');
+                $this.removeClass('fas');
+                $this.removeClass('is-active');
+            }
+        })
     });
 
 
