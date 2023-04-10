@@ -1,6 +1,6 @@
 <section class="l-sidebar__container">
   <ul class="c-sidebar__list">
-    <li class="c-sidebar__item --active --border-top"><a href="">お気に入り</a></li>
+    <li class="c-sidebar__item --border-top"><a href="">お気に入り</a></li>
   </ul>
   <h3 class="c-sidebar__list-title">海岸の管理</h3>
   <ul class="c-sidebar__list">
