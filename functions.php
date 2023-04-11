@@ -991,6 +991,19 @@ function extractCoordinatesFromUrl( $mapUrl ) {
 	}
 }
 
+function isLogin() {
+	if ( ! empty( $_SESSION['user_id'] ) ) {
+		if ( time() < $_SESSION['login_time'] + $_SESSION['login_limit'] ) {
+			return true;
+		} else {
+			session_destroy();
+
+			return false;
+		}
+	} else {
+		return false;
+	}
+}
 
 
 
