@@ -3,7 +3,7 @@
 require( 'functions.php' );
 startPageDisplay();
 
-if ( ! empty( $_POST ) ) {
+if ( ! empty( $_POST ) && ! empty( isLogin() ) ) {
 	debug( 'お気に入りボタンがクリックされました' );
 	try {
 		$dbh       = dbConnect();
