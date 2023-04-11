@@ -125,6 +125,10 @@ require "header.php";
             echo sanitize( $viewData['facility_name'] );
           }
           ?>
+          <span class="favorite-button-wrap">
+        <i class="far fa-heart favorite-button js-toggle-favorite" data-facility-id="<?php
+        echo sanitize( $viewData['facility_id'] ); ?>"></i>
+        </span>
         </h1>
         <ul class="p-facility-detail__list">
           <li class="p-facility-detail__item">

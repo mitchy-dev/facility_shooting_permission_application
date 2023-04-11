@@ -1804,12 +1804,20 @@ strong {
 }
 
 .favorite-button {
-    position: absolute;
-    top: 6%;
-    right: 8%;
-    font-size: 20px;
-    color: #f8f8f8;
+    /*position: absolute;*/
+    /*top: 6%;*/
+    /*right: 8%;*/
+    font-size: 22px;
+    color: var(--color-text-main);
     z-index: 1;
+}
+
+.favorite-button:hover {
+    cursor: pointer;
+}
+
+.favorite-button-wrap {
+    margin-left: 8px;
 }
 
 .favorite-button.is-active {
