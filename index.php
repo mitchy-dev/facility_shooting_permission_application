@@ -112,8 +112,6 @@ require "header.php";
             echo sanitize( $value['facility_id'] ) . appendGetParameter( array( 'facility_id' ) ) ?>"
                class="p-card__link"
                target="_blank">
-              <i class="far fa-heart favorite-button js-toggle-favorite" data-facility-id="<?php
-              echo sanitize( $value['facility_id'] ); ?>"></i>
               <div class="p-card__head">
                 <?php
                 if ( empty( $value['thumbnail_path'] ) ): ?>
