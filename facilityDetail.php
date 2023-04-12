@@ -128,10 +128,17 @@ require "header.php";
           <span class="favorite-button-wrap">
         <i class="<?php
         if ( ! empty( isRegisteredFavoriteFacility( $viewData['facility_id'] ) ) ) {
-          echo 'fas is-active js-toggle-favorite';
+          echo 'fas is-active';
         } else {
-          echo 'far js-login-reminder';
-        } ?> fa-heart favorite-button" data-facility-id="<?php
+          echo 'far';
+        }
+        if ( ! empty( isLogin() ) ) {
+          echo ' js-toggle-favorite';
+        } else {
+          echo ' js-login-reminder';
+        }
+
+        ?> fa-heart favorite-button" data-facility-id="<?php
         echo sanitize( $viewData['facility_id'] ); ?>"></i>
         </span>
         </h1>
