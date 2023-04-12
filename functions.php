@@ -656,6 +656,26 @@ function fetchListOfRegisteredFacilities( $userId, $published = true ) {
 	}
 }
 
+//お気に入りの海岸の一覧を取得
+function fetchListOfFavoriteFacilities( $userId ) {
+	debug( 'お気に入りの海岸の情報を取得します' );
+	try {
+		$dbh  = dbConnect();
+		$sql  = 'select f.facility_id, f.facility_name, f.thumbnail_path, p.name as prefecture from facilities as f right join favorite_facilities as ff on f.facility_id = ff.facility_id join prefectures as p on f.prefecture_id = p.prefecture_id where ff.user_id = :user_id and f.is_deleted = false';
+		$data = array(
+			':user_id' => $userId,
+		);
+		$sth  = queryPost( $dbh, $sql, $data );
+		if ( ! empty( $sth ) ) {
+			return $sth->fetchAll();
+		} else {
+			return array();
+		}
+	} catch ( Exception $e ) {
+		exceptionHandler( $e );
+	}
+}
+
 //海岸の写真のパスを取得
 function fetchFacilityImagePaths( $facilityId ) {
 	debug( '海岸の写真を取得します' );
