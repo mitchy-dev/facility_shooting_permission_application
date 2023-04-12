@@ -298,5 +298,10 @@ $(function () {
         })
     });
 
+    $('.js-login-reminder').on('click', function (e) {
+        e.preventDefault();
+        alert('お気に入り登録するにはログインしてください');
+    });
+
 
 });
