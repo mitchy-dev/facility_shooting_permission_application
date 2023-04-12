@@ -126,7 +126,12 @@ require "header.php";
           }
           ?>
           <span class="favorite-button-wrap">
-        <i class="far fa-heart favorite-button js-toggle-favorite" data-facility-id="<?php
+        <i class="<?php
+        if ( ! empty( isRegisteredFavoriteFacility( $viewData['facility_id'] ) ) ) {
+          echo 'fas is-active';
+        } else {
+          echo 'far';
+        } ?> fa-heart favorite-button js-toggle-favorite" data-facility-id="<?php
         echo sanitize( $viewData['facility_id'] ); ?>"></i>
         </span>
         </h1>
