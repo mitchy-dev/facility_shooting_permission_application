@@ -1005,7 +1005,30 @@ function isLogin() {
 	}
 }
 
-
+function isRegisteredFavoriteFacility( $facilityId ) {
+	if ( ! empty( isLogin() ) ) {
+//		ユーザーIDと施設IDで登録済みか照会
+		try {
+			$dbh       = dbConnect();
+			$sql       = 'select count(*)from favorite_facilities where user_id = :user_id and facility_id = :facility_id';
+			$data      = array(
+				':user_id'     => $_SESSION['user_id'],
+				':facility_id' => $facilityId
+			);
+			$queryPost = queryPost( $dbh, $sql, $data );
+			$result    = $queryPost->fetch();
+			if ( ! empty( array_shift( $result ) ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch ( Exception $e ) {
+			exceptionHandler( $e );
+		}
+	} else {
+		return false;
+	}
+}
 
 
 
