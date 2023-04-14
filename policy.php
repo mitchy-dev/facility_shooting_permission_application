@@ -1,6 +1,6 @@
 <?php
 
-require('functions.php');
+require( 'functions.php' );
 startPageDisplay();
 
 endPageDisplay();
@@ -157,27 +157,35 @@ require "header.php";
     </p>
   </section>
   <section class="about__inner">
-    <h3 class="about__title-small">９　リンク先における個人情報の保護
+    <h3 class="about__title-small">９　免責および注意事項について</h3>
+    <p class="about__lead">
+      営利目的で、本サイトが提供している情報を許可なく、無断で直接的あるいは間接的に利用することを禁じます。
+      営利目的、非営利目的に関わらず、本サイトが提供しているデータ、文章、デザイン、画像等を許可なく、これらを無断で複製、複写、翻訳、転載することを禁じます。
+      本サイトで提供している情報は、最新かつ正確に掲載するよう努めますが、各自の責任と判断のもとにご利用いただき、万一これらの情報を利用されたことで生じた損害については、一切責任を負うことはできません。
+    </p>
+  </section>
+  <section class="about__inner">
+    <h3 class="about__title-small">１０　リンク先における個人情報の保護
     </h3>
     <p class="about__lead">
       このプライバシーポリシーは、当サイトにのみ適用されます。したがって、当サイトからリンクする当方以外の事業者または個人のウェブサイトにおける個人情報の取扱いについては、当方は責任を負うことはできません。
     </p>
   </section>
   <section class="about__inner">
-    <h3 class="about__title-small">１０　関係法令･その他規範の遵守</h3>
+    <h3 class="about__title-small">１１　関係法令･その他規範の遵守</h3>
     <p class="about__lead">
       当方は､個人情報の保護に関する法令およびその他関連する規範等を遵守いたします。
     </p>
   </section>
   <section class="about__inner u-mb-8">
-    <h3 class="about__title-small">１１　個人情報に関するお問い合わせについて</h3>
+    <h3 class="about__title-small">１２　個人情報に関するお問い合わせについて</h3>
     <p class="about__lead">
       当サイトでは、個人情報に関するお問い合わせのために、次の窓口を設定しております。<br>
       https://www.twitter.com/messages/compose?recipient_id=1513111003638398979
     </p>
   </section>
   <p class="about__lead-bottom">以上</p>
-  <p class="about__lead-bottom">令和４年１２月１日制定</p>
+  <p class="about__lead-bottom">令和５年４月１５日制定</p>
 </main>
 
 <?php

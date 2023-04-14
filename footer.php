@@ -4,6 +4,8 @@
     <li class="c-footer-nav__list"><a href="policy.php" class="c-footer-nav__item">プライバシーポリシー</a></li>
     <li class="c-footer-nav__list"><a href="https://www.twitter.com/messages/compose?recipient_id=1513111003638398979"
                                       class="c-footer-nav__item" target="_blank">お問い合わせ</a></li>
+    <li class="c-footer-nav__list"><a href="https://uub.jp/" class="c-footer-nav__item"
+                                      target="_blank">出典：都道府県地区町村</a></li>
   </ul>
   <div class="c-footer-copyright">
     <p class="c-footer-copyright__item">©2023 みっちー</p>
@@ -11,6 +13,6 @@
 </footer>
 </div>
 <script src="dist/js/app.min.js"></script>
-<script src="dist/js/app.min.js.map"></script>
+<!--<script src="dist/js/app.min.js.map"></script>-->
 </body>
 </html>
